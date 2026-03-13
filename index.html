@@ -502,7 +502,14 @@ function selectOption(element, field) {
 // ---- UPDATE UI ----
 function updateUI() {
   for (var i = 1; i <= 5; i++) {
-    document.getElementById("step" + i).className = (i === currentStep) ? "form-step active" : "form-step";
+    var el = document.getElementById("step" + i);
+    if (i === currentStep) {
+      el.className = "form-step active";
+      el.style.display = "block";
+    } else {
+      el.className = "form-step";
+      el.style.display = "none";
+    }
   }
   document.getElementById("stepLabel").textContent = currentStep + " / 5";
   document.getElementById("progressBar").style.width = (currentStep * 20) + "%";
