@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | Masari.io Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06090F;--bg2:#0C1220;--bg3:#121A2B;--bg4:#1a2440;
+  --gold:#F0A500;--gold2:#FFD166;--green:#34D399;--red:#EF4444;--blue:#60A5FA;--purple:#A78BFA;
+  --txt:#F1F1F1;--txt2:#94A3B8;--txt3:#4B5975;
+  --border:rgba(240,165,0,0.1);--border2:rgba(240,165,0,0.25);
+  --font:'IBM Plex Sans Arabic',sans-serif;--mono:'Space Mono',monospace;
+  --sidebar:260px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.6;display:flex;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+
+/* ===== LOGIN SCREEN ===== */
+#loginScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.login-box{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:400px;width:90%;text-align:center}
+.login-box h1{font-size:28px;font-weight:900;margin-bottom:6px}
+.login-box .sub{color:var(--txt2);font-size:14px;margin-bottom:32px}
+.login-box .logo{font-size:24px;font-weight:800;margin-bottom:24px;display:block}.login-box .logo span{color:var(--gold)}
+.lin{width:100%;padding:14px 16px;background:var(--bg);border:2px solid transparent;border-radius:8px;color:var(--txt);font-family:var(--font);font-size:15px;outline:none;margin-bottom:14px;transition:border-color .3s}
+.lin:focus{border-color:var(--gold)}
+.lin::placeholder{color:var(--txt3)}
+.lbtn{width:100%;padding:14px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-top:8px;transition:all .3s}
+.lbtn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(240,165,0,.3)}
+.lerr{color:var(--red);font-size:13px;margin-top:10px;display:none}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:var(--sidebar);background:var(--bg2);border-left:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:fixed;top:0;right:0;bottom:0;z-index:100}
+.sb-logo{padding:0 24px 24px;font-size:20px;font-weight:800;border-bottom:1px solid var(--border)}
+.sb-logo span{color:var(--gold)}
+.sb-logo small{display:block;font-size:11px;color:var(--txt3);font-weight:400;margin-top:2px}
+.sb-nav{flex:1;padding:16px 12px;overflow-y:auto}
+.sb-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;color:var(--txt2);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;margin-bottom:4px;position:relative}
+.sb-item:hover{background:var(--bg3);color:var(--txt)}
+.sb-item.active{background:rgba(240,165,0,0.08);color:var(--gold)}
+.sb-item .icon{font-size:18px;width:24px;text-align:center}
+.sb-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-right:auto}
+.sb-section{font-size:11px;color:var(--txt3);padding:16px 16px 6px;font-weight:700;letter-spacing:1px}
+.sb-footer{padding:16px 24px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-uname{font-size:13px;font-weight:600}.sb-urole{font-size:11px;color:var(--txt3)}
+
+/* ===== MAIN ===== */
+.main{margin-right:var(--sidebar);flex:1;padding:32px;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+
+/* ===== HEADER ===== */
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+.page-header h1{font-size:26px;font-weight:900}
+.page-header p{color:var(--txt2);font-size:14px;margin-top:4px}
+.header-actions{display:flex;gap:10px}
+.hbtn{padding:10px 20px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.hbtn-gold{background:var(--gold);color:var(--bg)}.hbtn-gold:hover{box-shadow:0 4px 16px rgba(240,165,0,.3)}
+.hbtn-dark{background:var(--bg3);color:var(--txt);border:1px solid var(--border)}.hbtn-dark:hover{border-color:var(--border2)}
+
+/* ===== STATS CARDS ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px}
+.stat-card .label{font-size:13px;color:var(--txt2);margin-bottom:8px}
+.stat-card .value{font-size:32px;font-weight:900;font-family:var(--mono)}
+.stat-card .change{font-size:12px;margin-top:6px}
+.stat-card .up{color:var(--green)}.stat-card .down{color:var(--red)}
+
+/* ===== TABLE ===== */
+.table-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.table-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.table-header h3{font-size:16px;font-weight:700}
+.table-search{padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--txt);font-family:var(--font);font-size:13px;outline:none;min-width:200px}
+.table-search:focus{border-color:var(--gold)}
+table{width:100%;border-collapse:collapse}
+th{text-align:right;padding:12px 24px;font-size:12px;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)}
+td{padding:14px 24px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.02)}
+tr:hover td{background:rgba(240,165,0,.02)}
+.td-badge{padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;display:inline-block}
+.td-badge.pro{background:rgba(240,165,0,.1);color:var(--gold)}
+.td-badge.free{background:rgba(96,165,250,.1);color:var(--blue)}
+.td-badge.admin{background:rgba(167,139,250,.1);color:var(--purple)}
+.td-badge.editor{background:rgba(52,211,153,.1);color:var(--green)}
+.td-badge.viewer{background:rgba(148,163,184,.1);color:var(--txt2)}
+.td-badge.online{background:rgba(52,211,153,.1);color:var(--green)}
+.td-badge.offline{background:rgba(148,163,184,.1);color:var(--txt3)}
+
+/* ===== CHAT ===== */
+.chat-layout{display:grid;grid-template-columns:300px 1fr;gap:0;background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden;height:calc(100vh - 180px);min-height:500px}
+.chat-list{border-left:1px solid var(--border);overflow-y:auto}
+.chat-list-header{padding:16px 20px;border-bottom:1px solid var(--border);font-size:15px;font-weight:700}
+.chat-item{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.02);cursor:pointer;transition:background .2s}
+.chat-item:hover{background:var(--bg4)}
+.chat-item.active{background:rgba(240,165,0,.06);border-right:3px solid var(--gold)}
+.chat-item .ci-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.chat-item .ci-msg{font-size:12px;color:var(--txt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-item .ci-time{font-size:11px;color:var(--txt3);float:left}
+.chat-item .ci-unread{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;float:left;margin-top:2px}
+
+.chat-main{display:flex;flex-direction:column}
+.chat-top{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chat-top h3{font-size:16px;font-weight:700}
+.chat-top .status{font-size:12px;color:var(--green)}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:75%;padding:12px 16px;border-radius:14px;font-size:14px;line-height:1.7}
+.msg.user{background:var(--bg4);align-self:flex-start;border-bottom-right-radius:4px}
+.msg.admin{background:rgba(240,165,0,.08);align-self:flex-end;border-bottom-left-radius:4px}
+.msg .msg-time{font-size:10px;color:var(--txt3);margin-top:4px}
+.chat-input{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px}
+.chat-input input{flex:1;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none}
+.chat-input input:focus{border-color:var(--gold)}
+.chat-input button{padding:12px 24px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer}
+
+/* ===== USER MANAGEMENT ===== */
+.add-user-form{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px;display:none}
+.add-user-form.show{display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end}
+.form-row .field label{display:block;font-size:12px;color:var(--txt2);margin-bottom:4px;font-weight:600}
+.form-row .field input,.form-row .field select{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--txt);font-family:var(--font);font-size:13px;outline:none}
+.form-row .field select{appearance:none;cursor:pointer}
+
+/* ===== SETTINGS ===== */
+.settings-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
+.settings-card h3{font-size:16px;font-weight:700;margin-bottom:16px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:14px}.setting-desc{font-size:12px;color:var(--txt3)}
+.toggle{width:44px;height:24px;background:var(--txt3);border-radius:12px;position:relative;cursor:pointer;transition:background .3s}
+.toggle.on{background:var(--gold)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:2px;right:2px;transition:transform .3s}
+.toggle.on::after{transform:translateX(-20px)}
+
+/* ===== CHART ===== */
+.chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px}
+.chart-wrap h3{font-size:16px;font-weight:700;margin-bottom:20px}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:200px;padding-top:20px}
+.chart-bar{flex:1;background:linear-gradient(to top,var(--gold),var(--gold2));border-radius:6px 6px 0 0;transition:height .6s ease;position:relative;min-width:0}
+.chart-bar:hover{opacity:.85}
+.chart-bar .bar-val{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--gold);font-family:var(--mono);white-space:nowrap}
+.chart-bar .bar-label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--txt3);white-space:nowrap}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{margin-right:0}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .chat-layout{grid-template-columns:1fr}
+  .chat-list{display:none}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <span class="logo">مساري<span>.io</span></span>
+    <h1>لوحة التحكم</h1>
+    <p class="sub">سجل دخول للوصول لإدارة المنصة</p>
+    <input type="text" class="lin" id="loginUser" placeholder="اسم المستخدم" value="admin">
+    <input type="password" class="lin" id="loginPass" placeholder="كلمة المرور" value="admin123">
+    <button class="lbtn" onclick="doLogin()">تسجيل الدخول ←</button>
+    <div class="lerr" id="loginErr">اسم المستخدم أو كلمة المرور خطأ</div>
+    <p style="color:var(--txt3);font-size:11px;margin-top:16px">تجريبي: admin / admin123</p>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar" style="display:none">
+  <div class="sb-logo">مساري<span>.io</span><small>لوحة التحكم</small></div>
+  <div class="sb-nav">
+    <div class="sb-section">الرئيسية</div>
+    <div class="sb-item active" onclick="showPage('dashboard',this)"><span class="icon">📊</span> نظرة عامة</div>
+    <div class="sb-item" onclick="showPage('trips',this)"><span class="icon">✈️</span> الرحلات</div>
+    
+    <div class="sb-section">التواصل</div>
+    <div class="sb-item" onclick="showPage('chat',this)"><span class="icon">💬</span> الرسائل <span class="sb-badge" id="chatBadge">3</span></div>
+    
+    <div class="sb-section">الإدارة</div>
+    <div class="sb-item" onclick="showPage('users',this)" id="usersTab"><span class="icon">👥</span> المستخدمين</div>
+    <div class="sb-item" onclick="showPage('team',this)" id="teamTab"><span class="icon">🔑</span> فريق العمل</div>
+    <div class="sb-item" onclick="showPage('settings',this)"><span class="icon">⚙️</span> الإعدادات</div>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar" id="sbAvatar">م</div>
+      <div><div class="sb-uname" id="sbName">المدير</div><div class="sb-urole" id="sbRole">مدير عام</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main" id="mainContent" style="display:none">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="page active" id="pg-dashboard">
+    <div class="page-header">
+      <div><h1>نظرة عامة</h1><p>إحصائيات المنصة في الوقت الحقيقي</p></div>
+      <div class="header-actions">
+        <button class="hbtn hbtn-dark" onclick="location.href='index.html'">↗ زيارة الموقع</button>
+      </div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-card"><div class="label">إجمالي الرحلات</div><div class="value" style="color:var(--gold)">1,284</div><div class="change up">↑ 12% عن الأسبوع الماضي</div></div>
+      <div class="stat-card"><div class="label">المستخدمين</div><div class="value" style="color:var(--blue)">847</div><div class="change up">↑ 8% جدد هذا الأسبوع</div></div>
+      <div class="stat-card"><div class="label">الإيرادات</div><div class="value" style="color:var(--green)">$2,415</div><div class="change up">↑ 24% عن الشهر الماضي</div></div>
+      <div class="stat-card"><div class="label">رسائل جديدة</div><div class="value" style="color:var(--red)">12</div><div class="change">3 بانتظار الرد</div></div>
+    </div>
+    
+    <!-- Chart -->
+    <div class="chart-wrap">
+      <h3>الرحلات المنشأة — آخر 7 أيام</h3>
+      <div class="chart-bars" id="chartBars"></div>
+    </div>
+    
+    <!-- Top destinations -->
+    <div class="table-wrap">
+      <div class="table-header"><h3>أكثر الوجهات طلباً</h3></div>
+      <table>
+        <thead><tr><th>#</th><th>الوجهة</th><th>عدد الرحلات</th><th>نسبة</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>اسطنبول 🇹🇷</td><td>312</td><td>24%</td></tr>
+          <tr><td>2</td><td>دبي 🇦🇪</td><td>248</td><td>19%</td></tr>
+          <tr><td>3</td><td>لندن 🇬🇧</td><td>189</td><td>15%</td></tr>
+          <tr><td>4</td><td>باريس 🇫🇷</td><td>156</td><td>12%</td></tr>
+          <tr><td>5</td><td>طوكيو 🇯🇵</td><td>98</td><td>8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TRIPS ===== -->
+  <div class="page" id="pg-trips">
+    <div class="page-header">
+      <div><h1>الرحلات</h1><p>جميع الرحلات المنشأة على المنصة</p></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header"><h3>سجل الرحلات</h3><input type="text" class="table-search" placeholder="🔍 ابحث بالوجهة أو المستخدم..." oninput="filterTrips(this.value)"></div>
+      <table>
+        <thead><tr><th>التاريخ</th><th>المستخدم</th><th>الوجهة</th><th>الأيام</th><th>الميزانية</th><th>النوع</th><th>الحالة</th></tr></thead>
+        <tbody id="tripsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== CHAT / INBOX ===== -->
+  <div class="page" id="pg-chat">
+    <div class="page-header"><div><h1>الرسائل والاستفسارات</h1><p>رد على استفسارات العملاء</p></div></div>
+    <div class="chat-layout">
+      <div class="chat-list">
+        <div class="chat-list-header">المحادثات <span style="color:var(--txt3);font-size:12px">(12)</span></div>
+        <div id="chatList"></div>
+      </div>
+      <div class="chat-main">
+        <div class="chat-top"><h3 id="chatName">اختر محادثة</h3><span class="status" id="chatStatus"></span></div>
+        <div class="chat-msgs" id="chatMsgs">
+          <div style="text-align:center;color:var(--txt3);padding:40px;font-size:14px">← اختر محادثة من القائمة</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="replyInput" placeholder="اكتب ردك هنا..." onkeydown="if(event.key==='Enter')sendReply()">
+          <button onclick="sendReply()">إرسال ←</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== USERS ===== -->
+  <div class="page" id="pg-users">
+    <div class="page-header"><div><h1>المستخدمين</h1><p>إدارة مستخدمي المنصة</p></div></div>
+    <div class="table-wrap">
+      <div class="table-header"><h3>قائمة المستخدمين</h3><input type="text" class="table-search" placeholder="🔍 ابحث..." oninput="filterUsers(this.value)"></div>
+      <table>
+        <thead><tr><th>المستخدم</th><th>الإيميل</th><th>الرحلات</th><th>الخطة</th><th>تاريخ التسجيل</th></tr></thead>
+        <tbody id="usersTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== TEAM MANAGEMENT ===== -->
+  <div class="page" id="pg-team">
+    <div class="page-header">
+      <div><h1>فريق العمل</h1><p>إدارة الصلاحيات والأدوار</p></div>
+      <div class="header-actions"><button class="hbtn hbtn-gold" onclick="toggleAddUser()">+ إضافة عضو جديد</button></div>
+    </div>
+    
+    <div class="add-user-form" id="addUserForm">
+      <h3 style="margin-bottom:16px;font-size:15px">إضافة عضو جديد</h3>
+      <div class="form-row">
+        <div class="field"><label>الاسم</label><input type="text" id="newName" placeholder="الاسم الكامل"></div>
+        <div class="field"><label>الإيميل</label><input type="email" id="newEmail" placeholder="email@example.com"></div>
+        <div class="field"><label>الصلاحية</label>
+          <select id="newRole">
+            <option value="admin">مدير عام — كل الصلاحيات</option>
+            <option value="editor" selected>محرر — إدارة الرحلات والرسائل</option>
+            <option value="viewer">مشاهد — عرض فقط بدون تعديل</option>
+          </select>
+        </div>
+        <div><button class="hbtn hbtn-gold" onclick="addTeamMember()" style="white-space:nowrap">إضافة ←</button></div>
+      </div>
+    </div>
+    
+    <div class="table-wrap">
+      <div class="table-header"><h3>أعضاء الفريق</h3></div>
+      <table>
+        <thead><tr><th>العضو</th><th>الإيميل</th><th>الصلاحية</th><th>الحالة</th><th>إجراء</th></tr></thead>
+        <tbody id="teamTable"></tbody>
+      </table>
+    </div>
+    
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:24px">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">📋 شرح الصلاحيات</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="padding:16px;background:var(--bg);border-radius:10px"><div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--purple)">🔑 مدير عام</div><div style="font-size:12px;color:var(--txt2);line-height:1.8">كل الصلاحيات: الإحصائيات، الرحلات، الرسائل، المستخدمين، الفريق، الإعدادات، الحذف والتعديل.</div></div>
+        <div style="padding:16px;background:var(--bg);border-radius:10px"><div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--green)">✏️ محرر</div><div style="font-size:12px;color:var(--txt2);line-height:1.8">عرض الإحصائيات، إدارة الرحلات، الرد على الرسائل. لا يملك صلاحية إدارة الفريق أو الإعدادات.</div></div>
+        <div style="padding:16px;background:var(--bg);border-radius:10px"><div style="font-size:14px;font-weight:700;margin-bottom:6px;color:var(--txt2)">👁️ مشاهد</div><div style="font-size:12px;color:var(--txt2);line-height:1.8">عرض الإحصائيات والرحلات فقط. لا يملك صلاحية التعديل أو الرد أو الحذف.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS ===== -->
+  <div class="page" id="pg-settings">
+    <div class="page-header"><div><h1>الإعدادات</h1><p>إعدادات المنصة والربط</p></div></div>
+    
+    <div class="settings-card">
+      <h3>⚙️ إعدادات عامة</h3>
+      <div class="setting-row"><div><div class="setting-label">الرحلات المجانية</div><div class="setting-desc">عدد الرحلات المجانية لكل مستخدم جديد</div></div><input type="number" value="2" style="width:60px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);text-align:center"></div>
+      <div class="setting-row"><div><div class="setting-label">سعر الرحلة الاحترافية</div><div class="setting-desc">سعر الرحلة الواحدة بالدولار</div></div><input type="text" value="$4.99" style="width:80px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);text-align:center"></div>
+      <div class="setting-row"><div><div class="setting-label">تفعيل الشاتبوت</div><div class="setting-desc">السماح للمستخدمين بإرسال استفسارات</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+    
+    <div class="settings-card">
+      <h3>🔗 الربط مع الخدمات</h3>
+      <div class="setting-row"><div><div class="setting-label">OpenAI API Key</div><div class="setting-desc">مفتاح الذكاء الاصطناعي</div></div><input type="password" value="sk-****" style="width:200px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--mono);font-size:12px"></div>
+      <div class="setting-row"><div><div class="setting-label">Stripe Secret Key</div><div class="setting-desc">مفتاح بوابة الدفع</div></div><input type="password" value="sk_live_****" style="width:200px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--mono);font-size:12px"></div>
+      <div class="setting-row"><div><div class="setting-label">Google Analytics ID</div><div class="setting-desc">رمز التتبع</div></div><input type="text" value="G-XXXXXXX" style="width:200px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--mono);font-size:12px"></div>
+    </div>
+    
+    <div class="settings-card">
+      <h3>📧 الإشعارات</h3>
+      <div class="setting-row"><div><div class="setting-label">إشعار رحلة جديدة</div><div class="setting-desc">إرسال إيميل عند إنشاء رحلة جديدة</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setting-row"><div><div class="setting-label">إشعار دفع جديد</div><div class="setting-desc">إرسال إيميل عند اشتراك جديد</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="setting-row"><div><div class="setting-label">إشعار رسالة جديدة</div><div class="setting-desc">إرسال إيميل عند استلام رسالة عميل</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== DATA =====
+var ACCOUNTS = [
+  { user: "admin", pass: "admin123", name: "عبدالله المدير", role: "admin", email: "admin@masari.io" },
+  { user: "sarah", pass: "sarah123", name: "سارة المحررة", role: "editor", email: "sarah@masari.io" },
+  { user: "view", pass: "view123", name: "فهد المشاهد", role: "viewer", email: "fahad@masari.io" }
+];
+var currentUser = null;
+
+var TRIPS_DATA = [
+  { date: "2026-03-13", user: "محمد العتيبي", dest: "اسطنبول", days: 5, budget: "متوسط", type: "عائلية", plan: "pro" },
+  { date: "2026-03-13", user: "نورة الشمري", dest: "المالديف", days: 7, budget: "فاخر", type: "شهر عسل", plan: "pro" },
+  { date: "2026-03-12", user: "خالد المهيري", dest: "لندن", days: 4, budget: "متوسط", type: "ثقافية", plan: "free" },
+  { date: "2026-03-12", user: "فاطمة الحربي", dest: "دبي", days: 3, budget: "فاخر", type: "تسوق", plan: "pro" },
+  { date: "2026-03-12", user: "أحمد السعيد", dest: "طوكيو", days: 6, budget: "اقتصادي", type: "مغامرة", plan: "free" },
+  { date: "2026-03-11", user: "ليلى القحطاني", dest: "باريس", days: 5, budget: "فاخر", type: "شهر عسل", plan: "pro" },
+  { date: "2026-03-11", user: "عمر البلوي", dest: "اسطنبول", days: 3, budget: "اقتصادي", type: "ثقافية", plan: "free" },
+  { date: "2026-03-10", user: "هند الزهراني", dest: "بالي", days: 8, budget: "متوسط", type: "استرخاء", plan: "pro" },
+  { date: "2026-03-10", user: "سلمان الدوسري", dest: "برشلونة", days: 4, budget: "متوسط", type: "مغامرة", plan: "free" },
+  { date: "2026-03-09", user: "منيرة العنزي", dest: "كوالالمبور", days: 5, budget: "اقتصادي", type: "عائلية", plan: "pro" }
+];
+
+var USERS_DATA = [
+  { name: "محمد العتيبي", email: "m.otaibi@gmail.com", trips: 8, plan: "pro", date: "2026-01-15" },
+  { name: "نورة الشمري", email: "noura.sh@gmail.com", trips: 3, plan: "pro", date: "2026-02-01" },
+  { name: "خالد المهيري", email: "khalid.m@gmail.com", trips: 2, plan: "free", date: "2026-02-20" },
+  { name: "فاطمة الحربي", email: "fatima.h@gmail.com", trips: 5, plan: "pro", date: "2026-01-28" },
+  { name: "أحمد السعيد", email: "ahmed.s@gmail.com", trips: 1, plan: "free", date: "2026-03-05" }
+];
+
+var TEAM_DATA = [
+  { name: "عبدالله المدير", email: "admin@masari.io", role: "admin", status: "online" },
+  { name: "سارة المحررة", email: "sarah@masari.io", role: "editor", status: "online" },
+  { name: "فهد المشاهد", email: "fahad@masari.io", role: "viewer", status: "offline" }
+];
+
+var CHATS = [
+  { id: 1, name: "محمد العتيبي", unread: 2, messages: [
+    { from: "user", text: "السلام عليكم، هل الأماكن المقترحة في اسطنبول فعلاً حلال؟", time: "10:30 AM" },
+    { from: "user", text: "وهل ممكن أعدل الجدول بعد ما يطلع؟", time: "10:31 AM" }
+  ]},
+  { id: 2, name: "نورة الشمري", unread: 1, messages: [
+    { from: "user", text: "مرحبا، اشتركت بس ما قدرت أحمل PDF", time: "9:15 AM" },
+    { from: "admin", text: "أهلاً نورة! ممكن تجربين تضغطين زر التحميل مرة ثانية؟", time: "9:20 AM" },
+    { from: "user", text: "جربت بس نفس المشكلة", time: "9:25 AM" }
+  ]},
+  { id: 3, name: "أحمد السعيد", unread: 0, messages: [
+    { from: "user", text: "كيف أقدر أدفع بالريال السعودي؟", time: "أمس" },
+    { from: "admin", text: "أهلاً أحمد! حالياً الدفع بالدولار عبر Stripe. قريباً نضيف الدفع بالريال عبر Tap.", time: "أمس" }
+  ]},
+  { id: 4, name: "فاطمة الحربي", unread: 0, messages: [
+    { from: "user", text: "شكراً جداً! الرحلة كانت رائعة 🎉", time: "أمس" },
+    { from: "admin", text: "يسعدنا! شكراً لك فاطمة ❤️", time: "أمس" }
+  ]}
+];
+var activeChat = null;
+
+// ===== LOGIN =====
+function doLogin() {
+  var user = document.getElementById("loginUser").value;
+  var pass = document.getElementById("loginPass").value;
+  var found = null;
+  for (var i = 0; i < ACCOUNTS.length; i++) {
+    if (ACCOUNTS[i].user === user && ACCOUNTS[i].pass === pass) { found = ACCOUNTS[i]; break; }
+  }
+  if (found) {
+    currentUser = found;
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("sidebar").style.display = "flex";
+    document.getElementById("mainContent").style.display = "block";
+    document.getElementById("sbAvatar").textContent = found.name.charAt(0);
+    document.getElementById("sbName").textContent = found.name;
+    var roleNames = { admin: "مدير عام", editor: "محرر", viewer: "مشاهد" };
+    document.getElementById("sbRole").textContent = roleNames[found.role];
+    applyPermissions(found.role);
+    initDashboard();
+  } else {
+    document.getElementById("loginErr").style.display = "block";
+  }
+}
+
+// ===== PERMISSIONS =====
+function applyPermissions(role) {
+  if (role === "viewer") {
+    document.getElementById("teamTab").style.display = "none";
+    var settingsTab = document.querySelector('[onclick*="settings"]');
+    if (settingsTab) settingsTab.style.display = "none";
+  }
+  if (role === "editor") {
+    document.getElementById("teamTab").style.display = "none";
+  }
+}
+
+// ===== PAGE NAVIGATION =====
+function showPage(pageId, el) {
+  var pages = document.getElementsByClassName("page");
+  for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active");
+  document.getElementById("pg-" + pageId).classList.add("active");
+  var items = document.getElementsByClassName("sb-item");
+  for (var i = 0; i < items.length; i++) items[i].classList.remove("active");
+  if (el) el.classList.add("active");
+}
+
+// ===== INIT =====
+function initDashboard() {
+  renderChart();
+  renderTrips(TRIPS_DATA);
+  renderUsers(USERS_DATA);
+  renderTeam();
+  renderChatList();
+}
+
+// ===== CHART =====
+function renderChart() {
+  var data = [
+    { label: "السبت", val: 45 }, { label: "الأحد", val: 62 },
+    { label: "الإثنين", val: 78 }, { label: "الثلاثاء", val: 55 },
+    { label: "الأربعاء", val: 91 }, { label: "الخميس", val: 120 },
+    { label: "الجمعة", val: 84 }
+  ];
+  var max = 0;
+  for (var i = 0; i < data.length; i++) { if (data[i].val > max) max = data[i].val; }
+  var html = "";
+  for (var i = 0; i < data.length; i++) {
+    var h = Math.round((data[i].val / max) * 180);
+    html += '<div class="chart-bar" style="height:' + h + 'px"><span class="bar-val">' + data[i].val + '</span><span class="bar-label">' + data[i].label + '</span></div>';
+  }
+  document.getElementById("chartBars").innerHTML = html;
+}
+
+// ===== TRIPS TABLE =====
+function renderTrips(data) {
+  var html = "";
+  for (var i = 0; i < data.length; i++) {
+    var t = data[i];
+    html += "<tr><td>" + t.date + "</td><td>" + t.user + "</td><td>" + t.dest + "</td><td>" + t.days + "</td><td>" + t.budget + "</td><td>" + t.type + '</td><td><span class="td-badge ' + t.plan + '">' + (t.plan === "pro" ? "PRO" : "مجاني") + "</span></td></tr>";
+  }
+  document.getElementById("tripsTable").innerHTML = html;
+}
+function filterTrips(q) {
+  q = q.toLowerCase();
+  var filtered = [];
+  for (var i = 0; i < TRIPS_DATA.length; i++) {
+    if (TRIPS_DATA[i].dest.includes(q) || TRIPS_DATA[i].user.includes(q)) filtered.push(TRIPS_DATA[i]);
+  }
+  renderTrips(filtered);
+}
+
+// ===== USERS TABLE =====
+function renderUsers(data) {
+  var html = "";
+  for (var i = 0; i < data.length; i++) {
+    var u = data[i];
+    html += "<tr><td>" + u.name + "</td><td style='font-family:var(--mono);font-size:12px'>" + u.email + "</td><td>" + u.trips + "</td><td><span class='td-badge " + u.plan + "'>" + (u.plan === "pro" ? "PRO" : "مجاني") + "</span></td><td>" + u.date + "</td></tr>";
+  }
+  document.getElementById("usersTable").innerHTML = html;
+}
+function filterUsers(q) {
+  q = q.toLowerCase();
+  var filtered = [];
+  for (var i = 0; i < USERS_DATA.length; i++) {
+    if (USERS_DATA[i].name.includes(q) || USERS_DATA[i].email.includes(q)) filtered.push(USERS_DATA[i]);
+  }
+  renderUsers(filtered);
+}
+
+// ===== TEAM =====
+function renderTeam() {
+  var html = "";
+  var roleLabels = { admin: "مدير عام", editor: "محرر", viewer: "مشاهد" };
+  for (var i = 0; i < TEAM_DATA.length; i++) {
+    var m = TEAM_DATA[i];
+    var canDelete = (currentUser && currentUser.role === "admin" && m.email !== currentUser.email);
+    html += "<tr><td>" + m.name + "</td><td style='font-family:var(--mono);font-size:12px'>" + m.email + "</td>" +
+      '<td><span class="td-badge ' + m.role + '">' + roleLabels[m.role] + "</span></td>" +
+      '<td><span class="td-badge ' + m.status + '">' + (m.status === "online" ? "متصل" : "غير متصل") + "</span></td>" +
+      "<td>" + (canDelete ? '<button onclick="removeTeam(' + i + ')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:12px">حذف</button>' : '<span style="color:var(--txt3);font-size:12px">—</span>') + "</td></tr>";
+  }
+  document.getElementById("teamTable").innerHTML = html;
+}
+
+function toggleAddUser() {
+  document.getElementById("addUserForm").classList.toggle("show");
+}
+
+function addTeamMember() {
+  var name = document.getElementById("newName").value.trim();
+  var email = document.getElementById("newEmail").value.trim();
+  var role = document.getElementById("newRole").value;
+  if (!name || !email) { alert("الرجاء تعبئة الاسم والإيميل"); return; }
+  TEAM_DATA.push({ name: name, email: email, role: role, status: "offline" });
+  ACCOUNTS.push({ user: email.split("@")[0], pass: "temp123", name: name, role: role, email: email });
+  renderTeam();
+  document.getElementById("newName").value = "";
+  document.getElementById("newEmail").value = "";
+  document.getElementById("addUserForm").classList.remove("show");
+  alert("تمت إضافة " + name + " بنجاح!\nكلمة المرور المؤقتة: temp123");
+}
+
+function removeTeam(index) {
+  if (confirm("هل أنت متأكد من حذف " + TEAM_DATA[index].name + "؟")) {
+    TEAM_DATA.splice(index, 1);
+    renderTeam();
+  }
+}
+
+// ===== CHAT =====
+function renderChatList() {
+  var html = "";
+  for (var i = 0; i < CHATS.length; i++) {
+    var c = CHATS[i];
+    var lastMsg = c.messages[c.messages.length - 1];
+    html += '<div class="chat-item' + (activeChat === i ? ' active' : '') + '" onclick="openChat(' + i + ')">' +
+      '<div class="ci-name">' + c.name + (c.unread > 0 ? ' <span class="ci-unread">' + c.unread + '</span>' : '') + '</div>' +
+      '<div class="ci-msg">' + lastMsg.text.substring(0, 50) + '...</div>' +
+      '<div class="ci-time">' + lastMsg.time + '</div>' +
+      '</div>';
+  }
+  document.getElementById("chatList").innerHTML = html;
+}
+
+function openChat(index) {
+  activeChat = index;
+  var chat = CHATS[index];
+  chat.unread = 0;
+  renderChatList();
+  updateChatBadge();
+  
+  document.getElementById("chatName").textContent = chat.name;
+  document.getElementById("chatStatus").textContent = "● متصل";
+  
+  var html = "";
+  for (var i = 0; i < chat.messages.length; i++) {
+    var m = chat.messages[i];
+    html += '<div class="msg ' + m.from + '"><div>' + m.text + '</div><div class="msg-time">' + m.time + '</div></div>';
+  }
+  document.getElementById("chatMsgs").innerHTML = html;
+  document.getElementById("chatMsgs").scrollTop = 999999;
+  document.getElementById("replyInput").focus();
+}
+
+function sendReply() {
+  var input = document.getElementById("replyInput");
+  var text = input.value.trim();
+  if (!text || activeChat === null) return;
+  
+  var now = new Date();
+  var time = now.getHours() + ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes();
+  
+  CHATS[activeChat].messages.push({ from: "admin", text: text, time: time });
+  openChat(activeChat);
+  input.value = "";
+}
+
+function updateChatBadge() {
+  var total = 0;
+  for (var i = 0; i < CHATS.length; i++) total += CHATS[i].unread;
+  var badge = document.getElementById("chatBadge");
+  badge.textContent = total;
+  badge.style.display = total > 0 ? "inline" : "none";
+}
+</script>
+</body>
+</html>

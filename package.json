@@ -1,0 +1,17 @@
+{
+  "name": "masari-io",
+  "version": "1.0.0",
+  "description": "Masari.io - AI Travel Itinerary Generator",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "openai": "^4.40.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
