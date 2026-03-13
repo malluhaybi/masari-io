@@ -401,30 +401,49 @@ function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
 function startTrip() {
   var screen = document.getElementById("loadingScreen");
   screen.style.display = "flex";
+  
+  // Animate loading steps continuously
+  var loadStep = 0;
   var ids = ["ls1", "ls2", "ls3", "ls4"];
-  for (var i = 0; i < ids.length; i++) {
-    (function(idx) {
-      setTimeout(function() { document.getElementById(ids[idx]).style.color = "var(--gold)"; document.getElementById(ids[idx]).getElementsByTagName("span")[0].textContent = "⟳"; }, idx * 800);
-      setTimeout(function() { document.getElementById(ids[idx]).style.color = "var(--green)"; document.getElementById(ids[idx]).getElementsByTagName("span")[0].textContent = "✓"; }, (idx + 1) * 800);
-    })(i);
+  var loadInterval = setInterval(function() {
+    if (loadStep < ids.length) {
+      document.getElementById(ids[loadStep]).style.color = "var(--gold)";
+      document.getElementById(ids[loadStep]).getElementsByTagName("span")[0].textContent = "⟳";
+      if (loadStep > 0) {
+        document.getElementById(ids[loadStep - 1]).style.color = "var(--green)";
+        document.getElementById(ids[loadStep - 1]).getElementsByTagName("span")[0].textContent = "✓";
+      }
+      loadStep++;
+    }
+  }, 3000);
+
+  function hideLoading() {
+    clearInterval(loadInterval);
+    screen.style.display = "none";
+    for (var i = 0; i < ids.length; i++) {
+      document.getElementById(ids[i]).style.color = "var(--txt3)";
+      document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○";
+    }
   }
 
-  var apiDone = false;
   fetch("/api/generate-trip", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes })
   })
   .then(function(r) { return r.ok ? r.json() : null; })
-  .then(function(j) { if (j && j.data) { apiDone = true; window._tripData = j.data; } })
-  .catch(function() {});
-
-  setTimeout(function() {
-    screen.style.display = "none";
-    for (var i = 0; i < ids.length; i++) { document.getElementById(ids[i]).style.color = "var(--txt3)"; document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○"; }
-    if (apiDone && window._tripData) renderSmartTrip(window._tripData);
-    else buildLocalTrip();
-  }, 6000);
+  .then(function(j) {
+    hideLoading();
+    if (j && j.data) {
+      renderSmartTrip(j.data);
+    } else {
+      buildLocalTrip();
+    }
+  })
+  .catch(function() {
+    hideLoading();
+    buildLocalTrip();
+  });
 }
 
 // ===== RENDER SMART TRIP (3 OPTIONS) =====
