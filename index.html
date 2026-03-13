@@ -524,6 +524,10 @@ function sendBot() {
   var msgs = document.getElementById("botMsgs");
   msgs.innerHTML += '<div style="background:var(--bg);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;align-self:flex-end;color:var(--txt)">' + t + '</div>';
   inp.value = ""; msgs.scrollTop = 999999;
+  
+  // Send to admin via EmailJS
+  sendToAdmin("💬 رسالة شاتبوت جديدة", "رسالة من زائر:\n\n" + t + "\n\nالوقت: " + new Date().toLocaleString("ar-SA"));
+  
   setTimeout(function() {
     var q = t.toLowerCase(), r = "شكراً لسؤالك! سيرد فريقنا قريباً. support@masari.io";
     if (q.indexOf("حقيق") > -1 || q.indexOf("أماكن") > -1) r = "نعم! كل الأماكن حقيقية وموجودة على Google Maps 📍";
@@ -534,6 +538,38 @@ function sendBot() {
     msgs.scrollTop = 999999;
   }, 600);
 }
+
+// ===== EMAILJS - SEND TO ADMIN =====
+function sendToAdmin(subject, message) {
+  if (typeof emailjs === "undefined") return;
+  emailjs.send("service_vtis1ps", "template_br397yj", {
+    subject: subject,
+    message: message
+  }).catch(function() {});
+}
+
+// ===== NOTIFY ON TRIP GENERATED =====
+var _origRenderSmart = renderSmartTrip;
+renderSmartTrip = function(data) {
+  _origRenderSmart(data);
+  sendToAdmin(
+    "✈️ رحلة جديدة — " + formData.destination,
+    "رحلة جديدة تم إنشاؤها:\n\n" +
+    "📍 الوجهة: " + formData.destination + "\n" +
+    "📅 المدة: " + formData.days + " أيام\n" +
+    "💰 الميزانية: " + formData.budget + "\n" +
+    "✈️ النوع: " + formData.tripType + "\n" +
+    "🍽️ الطعام: " + formData.food + "\n" +
+    "💵 التكلفة: ~$" + (data.total_cost_estimate || "—") + "\n" +
+    "🕐 الوقت: " + new Date().toLocaleString("ar-SA")
+  );
+};
+</script>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  emailjs.init("IX0_HiEZ5LKeJusYq");
 </script>
 </body>
 </html>
