@@ -1,5 +1,5 @@
 // ============================================
-// Masar.ai - Vercel Serverless API
+// Masari.io - Smart Trip Generator API
 // File: /api/generate-trip.js
 // ============================================
 
@@ -9,47 +9,58 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// System prompt - the brain of Masar.ai
-const SYSTEM_PROMPT = `You are Masar.ai, an expert AI travel planner specializing in creating detailed, personalized day-by-day travel itineraries.
+const SYSTEM_PROMPT = `You are Masari.io, an elite AI travel architect. You don't just plan trips — you give travelers SMART CHOICES.
+
+## YOUR APPROACH:
+For each time slot in the day, provide exactly 3 OPTIONS ranked from best to good. Each option includes a rating, pros, cons, estimated cost, and your recommendation reason. This helps the traveler make informed decisions.
 
 ## RULES:
-1. Only suggest REAL places, restaurants, and attractions that actually exist.
-2. Include exact place names suitable for Google Maps search.
-3. Respect the budget tier:
-   - اقتصادي (Economy): Budget hostels, street food, free attractions, public transport
-   - متوسط (Mid-range): 3-4 star hotels, casual restaurants, popular attractions
-   - فاخر (Luxury): 5-star hotels, fine dining, VIP experiences, private transport
-4. Respect food preferences strictly (حلال/halal, نباتي/vegan, بحري/seafood).
-5. Include realistic time estimates and travel time between places.
-6. Include cost estimates in USD for each activity.
-7. Structure each day: Morning (8-12), Afternoon (12-17), Evening (17-22).
-8. Vary activities - don't repeat the same type consecutively.
-9. Consider opening hours and best times to visit.
-10. Return ONLY valid JSON. No markdown, no explanation, no code blocks.
+1. ONLY suggest REAL places that ACTUALLY EXIST. Use their real names.
+2. Include exact names searchable on Google Maps.
+3. Budget tiers:
+   - اقتصادي: Budget stays, street food, free/cheap attractions, public transport
+   - متوسط: 3-4 star hotels, mid-range restaurants, popular attractions
+   - فاخر: 5-star hotels, fine dining, VIP/exclusive experiences, private transport
+4. Strictly respect food preferences (حلال/halal, نباتي/vegan, بحري/seafood).
+5. All descriptions in Arabic.
+6. For each activity slot, provide 3 real alternatives with honest comparison.
+7. Mark your top pick as "recommended": true.
+8. Include real ratings (out of 5) based on general reputation.
+9. Return ONLY valid JSON. No markdown, no code blocks, no explanation.
 
-## JSON SCHEMA (follow exactly):
+## JSON SCHEMA:
 {
-  "trip_title": "string - catchy title in Arabic",
+  "trip_title": "string - catchy Arabic title",
   "destination": "string",
   "total_days": number,
   "budget_level": "string",
   "total_cost_estimate": number,
   "currency": "USD",
-  "tips": ["string - 3 useful tips for this destination"],
+  "tips": ["3 useful travel tips in Arabic"],
   "days": [
     {
       "day_number": number,
-      "title": "string - creative day title in Arabic",
-      "activities": [
+      "title": "string - creative Arabic day title",
+      "slots": [
         {
           "time": "string - e.g. 9:00 AM",
-          "name": "string - exact place name",
-          "name_ar": "string - Arabic name if available",
-          "description": "string - 2 sentences in Arabic",
-          "cost_usd": number,
-          "duration_minutes": number,
-          "maps_query": "string - Google Maps search query",
-          "category": "attraction|restaurant|hotel|transport|shopping|entertainment"
+          "slot_title": "string - e.g. زيارة صباحية or غداء or نشاط مسائي",
+          "category": "attraction|restaurant|shopping|entertainment|relaxation",
+          "options": [
+            {
+              "name": "string - exact real place name",
+              "name_ar": "string - Arabic name",
+              "description": "string - 2 sentences in Arabic describing the place",
+              "rating": number (1-5, one decimal like 4.5),
+              "cost_usd": number,
+              "duration_minutes": number,
+              "maps_query": "string - for Google Maps search",
+              "pros": ["2 pros in Arabic"],
+              "cons": ["1 con in Arabic"],
+              "recommended": boolean (true for your top pick only),
+              "why_recommended": "string - 1 sentence in Arabic why this is the best choice (only if recommended=true)"
+            }
+          ]
         }
       ],
       "daily_cost_estimate": number
@@ -58,111 +69,81 @@ const SYSTEM_PROMPT = `You are Masar.ai, an expert AI travel planner specializin
 }`;
 
 export default async function handler(req, res) {
-  // CORS headers
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const { destination, days, budget, tripType, food, notes } = req.body;
 
-    // Validation
     if (!destination || !days || !budget || !tripType) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Build user message
-    const userMessage = `Plan a complete travel itinerary with these details:
+    const userMessage = `Plan a complete travel itinerary:
 - Destination: ${destination}
 - Duration: ${days} days
-- Budget level: ${budget}
+- Budget: ${budget}
 - Trip type: ${tripType}
-- Food preference: ${food || 'No preference'}
-- Additional notes: ${notes || 'None'}
+- Food: ${food || 'No preference'}
+- Notes: ${notes || 'None'}
 
-Generate a detailed day-by-day plan following the JSON schema exactly. All descriptions should be in Arabic.`;
+For EACH time slot, provide exactly 3 real place options with ratings, pros, cons, cost, and mark the best one as recommended. 
+Each day should have 4 slots: morning activity, lunch, afternoon activity, dinner/evening.
+All text in Arabic. Place names must be real and findable on Google Maps.`;
 
-    // Call OpenAI
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Cost-efficient: ~$0.001 per trip
+      model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userMessage }
       ],
       temperature: 0.7,
-      max_tokens: 4000,
+      max_tokens: 6000,
       response_format: { type: 'json_object' },
     });
 
-    // Parse response
     const tripData = JSON.parse(response.choices[0].message.content);
 
-    // Add Google Maps links
-    tripData.days.forEach(day => {
-      day.activities.forEach(activity => {
-        activity.maps_url = `https://www.google.com/maps/search/${encodeURIComponent(activity.maps_query)}`;
+    // Add Google Maps URLs
+    if (tripData.days) {
+      tripData.days.forEach(day => {
+        if (day.slots) {
+          day.slots.forEach(slot => {
+            if (slot.options) {
+              slot.options.forEach(opt => {
+                opt.maps_url = `https://www.google.com/maps/search/${encodeURIComponent(opt.maps_query || opt.name)}`;
+              });
+            }
+          });
+        }
+        // Backward compat: also handle old 'activities' format
+        if (day.activities) {
+          day.activities.forEach(act => {
+            act.maps_url = `https://www.google.com/maps/search/${encodeURIComponent(act.maps_query || act.name)}`;
+          });
+        }
       });
-    });
+    }
 
-    // Log usage for monitoring
-    console.log(`Trip generated: ${destination}, ${days} days, ${budget}`);
-    console.log(`Tokens used: ${response.usage.total_tokens}`);
+    console.log(`Trip: ${destination}, ${days}d, ${budget} | Tokens: ${response.usage.total_tokens}`);
 
     return res.status(200).json({
       success: true,
       data: tripData,
       usage: {
         tokens: response.usage.total_tokens,
-        estimated_cost: (response.usage.total_tokens / 1000000 * 0.60).toFixed(6),
+        cost_usd: (response.usage.total_tokens / 1000000 * 0.60).toFixed(6),
       }
     });
 
   } catch (error) {
-    console.error('AI Generation Error:', error);
-
-    // Specific error handling
-    if (error.code === 'insufficient_quota') {
-      return res.status(402).json({ error: 'API quota exceeded. Please try again later.' });
-    }
-    if (error.code === 'rate_limit_exceeded') {
-      return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
-    }
-
-    return res.status(500).json({
-      error: 'Failed to generate trip. Please try again.',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    console.error('Error:', error);
+    if (error.code === 'insufficient_quota') return res.status(402).json({ error: 'API quota exceeded' });
+    if (error.code === 'rate_limit_exceeded') return res.status(429).json({ error: 'Too many requests' });
+    return res.status(500).json({ error: 'Failed to generate trip' });
   }
 }
-
-
-// ============================================
-// Alternative: Using Claude API instead of OpenAI
-// ============================================
-/*
-import Anthropic from '@anthropic-ai/sdk';
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-// In the handler, replace the OpenAI call with:
-const response = await anthropic.messages.create({
-  model: 'claude-sonnet-4-20250514',
-  max_tokens: 4000,
-  system: SYSTEM_PROMPT,
-  messages: [
-    { role: 'user', content: userMessage }
-  ],
-});
-
-const tripData = JSON.parse(response.content[0].text);
-*/
