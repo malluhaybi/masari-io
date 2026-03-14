@@ -246,7 +246,7 @@ footer a:hover { color: var(--gold); }
         <div class="mb"><label class="form-label">إلى أين تريد السفر؟ *</label><input type="text" class="form-input" id="inputDest" placeholder="مثال: دبي، اسطنبول، لندن، طوكيو..."></div>
         <div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="30" value="3"></div>
       </div>
-      <div class="form-step" id="step2">
+      <div class="form-step" id="step2" style="display:none">
         <label class="form-label">مستوى الميزانية *</label>
         <div class="options">
           <div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💵</span><span class="name">اقتصادي</span></div>
@@ -254,7 +254,7 @@ footer a:hover { color: var(--gold); }
           <div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💎</span><span class="name">فاخر</span></div>
         </div>
       </div>
-      <div class="form-step" id="step3">
+      <div class="form-step" id="step3" style="display:none">
         <label class="form-label">نوع الرحلة *</label>
         <div class="options">
           <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">👨‍👩‍👧‍👦</span><span class="name">عائلية</span></div>
@@ -265,7 +265,7 @@ footer a:hover { color: var(--gold); }
           <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏖️</span><span class="name">استرخاء</span></div>
         </div>
       </div>
-      <div class="form-step" id="step4">
+      <div class="form-step" id="step4" style="display:none">
         <label class="form-label">تفضيلات الطعام (اختياري)</label>
         <div class="options">
           <div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥩</span><span class="name">حلال</span></div>
@@ -274,7 +274,7 @@ footer a:hover { color: var(--gold); }
           <div class="opt-card selected" onclick="selectOption(this,'food')"><span class="emoji">🍽️</span><span class="name">بدون تفضيل</span></div>
         </div>
       </div>
-      <div class="form-step" id="step5">
+      <div class="form-step" id="step5" style="display:none">
         <div class="mb"><label class="form-label">ملاحظات (اختياري)</label><input type="text" class="form-input" id="inputNotes" placeholder="أنشطة للأطفال، أماكن قريبة..."></div>
         <div style="background:var(--bg3);border-radius:var(--rs);padding:20px"><h4 style="margin-bottom:10px;font-size:15px">📋 ملخص</h4><div id="summaryBox" style="color:var(--txt2);font-size:14px;line-height:2.2"></div></div>
       </div>
@@ -319,6 +319,23 @@ footer a:hover { color: var(--gold); }
   <p>© 2026 Masari.io — جميع الحقوق محفوظة</p>
   <div><a href="privacy.html">سياسة الخصوصية</a> <a href="terms.html">الشروط والأحكام</a> <a href="about.html">من نحن</a> <a href="admin.html">لوحة التحكم</a></div>
 </footer>
+
+<!-- PAYWALL -->
+<div id="paywallModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(6,9,15,0.95);backdrop-filter:blur(30px);align-items:center;justify-content:center">
+  <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:20px;max-width:460px;width:90%;padding:36px 28px;text-align:center;position:relative">
+    <button onclick="document.getElementById('paywallModal').style.display='none'" style="position:absolute;top:14px;left:14px;background:none;border:none;color:var(--txt3);font-size:20px;cursor:pointer">✕</button>
+    <div style="font-size:44px;margin-bottom:14px">🔒</div>
+    <h2 style="font-size:22px;font-weight:900;margin-bottom:8px">انتهت رحلاتك المجانية!</h2>
+    <p style="color:var(--txt2);font-size:14px;margin-bottom:24px">لقد استخدمت رحلتيك المجانيتين. اشترك الآن للمتابعة.</p>
+    <div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);border-radius:12px;padding:18px;margin-bottom:20px">
+      <div style="font-size:34px;font-weight:900;color:var(--gold);font-family:var(--mono)">$4.99</div>
+      <div style="color:var(--txt2);font-size:12px">لكل رحلة — دفعة واحدة</div>
+    </div>
+    <button onclick="handlePayment('single')" style="width:100%;padding:14px;background:var(--gold);color:var(--bg);border:none;border-radius:var(--rs);font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px">اشترك الآن — $4.99 ←</button>
+    <button onclick="handlePayment('monthly')" style="width:100%;padding:12px;background:transparent;color:var(--txt2);border:1px solid var(--border);border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer">أو اشتراك شهري $29 — رحلات لا محدودة</button>
+    <p style="color:var(--txt3);font-size:10px;margin-top:14px">🔒 دفع آمن عبر Stripe</p>
+  </div>
+</div>
 
 <!-- LOADING -->
 <div id="loadingScreen">
@@ -397,8 +414,44 @@ function goNext() {
 // ===== BACK =====
 function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
 
+// ===== TRIP COUNTER =====
+function getTripsUsed() { try { return parseInt(localStorage.getItem("masari_trips") || "0"); } catch(e) { return 0; } }
+function addTripCount() { try { var c = getTripsUsed() + 1; localStorage.setItem("masari_trips", c.toString()); } catch(e) {} }
+function isPro() { try { return localStorage.getItem("masari_pro") === "true"; } catch(e) { return false; } }
+
+// Check payment return
+(function() {
+  var p = new URLSearchParams(window.location.search);
+  if (p.get("paid") === "true") {
+    try { localStorage.setItem("masari_pro", "true"); } catch(e) {}
+    alert("تم الدفع بنجاح! شكراً لاشتراكك في Masari.io ✅");
+    window.history.replaceState({}, "", window.location.pathname);
+  }
+})();
+
+// ===== STRIPE CHECKOUT =====
+function handlePayment(plan) {
+  fetch("/api/create-checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ plan: plan || "single" })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.url) window.location.href = data.url;
+    else alert("حدث خطأ في الدفع. حاول مرة ثانية.");
+  })
+  .catch(function() { alert("حدث خطأ. تأكد من اتصالك بالإنترنت."); });
+}
+
 // ===== START TRIP =====
 function startTrip() {
+  // Check if free trips used
+  if (getTripsUsed() >= 2 && !isPro()) {
+    document.getElementById("paywallModal").style.display = "flex";
+    return;
+  }
+  addTripCount();
   var screen = document.getElementById("loadingScreen");
   screen.style.display = "flex";
   
