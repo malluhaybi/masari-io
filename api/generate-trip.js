@@ -15,55 +15,66 @@ export default async function handler(req, res) {
 
     const totalDays = parseInt(days) || 3;
     const from = parseInt(startDay) || 1;
-    const chunkSize = 3;
+    const chunkSize = 4;
     const to = Math.min(from + chunkSize - 1, totalDays);
     const hasMore = to < totalDays;
 
-    // Build exclusion list from previous chunks
     var excludeRule = '';
     if (usedPlaces && usedPlaces.length > 0) {
-      excludeRule = '\n\nIMPORTANT: Do NOT repeat any of these places that were already used in previous days: ' + usedPlaces.join(', ') + '. Choose DIFFERENT places for variety.';
+      excludeRule = '\nALREADY USED (do NOT repeat): ' + usedPlaces.slice(-30).join(', ');
     }
 
     const prompt = `Plan days ${from}-${to} of a ${totalDays}-day trip to ${destination}.
 Budget: ${budget}. Type: ${tripType}. Food: ${food || 'any'}. Notes: ${notes || 'none'}.
 
-RULES:
-- ONLY real places on Google Maps
-- Each day: 4 time slots (morning, lunch, afternoon, dinner)
-- Each slot: 3 options, mark best as recommended:true
-- All text Arabic, descriptions 1 sentence
-- Do NOT repeat any place across the entire trip — every option must be unique
-- Return ONLY JSON${excludeRule}
+CRITICAL RULES:
+1. ONLY real places on Google Maps
+2. If destination is a COUNTRY: split days logically between cities (stay 2-3 days per city, don't jump back). Add transport between cities (flights/trains/buses with real prices).
+3. If destination is a CITY: explore different neighborhoods each day
+4. Each day: 3 time slots (morning activity, lunch+afternoon, evening)
+5. Each slot: 2 best options, mark #1 as recommended:true
+6. MUST include realistic cost_usd for EVERY option (never 0)
+7. daily_cost_estimate MUST be sum of recommended options costs
+8. total_cost_estimate MUST be sum of all daily costs
+9. Keep descriptions SHORT (1 sentence Arabic)
+10. When moving between cities, first slot should be transport${excludeRule}
 
-JSON:
-{"days":[{"day_number":${from},"title":"Arabic","daily_cost_estimate":0,"slots":[{"time":"9:00 AM","slot_title":"Arabic","category":"attraction","options":[{"name":"place","name_ar":"Arabic","description":"Arabic","rating":4.5,"cost_usd":0,"duration_minutes":90,"maps_query":"place city","pros":["pro"],"cons":["con"],"recommended":true,"why_recommended":"Arabic"}]}]}],"tips":["tip1","tip2"]${from === 1 ? ',"trip_title":"Arabic","destination":"'+destination+'","total_days":'+totalDays+',"total_cost_estimate":0' : ''}}`;
+Transport slot example (when changing cities):
+{"time":"8:00 AM","slot_title":"انتقال إلى [city]","category":"transport","options":[{"name":"Turkish Airlines Flight","name_ar":"رحلة الخطوط التركية","description":"رحلة مباشرة ساعة ونص","rating":4.5,"cost_usd":80,"duration_minutes":90,"maps_query":"airport","pros":["سريع"],"cons":["أغلى"],"recommended":true,"why_recommended":"أسرع وسيلة"}]}
+
+JSON format:
+{"days":[{"day_number":1,"title":"Arabic","city":"city name","daily_cost_estimate":150,"slots":[{"time":"9:00 AM","slot_title":"Arabic","category":"attraction|restaurant|transport","options":[{"name":"real place","name_ar":"Arabic","description":"Arabic 1 sentence","rating":4.5,"cost_usd":25,"duration_minutes":90,"maps_query":"place city","pros":["pro"],"cons":["con"],"recommended":true,"why_recommended":"Arabic"}]}]}]${from === 1 ? ',"trip_title":"Arabic","destination":"'+destination+'","total_days":'+totalDays+',"total_cost_estimate":0,"tips":["tip1","tip2","tip3"]' : ',"tips":["tip"]'}}`;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: 'Return ONLY valid JSON. No markdown. Never repeat a place name.' },
+        { role: 'system', content: 'You are Masari.io travel planner. Return ONLY valid JSON. All costs must be realistic non-zero USD amounts. Never repeat places.' },
         { role: 'user', content: prompt }
       ],
-      temperature: 0.8,
-      max_tokens: 5000,
+      temperature: 0.7,
+      max_tokens: 4000,
       response_format: { type: 'json_object' },
     });
 
     const data = JSON.parse(response.choices[0].message.content);
 
-    // Collect all place names from this chunk for the frontend to track
     var placesInChunk = [];
+    var totalCost = 0;
     if (data.days) {
       data.days.forEach(function(day) {
+        var dayCost = 0;
         (day.slots || []).forEach(function(slot) {
           (slot.options || []).forEach(function(opt) {
             opt.maps_url = 'https://www.google.com/maps/search/' + encodeURIComponent(opt.maps_query || opt.name);
             if (opt.name) placesInChunk.push(opt.name);
+            if (opt.recommended && opt.cost_usd) dayCost += opt.cost_usd;
           });
         });
+        if (!day.daily_cost_estimate || day.daily_cost_estimate === 0) day.daily_cost_estimate = dayCost;
+        totalCost += day.daily_cost_estimate;
       });
     }
+    if (data.total_cost_estimate === 0 || !data.total_cost_estimate) data.total_cost_estimate = totalCost;
 
     return res.status(200).json({ 
       success: true, 
