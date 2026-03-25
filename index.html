@@ -1,451 +1,328 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مساري | Masari.io — رحلتك بضغطة زر</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#06090F;--bg2:#0C1220;--bg3:#121A2B;--gold:#F0A500;--gold2:#FFD166;--green:#34D399;--red:#EF4444;--blue:#60A5FA;--txt:#F1F1F1;--txt2:#94A3B8;--txt3:#4B5975;--border:rgba(240,165,0,0.1);--border2:rgba(240,165,0,0.25);--surface:rgba(18,26,43,0.8);--font:'IBM Plex Sans Arabic',sans-serif;--mono:'Space Mono',monospace;--r:14px;--rs:8px}
-html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.75;overflow-x:hidden}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
-nav.scrolled{background:rgba(6,9,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{text-decoration:none;font-size:24px;font-weight:800;color:var(--txt)}.logo span{color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:20px}.nav-links a{color:var(--txt2);text-decoration:none;font-size:13px;font-weight:500}.nav-links a:hover{color:var(--gold)}
-.nav-cta{background:var(--gold)!important;color:var(--bg)!important;padding:8px 18px!important;border-radius:var(--rs)!important;font-weight:700!important}
-.nav-user{display:flex;align-items:center;gap:10px}.nav-av{width:32px;height:32px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--bg)}
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px}
-.hero-content{max-width:700px}.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.15);padding:6px 16px;border-radius:40px;font-size:12px;color:var(--gold);font-weight:600;margin-bottom:28px}
-.hero h1{font-size:clamp(32px,6vw,60px);font-weight:900;line-height:1.2;margin-bottom:20px}.hero h1 .gold{color:var(--gold)}
-.hero p{font-size:18px;color:var(--txt2);margin-bottom:32px;max-width:550px;margin-left:auto;margin-right:auto}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--rs);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all .3s}
-.btn-gold{background:var(--gold);color:var(--bg)}.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,165,0,0.3)}
-.btn-dark{background:rgba(18,26,43,0.55);color:var(--txt);border:1px solid var(--border)}
-.section{padding:80px 24px;max-width:1100px;margin:0 auto}
-.section-head{text-align:center;margin-bottom:48px}.tag{display:inline-block;background:rgba(240,165,0,0.08);color:var(--gold);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:12px}
-.section-head h2{font-size:clamp(26px,4vw,40px);font-weight:900;margin-bottom:10px}.section-head p{color:var(--txt2);font-size:16px}
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.feat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px}.feat:hover{border-color:var(--border2);transform:translateY(-4px);transition:all .3s}
-.feat h3{font-size:17px;font-weight:700;margin:14px 0 8px}.feat p{font-size:13px;color:var(--txt2)}
-.steps{max-width:650px;margin:0 auto}.step{display:flex;gap:24px;padding:24px 0}
-.step-num{flex-shrink:0;width:56px;height:56px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--bg);font-family:var(--mono)}
-.step h3{font-size:18px;font-weight:700;margin-bottom:4px}.step p{color:var(--txt2);font-size:14px}
-.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px}
-.app-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:750px;margin:0 auto;overflow:hidden}
-.app-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}.app-header h2{font-size:18px;font-weight:800}
-#stepLabel{font-size:13px;color:var(--txt3);font-family:var(--mono)}
-.progress{height:3px;background:var(--bg3)}#progressBar{height:100%;background:var(--gold);transition:width .4s;width:20%}
-.app-body{padding:28px;min-height:200px}.form-step{display:none}.form-step.active{display:block}
-.form-label{display:block;font-size:14px;font-weight:600;margin-bottom:8px}
-.form-input{width:100%;padding:14px 16px;background:var(--bg3);border:2px solid transparent;border-radius:var(--rs);color:var(--txt);font-family:var(--font);font-size:15px;outline:none}.form-input:focus{border-color:var(--gold)}.form-input::placeholder{color:var(--txt3)}
-.mb{margin-bottom:20px}.options{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
-.opt-card{background:var(--bg3);border:2px solid transparent;border-radius:var(--rs);padding:16px 12px;text-align:center;cursor:pointer;transition:all .3s}
-.opt-card:hover{border-color:rgba(240,165,0,0.2)}.opt-card.selected{border-color:var(--gold);background:rgba(240,165,0,0.06)}
-.opt-card .emoji{font-size:28px;display:block;margin-bottom:6px}.opt-card .name{font-size:13px;font-weight:700}
-.app-footer{padding:16px 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-#backBtn{background:none;border:none;color:var(--txt2);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;padding:10px 16px;border-radius:var(--rs)}
-#nextBtn{background:var(--gold);color:var(--bg);border:none;padding:12px 26px;border-radius:var(--rs);font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer}
-#loadingScreen{display:none;position:fixed;inset:0;z-index:9999;background:rgba(6,9,15,0.97);backdrop-filter:blur(30px);flex-direction:column;align-items:center;justify-content:center}
-.spinner{width:60px;height:60px;border:3px solid var(--bg3);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:24px}
-@keyframes spin{to{transform:rotate(360deg)}}
-#resultSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto}
-.result-head{text-align:center;margin-bottom:40px}.result-head h2{font-size:32px;font-weight:900;margin-bottom:10px}
-.result-meta{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;color:var(--txt2);font-size:14px}
-.day-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden}
-.day-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-bottom:1px solid var(--border)}
-.day-header h3{font-size:17px;font-weight:700}
-.day-badge{background:var(--gold);color:var(--bg);padding:2px 10px;border-radius:12px;font-size:11px;font-weight:800;font-family:var(--mono);margin-left:8px}
-.day-body{padding:20px 24px}.day-card.collapsed .day-body{display:none}
-.day-cost{display:flex;justify-content:space-between;align-items:center;padding-top:14px;margin-top:8px;border-top:1px solid var(--border)}
-.result-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:32px}
-.opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-.opt-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
-.opt-box.rec{border-color:var(--gold);background:rgba(240,165,0,0.04)}.opt-box.transport{border-color:var(--blue);background:rgba(96,165,250,0.04)}
-.opt-rec-badge{position:absolute;top:-8px;right:12px;background:var(--gold);color:var(--bg);padding:2px 10px;border-radius:10px;font-size:10px;font-weight:800}
-.opt-name{font-size:14px;font-weight:700;margin-bottom:4px}.opt-stars{color:var(--gold);font-size:12px;margin-bottom:8px}
-.opt-desc{font-size:12px;color:var(--txt2);line-height:1.7;margin-bottom:10px}
-.opt-pro{font-size:11px;color:var(--green);margin-bottom:2px}.opt-con{font-size:11px;color:var(--red);margin-bottom:2px}
-.opt-why{margin-top:8px;padding:6px 10px;background:rgba(240,165,0,0.08);border-radius:6px;font-size:11px;color:var(--gold)}
-.opt-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.04)}
-.opt-price{font-family:var(--mono);font-size:13px;font-weight:700}.opt-map{font-size:11px;color:var(--green);text-decoration:none}
-.pricing{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:700px;margin:0 auto}
-.price-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 24px;text-align:center;position:relative}
-.price-card.popular{border-color:var(--gold)}.price-card.popular::before{content:'الأكثر شعبية';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--bg);padding:3px 14px;border-radius:12px;font-size:11px;font-weight:800}
-.price-amount{font-size:42px;font-weight:900;color:var(--gold);font-family:var(--mono);margin:12px 0}
-.price-amount small{font-size:14px;color:var(--txt3);font-weight:400;font-family:var(--font)}
-.price-list{list-style:none;text-align:right;margin:16px 0}.price-list li{padding:6px 0;font-size:13px;color:var(--txt2)}.price-list li::before{content:'✓ ';color:var(--green)}
-.faq-item{border-bottom:1px solid var(--border)}.faq-q{padding:18px 0;font-size:16px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between}.faq-q:hover{color:var(--gold)}
-.faq-a{max-height:0;overflow:hidden;color:var(--txt2);font-size:14px;line-height:1.9;transition:max-height .4s}.faq-item.open .faq-a{max-height:200px;padding-bottom:18px}
-footer{padding:40px 24px 20px;border-top:1px solid var(--border);text-align:center}footer p{font-size:13px;color:var(--txt3);margin-bottom:8px}footer a{color:var(--txt3);text-decoration:none;margin:0 8px;font-size:13px}footer a:hover{color:var(--gold)}
-/* AUTH MODAL */
-#authModal{display:none;position:fixed;inset:0;z-index:9998;background:rgba(6,9,15,0.95);backdrop-filter:blur(30px);align-items:center;justify-content:center}
-.auth-box{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;max-width:400px;width:90%;padding:36px 28px;text-align:center}
-.auth-box h2{font-size:22px;font-weight:900;margin-bottom:6px}.auth-sub{color:var(--txt2);font-size:13px;margin-bottom:24px}
-.auth-input{width:100%;padding:13px 16px;background:var(--bg);border:2px solid transparent;border-radius:8px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none;margin-bottom:12px}.auth-input:focus{border-color:var(--gold)}.auth-input::placeholder{color:var(--txt3)}
-.auth-btn{width:100%;padding:13px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;margin-top:6px}.auth-btn:hover{box-shadow:0 6px 24px rgba(240,165,0,.3)}
-.auth-switch{color:var(--txt3);font-size:12px;margin-top:16px}.auth-switch a{color:var(--gold);cursor:pointer;text-decoration:underline}
-.auth-err{color:var(--red);font-size:12px;margin-top:8px;display:none}
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  masari.io — index.html PATCH
+ *  الملف: index_patch.js
+ *  يحتوي على 3 تحسينات:
+ *    1. CSS محسّن للـ profileSection
+ *    2. HTML محسّن للـ profileSection
+ *    3. دالة showProfile() محسّنة مع إحصائيات
+ *    4. دالة buildInfographic() محسّنة للـ SVG
+ *
+ *  طريقة التطبيق:
+ *    ① افتح index.html في GitHub
+ *    ② ابحث عن /* PROFILE */ في CSS وعوّضه بـ PROFILE_CSS
+ *    ③ ابحث عن <div id="profileSection"> وعوّضه بـ PROFILE_HTML
+ *    ④ ابحث عن function showProfile() وعوّضها بـ showProfile()
+ *    ⑤ ابحث عن // === INFOGRAPHIC MAP === وعوّض الكود بـ buildInfographic()
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   1. PROFILE_CSS
+   استبدل  /* PROFILE */  في كتلة <style> بهذا:
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const PROFILE_CSS = `
 /* PROFILE */
-#profileSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto}
-.profile-trips{display:grid;gap:12px;margin-top:20px}
-.trip-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:border-color .2s}
-.trip-card:hover{border-color:var(--gold)}
-@media print{*{color:#000!important;background:#fff!important}nav,.hero,#features,#how,#appSection,#pricing,#faq,footer,#chatWidget,#loadingScreen,#paywallModal,#authModal,.result-actions,.badge,.opt-map{display:none!important}#resultSection{display:block!important;padding:0!important}.day-card.collapsed .day-body{display:block!important}#infographicSection{break-before:page}#infographicSection svg{max-width:100%!important}@page{margin:1.5cm}}
-@media(max-width:768px){.nav-links{display:none}.features,.tests,.pricing{grid-template-columns:1fr}.options{grid-template-columns:repeat(2,1fr)}.opt-grid{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
-<nav id="navbar">
-  <a href="#" class="logo">مساري<span>.io</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="#features">المميزات</a>
-    <a href="#how">كيف يعمل</a>
-    <a href="#appSection">صمم رحلتك</a>
-    <a href="#pricing">الأسعار</a>
-    <a id="navAuthBtn" href="javascript:showAuth('login')" class="nav-cta">تسجيل دخول</a>
+#profileSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto;animation:profileFadeIn .4s ease}
+@keyframes profileFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.profile-wrap{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center;position:sticky;top:90px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 24px rgba(240,165,0,.3)}
+.profile-name{font-size:19px;font-weight:700;margin-bottom:4px}
+.profile-email-txt{font-size:12px;color:var(--txt2);margin-bottom:16px;direction:ltr;unicode-bidi:plaintext}
+.profile-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:20px;letter-spacing:.3px}
+.profile-badge.pro{background:rgba(240,165,0,.15);color:var(--gold);border:1px solid rgba(240,165,0,.3)}
+.profile-badge.free{background:rgba(148,163,184,.08);color:var(--txt2);border:1px solid var(--border)}
+.profile-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.ps-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center}
+.ps-num{font-size:24px;font-weight:800;font-family:'Space Mono',monospace;color:var(--gold);line-height:1}
+.ps-lbl{font-size:10px;color:var(--txt2);margin-top:4px;letter-spacing:.2px}
+.profile-logout-btn{width:100%;padding:10px;background:none;border:1px solid var(--border);border-radius:10px;color:var(--txt3);font-family:var(--font);font-size:13px;cursor:pointer;transition:all .2s;margin-top:8px}
+.profile-logout-btn:hover{border-color:var(--red);color:var(--red)}
+.profile-trips-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px}
+.profile-trips-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.profile-trips-head h3{font-size:17px;font-weight:700}
+.trip-card-item{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .15s;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.trip-card-item:last-child{margin-bottom:0}
+.trip-card-item:hover{border-color:var(--border2);transform:translateX(-3px)}
+.tci-dest{font-size:15px;font-weight:700;margin-bottom:5px}
+.tci-meta{font-size:12px;color:var(--txt2);display:flex;gap:10px;flex-wrap:wrap}
+.tci-cost{font-size:17px;font-weight:800;font-family:'Space Mono',monospace;color:var(--gold);white-space:nowrap}
+.profile-empty{text-align:center;padding:48px 20px;color:var(--txt3)}
+.profile-empty .ei{font-size:44px;display:block;margin-bottom:12px}
+.profile-empty p{font-size:14px;margin-bottom:20px}
+@media(max-width:768px){.profile-wrap{grid-template-columns:1fr}.profile-card{position:static}}
+`;
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2. PROFILE_HTML
+   استبدل  <div id="profileSection">...</div>  بهذا:
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const PROFILE_HTML = `
+<div id="profileSection">
+  <div class="profile-wrap">
+
+    <!-- بطاقة المستخدم -->
+    <div class="profile-card">
+      <div class="profile-avatar" id="profileAvatar">م</div>
+      <div class="profile-name"   id="profileName">المستخدم</div>
+      <div class="profile-email-txt" id="profileEmail">—</div>
+      <div class="profile-badge free" id="profileBadge">🔓 مجاني</div>
+
+      <div class="profile-stats-row">
+        <div class="ps-box">
+          <div class="ps-num" id="profileTripCount">0</div>
+          <div class="ps-lbl">رحلة مصمَّمة</div>
+        </div>
+        <div class="ps-box">
+          <div class="ps-num" id="profileRemainingTrips">2</div>
+          <div class="ps-lbl">رحلات متبقية</div>
+        </div>
+      </div>
+
+      <a href="#appSection" class="btn btn-gold" style="display:block;text-align:center">✈️ رحلة جديدة</a>
+      <button class="profile-logout-btn" onclick="logoutUser()">↩ تسجيل خروج</button>
+    </div>
+
+    <!-- قسم الرحلات -->
+    <div class="profile-trips-section">
+      <div class="profile-trips-head">
+        <h3>🗺️ رحلاتي</h3>
+        <span id="profileTripsCount" style="font-size:13px;color:var(--txt2)"></span>
+      </div>
+      <div id="profileTrips"></div>
+    </div>
+
   </div>
-</nav>
-<section class="hero"><div class="hero-content"><div class="badge">🟢 مدعوم بالذكاء الاصطناعي</div><h1>خطط رحلتك بذكاء<br><span class="gold">في 30 ثانية فقط</span></h1><p>الذكاء الاصطناعي يعطيك خيارات لكل نشاط مع مقارنة ذكية — أماكن حقيقية، تقييمات، مميزات وعيوب، وتكاليف.</p><div class="hero-btns"><a href="#appSection" class="btn btn-gold">صمم رحلتي الآن ←</a><a href="#how" class="btn btn-dark">كيف يعمل ↓</a></div></div></section>
-<div class="section" id="features"><div class="section-head"><div class="tag">المميزات</div><h2>أدوات ذكية لرحلة مثالية</h2></div><div class="features"><div class="feat"><div style="font-size:28px">🧠</div><h3>خيارات ذكية</h3><p>لكل نشاط يعرض أماكن حقيقية مع تقييمات ومميزات وعيوب.</p></div><div class="feat"><div style="font-size:28px">🗺️</div><h3>خرائط مباشرة</h3><p>كل مكان مربوط بـ Google Maps.</p></div><div class="feat"><div style="font-size:28px">💰</div><h3>تقدير التكاليف</h3><p>ميزانية يومية تشمل كل شيء.</p></div><div class="feat"><div style="font-size:28px">🍽️</div><h3>طعام حلال</h3><p>مراعاة كاملة لتفضيلاتك الغذائية.</p></div><div class="feat"><div style="font-size:28px">📄</div><h3>تصدير PDF</h3><p>حمّل الجدول كملف جاهز للطباعة.</p></div><div class="feat"><div style="font-size:28px">👤</div><h3>بروفايل شخصي</h3><p>سجّل دخولك وشوف كل رحلاتك السابقة.</p></div></div></div>
-<div class="section" id="how"><div class="section-head"><div class="tag">كيف يعمل</div><h2>ثلاث خطوات بس</h2></div><div class="steps"><div class="step"><div class="step-num">1</div><div><h3>أخبرنا عن رحلتك</h3><p>الوجهة، الأيام، الميزانية، ونوع الرحلة.</p></div></div><div class="step"><div class="step-num">2</div><div><h3>الذكاء الاصطناعي يحلل</h3><p>يقارن آلاف الأماكن ويعطيك خيارات لكل نشاط.</p></div></div><div class="step"><div class="step-num">3</div><div><h3>اختر واستمتع</h3><p>قارن الخيارات، اختر الأنسب، وحمّل الجدول PDF.</p></div></div></div></div>
-<div class="section"><div class="section-head"><div class="tag">آراء العملاء</div><h2>ماذا يقولون عنا</h2></div><div class="tests"><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"وفّر علي ساعات! الخيارات ساعدتني أقرر بسرعة."</div><div style="font-size:14px;font-weight:700">محمد العتيبي</div><div style="font-size:11px;color:var(--txt3)">رحلة عائلية — اسطنبول</div></div><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"أول مرة أخطط شهر عسل بدون توتر."</div><div style="font-size:14px;font-weight:700">نورة الشمري</div><div style="font-size:11px;color:var(--txt3)">شهر عسل — المالديف</div></div><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"المقارنة بين الأماكن شيء ما لقيته بأي تطبيق ثاني."</div><div style="font-size:14px;font-weight:700">خالد المهيري</div><div style="font-size:11px;color:var(--txt3)">مؤثر سفر</div></div></div></div>
-<div class="section" id="appSection"><div class="section-head"><div class="tag">ابدأ الآن</div><h2>صمم رحلتك المثالية</h2><p>5 أسئلة بسيطة — والباقي علينا</p></div><div class="app-box"><div class="app-header"><h2>✦ مُصمم الرحلات</h2><span id="stepLabel">1 / 5</span></div><div class="progress"><div id="progressBar"></div></div><div class="app-body"><div class="form-step active" id="step1"><div class="mb"><label class="form-label">إلى أين تريد السفر؟ *</label><input type="text" class="form-input" id="inputDest" placeholder="مثال: دبي، تركيا، اليابان..."></div><div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="90" value="3"></div></div><div class="form-step" id="step2" style="display:none"><label class="form-label">مستوى الميزانية *</label><div class="options"><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💵</span><span class="name">اقتصادي</span></div><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💳</span><span class="name">متوسط</span></div><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💎</span><span class="name">فاخر</span></div></div></div><div class="form-step" id="step3" style="display:none"><label class="form-label">نوع الرحلة *</label><div class="options"><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">👨‍👩‍👧‍👦</span><span class="name">عائلية</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">💑</span><span class="name">شهر عسل</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏔️</span><span class="name">مغامرة</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🛍️</span><span class="name">تسوق</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏛️</span><span class="name">ثقافية</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏖️</span><span class="name">استرخاء</span></div></div></div><div class="form-step" id="step4" style="display:none"><label class="form-label">تفضيلات الطعام</label><div class="options"><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥩</span><span class="name">حلال</span></div><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥗</span><span class="name">نباتي</span></div><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🐟</span><span class="name">بحري</span></div><div class="opt-card selected" onclick="selectOption(this,'food')"><span class="emoji">🍽️</span><span class="name">بدون تفضيل</span></div></div></div><div class="form-step" id="step5" style="display:none"><div class="mb"><label class="form-label">ملاحظات (اختياري)</label><input type="text" class="form-input" id="inputNotes" placeholder="أنشطة للأطفال، أماكن قريبة..."></div><div style="background:var(--bg3);border-radius:var(--rs);padding:20px"><h4 style="margin-bottom:10px;font-size:15px">📋 ملخص</h4><div id="summaryBox" style="color:var(--txt2);font-size:14px;line-height:2.2"></div></div></div></div><div class="app-footer"><button id="backBtn" onclick="goBack()" style="visibility:hidden">→ السابقة</button><button id="nextBtn" onclick="goNext()">التالي ←</button></div></div></div>
-<div id="resultSection"><div class="result-head"><h2>🎉 مسار رحلتك جاهز!</h2><div class="result-meta" id="resultMeta"></div></div><div id="resultDays"></div><div class="result-actions"><button class="btn btn-gold" onclick="downloadPDF()">📄 تحميل PDF</button><button class="btn btn-dark" onclick="location.href='#appSection'">✦ رحلة جديدة</button></div></div>
-<div id="profileSection"><div class="section-head"><div class="tag">بروفايلي</div><h2 id="profileName">رحلاتي</h2><p id="profileEmail" style="color:var(--txt3)"></p></div><div id="profileTrips" class="profile-trips"><p style="color:var(--txt3);text-align:center">لا توجد رحلات بعد — صمم أول رحلة!</p></div><div style="text-align:center;margin-top:24px"><button class="btn btn-dark" onclick="logoutUser()">تسجيل خروج</button></div></div>
-<div class="section" id="pricing"><div class="section-head"><div class="tag">الأسعار</div><h2>خطط تناسب الجميع</h2></div><div class="pricing"><div class="price-card"><div style="font-size:20px;font-weight:800">مجاني</div><div class="price-amount">$0<small> / للأبد</small></div><ul class="price-list"><li>رحلتان مجانيتان</li><li>خيارات لكل نشاط</li><li>روابط Google Maps</li><li>تقدير التكاليف</li></ul><a href="#appSection" class="btn btn-dark" style="width:100%;justify-content:center">ابدأ مجاناً</a></div><div class="price-card popular"><div style="font-size:20px;font-weight:800">احترافي</div><div class="price-amount">$4.99<small> / رحلة</small></div><ul class="price-list"><li>رحلات غير محدودة</li><li>مقارنة ذكية</li><li>تصدير PDF احترافي</li><li>حفظ الرحلات في بروفايلك</li></ul><a href="#appSection" class="btn btn-gold" style="width:100%;justify-content:center">اشترك الآن</a></div></div></div>
-<div class="section" id="faq" style="max-width:700px"><div class="section-head"><div class="tag">أسئلة شائعة</div><h2>كل اللي تبي تعرفه</h2></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل الأماكن حقيقية؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم! كل الأماكن حقيقية وموجودة على Google Maps.</div></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل يراعي الحلال؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">بالتأكيد. كل المطاعم تكون حلال لما تختار هذا التفضيل.</div></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل بياناتي آمنة؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم. نستخدم Firebase من Google لحماية بياناتك.</div></div></div>
-<footer><p>© 2026 Masari.io — جميع الحقوق محفوظة</p><div><a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">الشروط</a><a href="about.html">من نحن</a><a href="admin.html">لوحة التحكم</a></div></footer>
-<!-- PAYWALL -->
-<div id="paywallModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(6,9,15,0.95);backdrop-filter:blur(30px);align-items:center;justify-content:center"><div style="background:var(--bg3);border:1px solid var(--border2);border-radius:20px;max-width:460px;width:90%;padding:36px 28px;text-align:center;position:relative"><button onclick="document.getElementById('paywallModal').style.display='none'" style="position:absolute;top:14px;left:14px;background:none;border:none;color:var(--txt3);font-size:20px;cursor:pointer">✕</button><div style="font-size:44px;margin-bottom:14px">🔒</div><h2 style="font-size:22px;font-weight:900;margin-bottom:8px">انتهت رحلاتك المجانية!</h2><p style="color:var(--txt2);font-size:14px;margin-bottom:24px">اشترك الآن للمتابعة.</p><div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);border-radius:12px;padding:18px;margin-bottom:20px"><div style="font-size:34px;font-weight:900;color:var(--gold);font-family:var(--mono)">$4.99</div><div style="color:var(--txt2);font-size:12px">لكل رحلة</div></div><button onclick="handlePayment('single')" style="width:100%;padding:14px;background:var(--gold);color:var(--bg);border:none;border-radius:var(--rs);font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px">اشترك — $4.99 ←</button><button onclick="handlePayment('monthly')" style="width:100%;padding:12px;background:transparent;color:var(--txt2);border:1px solid var(--border);border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer">اشتراك شهري $29 — رحلات لا محدودة</button></div></div>
-<!-- AUTH MODAL -->
-<div id="authModal"><div class="auth-box"><span class="logo" style="display:block;margin-bottom:20px;font-size:22px">مساري<span>.io</span></span><h2 id="authTitle">تسجيل الدخول</h2><p class="auth-sub" id="authSub">ادخل بياناتك</p><input type="text" class="auth-input" id="authName" placeholder="الاسم" style="display:none"><input type="email" class="auth-input" id="authEmail" placeholder="الإيميل"><input type="password" class="auth-input" id="authPass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doAuth()"><button class="auth-btn" onclick="doAuth()" id="authBtn">دخول</button><div class="auth-err" id="authErr"></div><div class="auth-switch" id="authSwitch">ما عندك حساب؟ <a onclick="showAuth('register')">سجل الآن</a></div><div style="margin-top:12px"><a onclick="document.getElementById('authModal').style.display='none'" style="color:var(--txt3);font-size:12px;cursor:pointer">✕ إغلاق</a></div></div></div>
-<!-- LOADING -->
-<div id="loadingScreen"><div class="spinner"></div><div style="font-size:20px;font-weight:800;margin-bottom:6px" id="loadTitle">✦ نصمم رحلتك الآن</div><div style="color:var(--txt2);font-size:14px;margin-bottom:24px">نقارن آلاف الأماكن ونجهز خيارات لكل نشاط</div><div id="ls1" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> تحليل الوجهة</div><div id="ls2" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> مقارنة الأماكن</div><div id="ls3" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> ترتيب الخيارات</div><div id="ls4" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> حساب التكاليف</div></div>
-<!-- CHATBOT -->
-<div id="chatWidget" style="position:fixed;bottom:24px;left:24px;z-index:900"><div onclick="toggleChat()" style="width:56px;height:56px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(240,165,0,0.3);font-size:22px">💬</div><div id="chatBox" style="display:none;position:absolute;bottom:68px;left:0;width:320px;background:var(--bg3);border:1px solid var(--border2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.4)"><div style="padding:14px 18px;background:var(--gold);display:flex;justify-content:space-between;align-items:center"><div style="font-size:14px;font-weight:800;color:var(--bg)">مساري.io</div><button onclick="toggleChat()" style="background:none;border:none;color:var(--bg);font-size:16px;cursor:pointer">✕</button></div><div id="botMsgs" style="height:260px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px"><div style="background:rgba(240,165,0,0.08);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;color:var(--txt)">أهلاً! 👋 كيف أقدر أساعدك؟</div></div><div style="padding:10px;border-top:1px solid var(--border);display:flex;gap:6px"><input type="text" id="botInput" placeholder="سؤالك..." style="flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);font-size:12px;outline:none" onkeydown="if(event.key==='Enter')sendBot()"><button onclick="sendBot()" style="padding:8px 14px;background:var(--gold);color:var(--bg);border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:12px">↩</button></div></div></div>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script>
-// ===== FIREBASE INIT =====
-firebase.initializeApp({
-  apiKey:"AIzaSyCtaF4bay85Pr7yB_fXtWdIH-Htg12W1BY",authDomain:"masari-io.firebaseapp.com",projectId:"masari-io",
-  storageBucket:"masari-io.firebasestorage.app",messagingSenderId:"512681089634",appId:"1:512681089634:web:615e26e29e5cc2c9458f3b"
-});
-var auth = firebase.auth();
-var db = firebase.firestore();
-var currentUser = null;
+</div>
+`;
 
-// ===== AUTH STATE =====
-auth.onAuthStateChanged(function(user) {
-  currentUser = user;
-  var navEl = document.getElementById("navLinks");
-  if (user) {
-    var initial = (user.displayName || user.email || "U").charAt(0).toUpperCase();
-    document.getElementById("navAuthBtn").outerHTML = '<div class="nav-user"><div class="nav-av" id="navAv">' + initial + '</div><a href="javascript:showProfile()" style="color:var(--txt);font-size:13px;font-weight:600">' + (user.displayName || 'حسابي') + '</a></div>';
-  }
-});
 
-// ===== AUTH UI =====
-var authMode = 'login';
-function showAuth(mode) {
-  authMode = mode;
-  document.getElementById("authModal").style.display = "flex";
-  document.getElementById("authErr").style.display = "none";
-  if (mode === 'register') {
-    document.getElementById("authTitle").textContent = "إنشاء حساب";
-    document.getElementById("authSub").textContent = "سجّل عشان تحفظ رحلاتك";
-    document.getElementById("authBtn").textContent = "إنشاء حساب";
-    document.getElementById("authName").style.display = "block";
-    document.getElementById("authSwitch").innerHTML = 'عندك حساب؟ <a onclick="showAuth(\'login\')">سجل دخول</a>';
-  } else {
-    document.getElementById("authTitle").textContent = "تسجيل الدخول";
-    document.getElementById("authSub").textContent = "ادخل بياناتك";
-    document.getElementById("authBtn").textContent = "دخول";
-    document.getElementById("authName").style.display = "none";
-    document.getElementById("authSwitch").innerHTML = 'ما عندك حساب؟ <a onclick="showAuth(\'register\')">سجل الآن</a>';
-  }
-}
-function doAuth() {
-  var email = document.getElementById("authEmail").value.trim();
-  var pass = document.getElementById("authPass").value;
-  var errEl = document.getElementById("authErr");
-  errEl.style.display = "none";
-  if (!email || !pass) { errEl.textContent = "ادخل الإيميل وكلمة المرور"; errEl.style.display = "block"; return; }
-  if (authMode === 'register') {
-    var name = document.getElementById("authName").value.trim();
-    auth.createUserWithEmailAndPassword(email, pass).then(function(cred) {
-      return cred.user.updateProfile({ displayName: name || email.split('@')[0] }).then(function() {
-        db.collection("users").doc(cred.user.uid).set({ name: name || email.split('@')[0], email: email, createdAt: new Date(), freeTrips: 0, isPro: false });
-      });
-    }).then(function() { document.getElementById("authModal").style.display = "none"; location.reload(); })
-    .catch(function(e) { errEl.textContent = e.message.indexOf("email-already") > -1 ? "الإيميل مسجل مسبقاً" : "خطأ: " + e.message; errEl.style.display = "block"; });
-  } else {
-    auth.signInWithEmailAndPassword(email, pass).then(function() { document.getElementById("authModal").style.display = "none"; location.reload(); })
-    .catch(function(e) { errEl.textContent = "الإيميل أو كلمة المرور غلط"; errEl.style.display = "block"; });
-  }
-}
-function logoutUser() { auth.signOut().then(function() { location.reload(); }); }
-
-// ===== PROFILE =====
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3. showProfile() محسّنة
+   استبدل  function showProfile() {...}  بهذا:
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function showProfile() {
   if (!currentUser) { showAuth('login'); return; }
-  document.getElementById("profileName").textContent = (currentUser.displayName || "المستخدم") + " — رحلاتي";
-  document.getElementById("profileEmail").textContent = currentUser.email;
-  // Load trips from Firestore
-  db.collection("trips").where("userId", "==", currentUser.uid).orderBy("createdAt", "desc").limit(20).get().then(function(snap) {
-    var html = '';
-    if (snap.empty) { html = '<p style="color:var(--txt3);text-align:center;padding:20px">لا توجد رحلات بعد — صمم أول رحلة!</p>'; }
-    snap.forEach(function(doc) {
-      var t = doc.data();
-      html += '<div class="trip-card"><div><div style="font-size:15px;font-weight:700">📍 ' + (t.destination || '—') + '</div><div style="font-size:12px;color:var(--txt3)">' + (t.days || 0) + ' أيام | ' + (t.budget || '') + ' | ' + (t.tripType || '') + '</div></div><div style="text-align:left"><div style="font-size:13px;color:var(--gold);font-weight:700">$' + (t.totalCost || '—') + '</div><div style="font-size:10px;color:var(--txt3)">' + (t.createdAt ? new Date(t.createdAt.seconds * 1000).toLocaleDateString('ar-SA') : '') + '</div></div></div>';
+
+  // Avatar
+  var initial = (currentUser.displayName || currentUser.email || 'م').charAt(0).toUpperCase();
+  document.getElementById('profileAvatar').textContent = initial;
+  document.getElementById('profileName').textContent   = currentUser.displayName || 'المستخدم — رحلاتي';
+  document.getElementById('profileEmail').textContent  = currentUser.email;
+
+  // Badge PRO / مجاني
+  var proStatus = isPro();
+  var badge = document.getElementById('profileBadge');
+  if (proStatus) {
+    badge.className   = 'profile-badge pro';
+    badge.textContent = '⭐ مشترك PRO';
+  } else {
+    badge.className   = 'profile-badge free';
+    badge.textContent = '🔓 مجاني';
+  }
+
+  // رحلات متبقية
+  var used      = getTripsUsed();
+  var remaining = proStatus ? '∞' : String(Math.max(0, 2 - used));
+  document.getElementById('profileRemainingTrips').textContent = remaining;
+
+  // جلب الرحلات من Firestore
+  db.collection('trips')
+    .where('userId', '==', currentUser.uid)
+    .orderBy('createdAt', 'desc')
+    .limit(20)
+    .get()
+    .then(function(snap) {
+      document.getElementById('profileTripCount').textContent  = snap.size;
+      document.getElementById('profileTripsCount').textContent = snap.size + ' رحلة';
+
+      if (snap.empty) {
+        document.getElementById('profileTrips').innerHTML =
+          '<div class="profile-empty">'
+          + '<span class="ei">✈️</span>'
+          + '<p>لا توجد رحلات بعد — صمّم أول رحلة!</p>'
+          + '<a href="#appSection" class="btn btn-gold">ابدأ الآن ←</a>'
+          + '</div>';
+        return;
+      }
+
+      var html = '';
+      snap.forEach(function(doc) {
+        var t    = doc.data();
+        var date = t.createdAt
+          ? new Date(t.createdAt.seconds * 1000).toLocaleDateString('ar-SA')
+          : '';
+        html +=
+          '<div class="trip-card-item">'
+          + '<div>'
+          +   '<div class="tci-dest">📍 ' + (t.destination || '—') + '</div>'
+          +   '<div class="tci-meta">'
+          +     '<span>📅 ' + (t.days || 0) + ' أيام</span>'
+          +     '<span>💰 $' + (t.budget || '—') + '</span>'
+          +     (t.tripType ? '<span>🎯 ' + t.tripType + '</span>' : '')
+          +     '<span style="color:var(--txt3)">' + date + '</span>'
+          +   '</div>'
+          + '</div>'
+          + '<div class="tci-cost">$' + (t.totalCost || 0) + '</div>'
+          + '</div>';
+      });
+      document.getElementById('profileTrips').innerHTML = html;
     });
-    document.getElementById("profileTrips").innerHTML = html;
-  });
-  document.getElementById("profileSection").style.display = "block";
-  document.getElementById("profileSection").scrollIntoView({ behavior: "smooth" });
+
+  document.getElementById('profileSection').style.display = 'block';
+  document.getElementById('profileSection').scrollIntoView({ behavior: 'smooth' });
 }
 
-// ===== SAVE TRIP TO FIRESTORE =====
-function saveTripToFirestore(tripData) {
-  if (!currentUser) return;
-  db.collection("trips").add({
-    userId: currentUser.uid,
-    userEmail: currentUser.email,
-    userName: currentUser.displayName || '',
-    destination: formData.destination,
-    days: formData.days,
-    budget: formData.budget,
-    tripType: formData.tripType,
-    food: formData.food,
-    totalCost: tripData.total_cost_estimate || 0,
-    tripTitle: tripData.trip_title || '',
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).catch(function() {});
-}
 
-// ===== STATE =====
-var currentStep = 1;
-var formData = { destination:"", days:3, budget:"", tripType:"", food:"بدون تفضيل", notes:"" };
-window.onscroll = function() { document.getElementById("navbar").className = window.scrollY > 50 ? "scrolled" : ""; };
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   4. INFOGRAPHIC — buildInfographic(mapPlaces, dest, formData, data)
+   في دالة renderSmartTrip() ابحث عن:
+     // === INFOGRAPHIC MAP ===
+   وعوّض كل كتلة بناء الـ SVG (من var mapPlaces حتى آخر html +=)
+   باستدعاء:
+     buildInfographic(mapPlaces, dest, formData, data);
+   ثم أضف هذه الدالة قبل renderSmartTrip():
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function buildInfographic(mapPlaces, dest, formData, data) {
+  if (!mapPlaces || mapPlaces.length === 0) return;
 
-function selectOption(el, field) { var cards = el.parentElement.getElementsByClassName("opt-card"); for (var i = 0; i < cards.length; i++) cards[i].classList.remove("selected"); el.classList.add("selected"); formData[field] = el.getElementsByClassName("name")[0].textContent; }
+  var W       = 800;
+  var nodeH   = 86, padY = 12, headerH = 78, footerH = 48;
+  var totalH  = headerH + mapPlaces.length * (nodeH + padY) + footerH;
 
-function updateUI() {
-  for (var i = 1; i <= 5; i++) { var el = document.getElementById("step" + i); if (i === currentStep) { el.className = "form-step active"; el.style.display = "block"; } else { el.className = "form-step"; el.style.display = "none"; } }
-  document.getElementById("stepLabel").textContent = currentStep + " / 5";
-  document.getElementById("progressBar").style.width = (currentStep * 20) + "%";
-  document.getElementById("backBtn").style.visibility = (currentStep === 1) ? "hidden" : "visible";
-  if (currentStep === 5) { document.getElementById("nextBtn").textContent = "صمم رحلتي ✦"; document.getElementById("summaryBox").innerHTML = "📍 " + formData.destination + "<br>📅 " + formData.days + " أيام<br>💰 " + formData.budget + "<br>✈️ " + formData.tripType + "<br>🍽️ " + formData.food; }
-  else { document.getElementById("nextBtn").textContent = "التالي ←"; }
-}
-function goNext() {
-  if (currentStep === 1) { formData.destination = document.getElementById("inputDest").value.trim(); formData.days = parseInt(document.getElementById("inputDays").value) || 3; if (!formData.destination) { document.getElementById("inputDest").style.borderColor = "#EF4444"; return; } }
-  if (currentStep === 2 && !formData.budget) return;
-  if (currentStep === 3 && !formData.tripType) return;
-  if (currentStep === 5) { formData.notes = document.getElementById("inputNotes").value; startTrip(); return; }
-  currentStep++; updateUI();
-}
-function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
+  var catIcons  = {
+    attraction:'🏛️', restaurant:'🍽️', transport:'✈️',
+    shopping:'🛍️', entertainment:'🎭', relaxation:'🧘'
+  };
+  var catColors = {
+    attraction:'#F0A500', restaurant:'#34D399', transport:'#60A5FA',
+    shopping:'#A78BFA',  entertainment:'#F472B6', relaxation:'#38BDF8'
+  };
 
-// ===== TRIP COUNTER =====
-function getTripsUsed() { if (currentUser) { return parseInt(localStorage.getItem("masari_trips_" + currentUser.uid) || "0"); } return parseInt(localStorage.getItem("masari_trips") || "0"); }
-function addTripCount() { var key = currentUser ? "masari_trips_" + currentUser.uid : "masari_trips"; var c = getTripsUsed() + 1; localStorage.setItem(key, c.toString()); }
-function isPro() { if (currentUser) { var v = localStorage.getItem("masari_pro_" + currentUser.uid); if (v === "true") return true; } return localStorage.getItem("masari_pro") === "true"; }
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + totalH + '" xmlns="http://www.w3.org/2000/svg"'
+    + ' style="width:100%;display:block;font-family:IBM Plex Sans Arabic,sans-serif;direction:rtl">';
 
-// Check payment return
-(function() {
-  var p = new URLSearchParams(window.location.search);
-  if (p.get("paid") === "true") {
-    var key = currentUser ? "masari_pro_" + currentUser.uid : "masari_pro";
-    localStorage.setItem(key, "true"); localStorage.setItem("masari_pro", "true");
-    window.history.replaceState({}, "", window.location.pathname);
-    try { var pending = localStorage.getItem("masari_pending_trip"); if (pending) { var s = JSON.parse(pending); formData = s; localStorage.removeItem("masari_pending_trip"); setTimeout(function() { alert("تم الدفع! ✅ جاري تصميم رحلتك..."); startTrip(); }, 1000); } else { alert("تم الدفع بنجاح! ✅"); } } catch(e) { alert("تم الدفع بنجاح! ✅"); }
+  // ── Defs ──
+  svg += '<defs>'
+    + '<linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">'
+    +   '<stop offset="0%" stop-color="#0D1424"/>'
+    +   '<stop offset="100%" stop-color="#07090F"/>'
+    + '</linearGradient>'
+    + '<linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">'
+    +   '<stop offset="0%"   stop-color="#F0A500" stop-opacity=".7"/>'
+    +   '<stop offset="100%" stop-color="#F0A500" stop-opacity=".05"/>'
+    + '</linearGradient>'
+    + '<filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/>'
+    +   '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
+    + '</filter>'
+    + '<filter id="cardShadow"><feDropShadow dx="0" dy="3" stdDeviation="7" flood-color="#000" flood-opacity=".4"/></filter>'
+    + '</defs>';
+
+  // Background
+  svg += '<rect width="' + W + '" height="' + totalH + '" fill="url(#bgGrad)" rx="16"/>';
+
+  // Subtle grid
+  for (var gy = headerH; gy < totalH - footerH; gy += 30) {
+    svg += '<line x1="80" y1="' + gy + '" x2="' + (W-20) + '" y2="' + gy
+      + '" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>';
   }
-})();
 
-// ===== STRIPE =====
-function handlePayment(plan) {
-  try { localStorage.setItem("masari_pending_trip", JSON.stringify(formData)); } catch(e) {}
-  fetch("/api/create-checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan: plan || "single" }) })
-  .then(function(r) { return r.json(); }).then(function(d) { if (d.url) window.location.href = d.url; else alert("خطأ في الدفع"); }).catch(function() { alert("خطأ. تأكد من اتصالك."); });
-}
+  // ── Header ──
+  svg += '<rect x="0" y="0" width="' + W + '" height="' + headerH + '" fill="rgba(240,165,0,0.05)" rx="16"/>';
+  svg += '<rect x="0" y="' + (headerH-1) + '" width="' + W + '" height="1" fill="rgba(240,165,0,0.18)"/>';
+  svg += '<text x="' + (W/2) + '" y="24" text-anchor="middle" fill="#F0A500"'
+    + ' font-size="10" font-weight="700" letter-spacing="3" font-family="Space Mono,monospace">'
+    + 'MASARI.IO — AI TRAVEL PLAN</text>';
+  svg += '<text x="' + (W/2) + '" y="50" text-anchor="middle" fill="#F1F1F1"'
+    + ' font-size="19" font-weight="800">✈️ ' + dest + ' — خطة المسار</text>';
+  svg += '<text x="' + (W/2) + '" y="68" text-anchor="middle" fill="#94A3B8" font-size="11">'
+    + formData.days + ' أيام  ·  ' + mapPlaces.length + ' نشاط  ·  $' + formData.budget
+    + '  ·  ~$' + (data.total_cost_estimate || 0) + ' تكلفة فعلية</text>';
 
-// ===== START TRIP =====
-function startTrip() {
-  if (getTripsUsed() >= 2 && !isPro()) { document.getElementById("paywallModal").style.display = "flex"; return; }
-  addTripCount();
-  var screen = document.getElementById("loadingScreen"); screen.style.display = "flex";
-  var loadStep = 0, ids = ["ls1","ls2","ls3","ls4"];
-  var loadInterval = setInterval(function() { if (loadStep < ids.length) { document.getElementById(ids[loadStep]).style.color = "var(--gold)"; document.getElementById(ids[loadStep]).getElementsByTagName("span")[0].textContent = "⟳"; if (loadStep > 0) { document.getElementById(ids[loadStep-1]).style.color = "var(--green)"; document.getElementById(ids[loadStep-1]).getElementsByTagName("span")[0].textContent = "✓"; } loadStep++; } else { loadStep = 0; for (var i = 0; i < ids.length; i++) { document.getElementById(ids[i]).style.color = "var(--txt3)"; document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○"; } } }, 2500);
-  function hideLoading() { clearInterval(loadInterval); screen.style.display = "none"; for (var i = 0; i < ids.length; i++) { document.getElementById(ids[i]).style.color = "var(--txt3)"; document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○"; } }
+  // ── Timeline line ──
+  var lineX = 52;
+  svg += '<line x1="' + lineX + '" y1="' + (headerH+12) + '" x2="' + lineX + '" y2="'
+    + (headerH + mapPlaces.length*(nodeH+padY) - padY) + '" stroke="url(#lineGrad)"'
+    + ' stroke-width="2" stroke-dasharray="5,4"/>';
 
-  var allDays = [], tripMeta = null, totalDays = parseInt(formData.days) || 3, usedPlaces = [];
-  function loadChunk(startDay, retries) {
-    document.getElementById("loadTitle").textContent = "✦ نصمم أيام " + startDay + "-" + Math.min(startDay + 3, totalDays) + " من " + totalDays;
-    fetch("/api/generate-trip", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes, startDay: startDay, usedPlaces: usedPlaces }) })
-    .then(function(r) { if (!r.ok) throw new Error("Status " + r.status); return r.json(); })
-    .then(function(j) {
-      if (j && j.data && j.data.days) {
-        if (!tripMeta) { tripMeta = { trip_title: j.data.trip_title || "رحلتك إلى " + formData.destination, destination: j.data.destination || formData.destination, total_days: totalDays, total_cost_estimate: j.data.total_cost_estimate || 0, tips: j.data.tips || [] }; }
-        else { tripMeta.total_cost_estimate += (j.data.total_cost_estimate || 0); if (j.data.tips) tripMeta.tips = tripMeta.tips.concat(j.data.tips); }
-        if (j.placesUsed) usedPlaces = usedPlaces.concat(j.placesUsed);
-        allDays = allDays.concat(j.data.days);
-        if (j.hasMore && j.nextStartDay) { loadChunk(j.nextStartDay, 0); }
-        else { hideLoading(); tripMeta.days = allDays; tripMeta.tips = tripMeta.tips.filter(function(t, i, a) { return a.indexOf(t) === i; }).slice(0, 5); renderSmartTrip(tripMeta); saveTripToFirestore(tripMeta); }
-      } else { throw new Error("Invalid"); }
-    })
-    .catch(function() { if (retries < 2) { setTimeout(function() { loadChunk(startDay, retries + 1); }, 2000); } else { hideLoading(); buildLocalTrip(); } });
-  }
-  loadChunk(1, 0);
-}
+  // ── Place cards ──
+  for (var pi = 0; pi < mapPlaces.length; pi++) {
+    var pl      = mapPlaces[pi];
+    var py      = headerH + 8 + pi * (nodeH + padY);
+    var color   = catColors[pl.cat]  || '#F0A500';
+    var icon    = catIcons[pl.cat]   || '📍';
+    var cardMid = py + (nodeH / 2);
 
-// ===== RENDER =====
-function renderSmartTrip(data) {
-  document.getElementById("resultMeta").innerHTML = '<span>📍 ' + (data.destination || formData.destination) + '</span><span>📅 ' + (data.total_days || formData.days) + ' أيام</span><span>💰 ' + formData.budget + '</span><span>💵 ~$' + (data.total_cost_estimate || '—') + '</span>';
-  var totalSlots = 0, totalOptions = 0;
-  for (var sd = 0; sd < data.days.length; sd++) { var ss = data.days[sd].slots || []; totalSlots += ss.length; for (var so = 0; so < ss.length; so++) totalOptions += (ss[so].options || []).length; }
-  var html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:28px"><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">' + (data.total_days || formData.days) + '</div><div style="font-size:11px;color:var(--txt2)">أيام</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--blue);font-family:var(--mono)">' + totalSlots + '</div><div style="font-size:11px;color:var(--txt2)">نشاط</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--green);font-family:var(--mono)">' + totalOptions + '</div><div style="font-size:11px;color:var(--txt2)">خيار</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">$' + (data.total_cost_estimate || '—') + '</div><div style="font-size:11px;color:var(--txt2)">التكلفة</div></div></div>';
-  for (var d = 0; d < data.days.length; d++) {
-    var day = data.days[d], slots = day.slots || [];
-    html += '<div class="day-card"><div class="day-header" onclick="this.parentElement.classList.toggle(\'collapsed\')"><h3><span class="day-badge">Day ' + (day.day_number || d+1) + '</span> ' + day.title + (day.city ? ' <span style="font-size:12px;color:var(--blue);font-weight:400">📍 ' + day.city + '</span>' : '') + '</h3><span style="color:var(--txt3)">▼</span></div><div class="day-body">';
-    for (var s = 0; s < slots.length; s++) {
-      var slot = slots[s];
-      if (slot.options && slot.options.length) {
-        html += '<div style="margin-bottom:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="background:var(--bg3);padding:4px 10px;border-radius:4px;font-size:12px;font-weight:700;color:var(--gold);font-family:var(--mono)">' + slot.time + '</span><span style="font-size:14px;font-weight:700">' + (slot.slot_title || '') + '</span></div><div class="opt-grid">';
-        for (var o = 0; o < slot.options.length; o++) {
-          var opt = slot.options[o], rec = opt.recommended, isT = (slot.category === 'transport');
-          html += '<div class="opt-box' + (rec ? ' rec' : '') + (isT ? ' transport' : '') + '">';
-          if (rec) html += '<div class="opt-rec-badge">⭐ الأفضل</div>';
-          html += '<div class="opt-name">' + (opt.name_ar || opt.name) + '</div><div class="opt-stars">';
-          for (var st = 0; st < Math.floor(opt.rating || 0); st++) html += '★';
-          html += ' <span style="font-family:var(--mono);font-size:11px">' + (opt.rating || '') + '</span></div>';
-          html += '<div class="opt-desc">' + (opt.description || '') + '</div>';
-          if (opt.pros) for (var p = 0; p < opt.pros.length; p++) html += '<div class="opt-pro">✓ ' + opt.pros[p] + '</div>';
-          if (opt.cons) for (var c = 0; c < opt.cons.length; c++) html += '<div class="opt-con">✗ ' + opt.cons[c] + '</div>';
-          if (rec && opt.why_recommended) html += '<div class="opt-why">💡 ' + opt.why_recommended + '</div>';
-          html += '<div class="opt-footer"><span class="opt-price">$' + (opt.cost_usd || 0) + '</span><a class="opt-map" href="' + (opt.maps_url || 'https://www.google.com/maps/search/' + encodeURIComponent(opt.maps_query || opt.name)) + '" target="_blank">📍 Maps</a></div></div>';
-        }
-        html += '</div></div>';
-      }
+    // Card background
+    svg += '<rect x="76" y="' + py + '" width="' + (W-96) + '" height="' + nodeH + '"'
+      + ' rx="13" fill="rgba(16,24,40,0.95)" stroke="' + color + '" stroke-opacity=".2"'
+      + ' stroke-width="1.5" filter="url(#cardShadow)"/>';
+
+    // Left accent bar
+    svg += '<rect x="76" y="' + py + '" width="4" height="' + nodeH + '" rx="2" fill="' + color + '"/>';
+
+    // Timeline dot
+    svg += '<circle cx="' + lineX + '" cy="' + cardMid + '" r="9" fill="' + color
+      + '" fill-opacity=".15" stroke="' + color + '" stroke-width="1.5"/>';
+    svg += '<circle cx="' + lineX + '" cy="' + cardMid + '" r="4" fill="' + color + '" filter="url(#glow)"/>';
+
+    // Day badge (top-left of card)
+    svg += '<rect x="' + (W-115) + '" y="' + (py+8) + '" width="35" height="17" rx="8" fill="'
+      + color + '" fill-opacity=".12"/>';
+    svg += '<text x="' + (W-97) + '" y="' + (py+20) + '" text-anchor="middle" fill="' + color
+      + '" font-size="9" font-weight="700">Day ' + pl.day + '</text>';
+
+    // Large faded number
+    svg += '<text x="' + (W-38) + '" y="' + (py+nodeH-10) + '" text-anchor="middle"'
+      + ' fill="rgba(255,255,255,.07)" font-size="38" font-weight="900"'
+      + ' font-family="Space Mono,monospace">' + pl.num + '</text>';
+
+    // Icon + Name
+    svg += '<text x="94" y="' + (py+28) + '" fill="#F1F1F1" font-size="14" font-weight="700">'
+      + icon + '  ' + (pl.name || '—') + '</text>';
+
+    // City
+    if (pl.city) {
+      svg += '<text x="96" y="' + (py+48) + '" fill="#94A3B8" font-size="11">📍 ' + pl.city + '</text>';
     }
-    html += '<div class="day-cost"><span style="color:var(--txt2);font-size:13px">تكلفة اليوم</span><span style="color:var(--gold);font-size:20px;font-weight:900;font-family:var(--mono)">$' + (day.daily_cost_estimate || '—') + '</span></div></div></div>';
+
+    // Cost chip
+    svg += '<rect x="96" y="' + (py+nodeH-24) + '" width="60" height="17" rx="8"'
+      + ' fill="rgba(240,165,0,.1)" stroke="rgba(240,165,0,.2)" stroke-width="1"/>';
+    svg += '<text x="126" y="' + (py+nodeH-12) + '" text-anchor="middle" fill="#F0A500"'
+      + ' font-size="10" font-weight="700" font-family="Space Mono,monospace">$' + pl.cost + '</text>';
   }
-  if (data.tips && data.tips.length) { html += '<div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);border-radius:14px;padding:24px;margin-top:16px"><h3 style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px">💡 نصائح</h3>'; for (var t = 0; t < data.tips.length; t++) html += '<div style="font-size:13px;color:var(--txt2);padding:4px 0">✦ ' + data.tips[t] + '</div>'; html += '</div>'; }
-  
-  // === INFOGRAPHIC MAP ===
-  var mapPlaces = [], placeNum = 1, cities = [];
-  for (var md = 0; md < data.days.length; md++) {
-    var mDay = data.days[md];
-    if (mDay.city && cities.indexOf(mDay.city) === -1) cities.push(mDay.city);
-    var mSlots = mDay.slots || [];
-    for (var ms = 0; ms < mSlots.length; ms++) {
-      var mOpts = mSlots[ms].options || [];
-      for (var mo = 0; mo < mOpts.length; mo++) {
-        if (mOpts[mo].recommended) {
-          mapPlaces.push({ name: mOpts[mo].name_ar || mOpts[mo].name, day: mDay.day_number || md+1, cost: mOpts[mo].cost_usd || 0, city: mDay.city || '', cat: mSlots[ms].category || '', num: placeNum });
-          placeNum++;
-        }
-      }
-    }
-  }
-  
-  if (mapPlaces.length > 0) {
-    // SVG Infographic Route Map
-    var dest = data.destination || formData.destination;
-    var svgW = 800, nodeH = 54, padY = 20, headerH = 80;
-    var svgH = headerH + (mapPlaces.length * (nodeH + padY)) + 100;
-    var catIcons = { attraction: '🏛️', restaurant: '🍽️', transport: '🚁', shopping: '🛍️', entertainment: '🎭', relaxation: '🧘' };
-    var catColors = { attraction: '#F0A500', restaurant: '#34D399', transport: '#60A5FA', shopping: '#A78BFA', entertainment: '#F472B6', relaxation: '#38BDF8' };
-    
-    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px" id="infographicSection">';
-    html += '<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:16px;font-weight:700">🗺️ خريطة المسار — ' + dest + '</h3><span style="font-size:12px;color:var(--txt3)">' + mapPlaces.length + ' محطة | ' + cities.length + ' مدينة</span></div>';
-    
-    // SVG Infographic
-    html += '<div style="padding:20px;overflow-x:auto"><svg viewBox="0 0 ' + svgW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;margin:0 auto;display:block;font-family:IBM Plex Sans Arabic,sans-serif">';
-    
-    // Background
-    html += '<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0C1220"/><stop offset="100%" stop-color="#06090F"/></linearGradient>';
-    html += '<filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
-    html += '<rect width="' + svgW + '" height="' + svgH + '" rx="14" fill="url(#bgGrad)"/>';
-    
-    // Header
-    html += '<text x="' + (svgW/2) + '" y="35" text-anchor="middle" fill="#F0A500" font-size="20" font-weight="900">✈️ ' + dest + ' — خطة المسار</text>';
-    html += '<text x="' + (svgW/2) + '" y="58" text-anchor="middle" fill="#94A3B8" font-size="12">' + (data.total_days || formData.days) + ' أيام | ' + mapPlaces.length + ' نشاط | $' + (data.total_cost_estimate || '—') + '</text>';
-    
-    // Route line
-    var lineX = 100, startY = headerH + 20;
-    html += '<line x1="' + lineX + '" y1="' + startY + '" x2="' + lineX + '" y2="' + (startY + mapPlaces.length * (nodeH + padY) - padY) + '" stroke="#F0A500" stroke-width="2" stroke-dasharray="6,4" opacity="0.3"/>';
-    
-    var currentDay = 0;
-    for (var pi = 0; pi < mapPlaces.length; pi++) {
-      var place = mapPlaces[pi];
-      var py = startY + pi * (nodeH + padY);
-      var col = catColors[place.cat] || '#F0A500';
-      
-      // Day separator
-      if (place.day !== currentDay) {
-        currentDay = place.day;
-        html += '<rect x="30" y="' + (py - 8) + '" width="50" height="22" rx="11" fill="#F0A500"/>';
-        html += '<text x="55" y="' + (py + 7) + '" text-anchor="middle" fill="#06090F" font-size="10" font-weight="800">Day ' + currentDay + '</text>';
-      }
-      
-      // Node circle
-      html += '<circle cx="' + lineX + '" cy="' + (py + 14) + '" r="16" fill="' + col + '" opacity="0.15"/>';
-      html += '<circle cx="' + lineX + '" cy="' + (py + 14) + '" r="10" fill="' + col + '" filter="url(#glow)"/>';
-      html += '<text x="' + lineX + '" y="' + (py + 18) + '" text-anchor="middle" fill="#06090F" font-size="9" font-weight="900">' + place.num + '</text>';
-      
-      // Place card
-      html += '<rect x="130" y="' + py + '" width="' + (svgW - 160) + '" height="' + nodeH + '" rx="10" fill="rgba(18,26,43,0.8)" stroke="' + col + '" stroke-width="1" stroke-opacity="0.3"/>';
-      
-      // Icon
-      html += '<text x="150" y="' + (py + 32) + '" font-size="20">' + (catIcons[place.cat] || '📍') + '</text>';
-      
-      // Place name
-      html += '<text x="180" y="' + (py + 22) + '" fill="#F1F1F1" font-size="13" font-weight="700" text-anchor="start">' + place.name + '</text>';
-      
-      // City + Cost
-      if (place.city) html += '<text x="180" y="' + (py + 40) + '" fill="#94A3B8" font-size="10" text-anchor="start">📍 ' + place.city + '</text>';
-      html += '<text x="' + (svgW - 40) + '" y="' + (py + 30) + '" fill="' + col + '" font-size="13" font-weight="900" text-anchor="end" font-family="Space Mono,monospace">$' + place.cost + '</text>';
-    }
-    
-    // Footer
-    var footY = startY + mapPlaces.length * (nodeH + padY) + 20;
-    html += '<text x="' + (svgW/2) + '" y="' + footY + '" text-anchor="middle" fill="#4B5975" font-size="10">Masari.io — مصمم بالذكاء الاصطناعي</text>';
-    
-    html += '</svg></div>';
-    
-    // Place list with links
-    html += '<div style="padding:16px 24px;border-top:1px solid var(--border)">';
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
-    for (var pi2 = 0; pi2 < mapPlaces.length; pi2++) {
-      var pl = mapPlaces[pi2];
-      var plCol = catColors[pl.cat] || '#F0A500';
-      html += '<a href="https://www.google.com/maps/search/' + encodeURIComponent(pl.name + ' ' + (pl.city || formData.destination)) + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;text-decoration:none" onmouseover="this.style.borderColor=\'' + plCol + '\'" onmouseout="this.style.borderColor=\'rgba(240,165,0,0.1)\'">';
-      html += '<span style="width:24px;height:24px;background:' + plCol + ';border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--bg);flex-shrink:0">' + pl.num + '</span>';
-      html += '<span style="font-size:12px;color:var(--txt);font-weight:600">' + pl.name + '</span>';
-      html += '</a>';
-    }
-    html += '</div></div></div>';
-  }
-  document.getElementById("resultDays").innerHTML = html;
-  var rs = document.getElementById("resultSection"); rs.style.display = "block";
-  setTimeout(function() { rs.scrollIntoView({ behavior: "smooth" }); }, 100);
+
+  // ── Footer ──
+  svg += '<rect x="0" y="' + (totalH-footerH) + '" width="' + W + '" height="' + footerH
+    + '" fill="rgba(240,165,0,.03)" rx="16"/>';
+  svg += '<line x1="0" y1="' + (totalH-footerH) + '" x2="' + W + '" y2="' + (totalH-footerH)
+    + '" stroke="rgba(240,165,0,.12)" stroke-width="1"/>';
+  svg += '<text x="' + (W/2) + '" y="' + (totalH-footerH+20) + '" text-anchor="middle"'
+    + ' fill="#4B5975" font-size="10" letter-spacing="1">'
+    + 'Masari.io — مصمَّم بالذكاء الاصطناعي</text>';
+  svg += '<text x="' + (W/2) + '" y="' + (totalH-footerH+36) + '" text-anchor="middle"'
+    + ' fill="rgba(240,165,0,.3)" font-size="9" font-family="Space Mono,monospace">masari.io</text>';
+  svg += '</svg>';
+
+  // ── Inject into DOM ──
+  var ig = document.getElementById('infographicSection');
+  ig.style.cssText = 'margin-top:24px;border:none;background:none;padding:0';
+  ig.innerHTML =
+    '<div style="display:flex;justify-content:space-between;align-items:center;'
+    + 'padding:16px 24px;background:var(--surface);border:1px solid var(--border);'
+    + 'border-radius:16px 16px 0 0">'
+    +   '<h3 style="font-size:16px;font-weight:700">🗺️ خريطة المسار — ' + dest + '</h3>'
+    +   '<span style="background:rgba(240,165,0,.1);border:1px solid var(--border2);'
+    +     'border-radius:20px;padding:4px 12px;font-size:11px;color:var(--gold);font-weight:700">'
+    +     '📍 ' + mapPlaces.length + ' محطة'
+    +   '</span>'
+    + '</div>'
+    + '<div style="background:var(--bg3);border:1px solid var(--border);border-top:none;'
+    +   'border-radius:0 0 16px 16px;overflow:hidden">'
+    +   '<div style="padding:20px;overflow-x:auto">' + svg + '</div>'
+    + '</div>';
 }
-function buildLocalTrip() { var d = formData.destination, n = formData.days; document.getElementById("resultMeta").innerHTML = '<span>📍 ' + d + '</span><span>📅 ' + n + ' أيام</span>'; var html = ''; for (var i = 0; i < n; i++) { html += '<div class="day-card"><div class="day-header"><h3><span class="day-badge">Day ' + (i+1) + '</span> يوم ' + (i+1) + '</h3></div><div class="day-body"><p style="color:var(--txt2);font-size:14px;padding:20px 0;text-align:center">⚠️ لم يتم الاتصال — جرّب مرة ثانية</p></div></div>'; } document.getElementById("resultDays").innerHTML = html; document.getElementById("resultSection").style.display = "block"; setTimeout(function() { document.getElementById("resultSection").scrollIntoView({ behavior: "smooth" }); }, 100); }
-function downloadPDF() { var cards = document.getElementsByClassName("day-card"); for (var i = 0; i < cards.length; i++) cards[i].classList.remove("collapsed"); setTimeout(function() { window.print(); }, 200); }
-function toggleChat() { var b = document.getElementById("chatBox"); b.style.display = b.style.display === "none" ? "block" : "none"; }
-function sendBot() { var inp = document.getElementById("botInput"), t = inp.value.trim(); if (!t) return; var msgs = document.getElementById("botMsgs"); msgs.innerHTML += '<div style="background:var(--bg);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;align-self:flex-end;color:var(--txt)">' + t + '</div>'; inp.value = ""; msgs.scrollTop = 999999; sendToAdmin("💬 رسالة شاتبوت", t); setTimeout(function() { var q = t.toLowerCase(), r = "شكراً! سيرد فريقنا قريباً."; if (q.indexOf("حلال") > -1) r = "بالتأكيد! لما تختار حلال، كل المطاعم حلال 🍽️"; if (q.indexOf("دفع") > -1 || q.indexOf("سعر") > -1) r = "أول رحلتين مجاناً! بعدها $4.99 💳"; msgs.innerHTML += '<div style="background:rgba(240,165,0,0.08);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;color:var(--txt)">' + r + '</div>'; msgs.scrollTop = 999999; }, 600); }
-function sendToAdmin(subject, message) { if (typeof emailjs === "undefined") return; emailjs.send("service_vtis1ps", "template_br397yj", { subject: subject, message: message }).catch(function() {}); }
-var _origRender = renderSmartTrip;
-renderSmartTrip = function(data) { _origRender(data); sendToAdmin("✈️ رحلة جديدة — " + formData.destination, "📍 " + formData.destination + "\n📅 " + formData.days + " أيام\n💰 " + formData.budget + "\n💵 ~$" + (data.total_cost_estimate || "—")); };
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("IX0_HiEZ5LKeJusYq");</script>
-</body>
-</html>
