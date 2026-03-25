@@ -14,117 +14,129 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1
 .login-box{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:44px 36px;max-width:380px;width:90%;text-align:center}
 .login-box h1{font-size:26px;font-weight:900;margin-bottom:4px}
 .login-box .sub{color:var(--txt2);font-size:14px;margin-bottom:28px}
-.login-box .logo{font-size:22px;font-weight:800;margin-bottom:20px;display:block}.login-box .logo em{color:var(--gold);font-style:normal}
 .lin{width:100%;padding:13px 16px;background:var(--bg);border:2px solid transparent;border-radius:8px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none;margin-bottom:12px}.lin:focus{border-color:var(--gold)}.lin::placeholder{color:var(--txt3)}
-.lbtn{width:100%;padding:13px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;margin-top:6px}.lbtn:hover{box-shadow:0 6px 24px rgba(240,165,0,.3)}
+.lbtn{width:100%;padding:13px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;margin-top:6px}
 .lerr{color:var(--red);font-size:12px;margin-top:8px;display:none}
 .sidebar{width:var(--sidebar);background:var(--bg2);border-left:1px solid var(--border);padding:20px 0;display:flex;flex-direction:column;position:fixed;top:0;right:0;bottom:0;z-index:100}
-.sb-logo{padding:0 20px 20px;font-size:18px;font-weight:800;border-bottom:1px solid var(--border)}.sb-logo em{color:var(--gold);font-style:normal}.sb-logo small{display:block;font-size:10px;color:var(--txt3);font-weight:400;margin-top:2px}
+.sb-logo{padding:0 20px 20px;font-size:18px;font-weight:800;border-bottom:1px solid var(--border)}.sb-logo em{color:var(--gold);font-style:normal}
 .sb-nav{flex:1;padding:14px 10px;overflow-y:auto}
 .sb-sec{font-size:10px;color:var(--txt3);padding:14px 14px 4px;font-weight:700;letter-spacing:1px}
 .sb-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;color:var(--txt2);font-size:13px;font-weight:500;cursor:pointer;margin-bottom:2px}.sb-item:hover{background:var(--bg3);color:var(--txt)}.sb-item.active{background:rgba(240,165,0,0.08);color:var(--gold)}
-.sb-item .ic{font-size:16px;width:22px;text-align:center}
-.sb-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;margin-right:auto}
 .sb-footer{padding:14px 20px;border-top:1px solid var(--border)}
-.sb-av{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--bg)}
-.sb-nm{font-size:12px;font-weight:600}.sb-rl{font-size:10px;color:var(--txt3)}
 .sb-logout{margin-top:10px;width:100%;padding:8px;background:none;border:1px solid var(--border);border-radius:6px;color:var(--txt3);font-family:var(--font);font-size:11px;cursor:pointer}.sb-logout:hover{border-color:var(--red);color:var(--red)}
 .main{margin-right:var(--sidebar);flex:1;padding:28px;overflow-y:auto}
 .page{display:none}.page.active{display:block}
-.pg-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.pg-hd h1{font-size:24px;font-weight:900}.pg-hd p{color:var(--txt2);font-size:13px;margin-top:2px}
-.hbtn{padding:9px 18px;border-radius:8px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;border:none}.hbtn-gold{background:var(--gold);color:var(--bg)}.hbtn-dark{background:var(--bg3);color:var(--txt);border:1px solid var(--border)}
+.pg-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.pg-hd h1{font-size:24px;font-weight:900}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
 .stat{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px}.stat .lb{font-size:12px;color:var(--txt2);margin-bottom:6px}.stat .vl{font-size:28px;font-weight:900;font-family:var(--mono)}
 .tbl-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
-.tbl-hd{padding:16px 20px;border-bottom:1px solid var(--border)}.tbl-hd h3{font-size:15px;font-weight:700}
+.tbl-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}.tbl-hd h3{font-size:15px;font-weight:700}
 table{width:100%;border-collapse:collapse}th{text-align:right;padding:10px 20px;font-size:11px;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)}td{padding:12px 20px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.02)}
-.badge{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;display:inline-block}
-.badge-admin{background:rgba(167,139,250,.1);color:var(--purple)}.badge-editor{background:rgba(52,211,153,.1);color:var(--green)}.badge-viewer{background:rgba(148,163,184,.1);color:var(--txt2)}.badge-on{background:rgba(52,211,153,.1);color:var(--green)}.badge-off{background:rgba(148,163,184,.1);color:var(--txt3)}
-.chart{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}.chart h3{font-size:15px;font-weight:700;margin-bottom:16px}
-.bars{display:flex;align-items:flex-end;gap:6px;height:160px}.bar{flex:1;background:var(--gold);border-radius:4px 4px 0 0;position:relative}.bar .bv{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--gold);font-family:var(--mono)}.bar .bl{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--txt3);white-space:nowrap}
-.chat-box{display:grid;grid-template-columns:260px 1fr;background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;height:calc(100vh - 160px);min-height:450px}
-.ch-list{border-left:1px solid var(--border);overflow-y:auto}.ch-list-hd{padding:14px 18px;border-bottom:1px solid var(--border);font-size:14px;font-weight:700}
-.ch-item{padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.02);cursor:pointer}.ch-item:hover{background:var(--bg4)}.ch-item.active{background:rgba(240,165,0,.06);border-right:3px solid var(--gold)}
-.ch-item .ci-nm{font-size:13px;font-weight:600;margin-bottom:2px}.ch-item .ci-msg{font-size:11px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ch-main{display:flex;flex-direction:column}.ch-top{padding:14px 20px;border-bottom:1px solid var(--border)}.ch-top h3{font-size:15px;font-weight:700}
-.ch-msgs{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:75%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.7}.msg.user{background:var(--bg4);align-self:flex-start}.msg.admin{background:rgba(240,165,0,.08);align-self:flex-end}.msg .mt{font-size:9px;color:var(--txt3);margin-top:3px}
-.ch-inp{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px}.ch-inp input{flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--txt);font-family:var(--font);font-size:13px;outline:none}.ch-inp input:focus{border-color:var(--gold)}.ch-inp button{padding:10px 20px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer}
-.add-form{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;display:none}.add-form.show{display:block}
-.form-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}
-.field label{display:block;font-size:11px;color:var(--txt2);margin-bottom:3px;font-weight:600}.field input,.field select{width:100%;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);font-size:12px;outline:none}
-.scard{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px}.scard h3{font-size:15px;font-weight:700;margin-bottom:14px}
-.srow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.02)}.srow:last-child{border-bottom:none}
-.sinp{padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);font-size:12px;outline:none}.sinp:focus{border-color:var(--gold)}
-.toggle{width:40px;height:22px;background:var(--txt3);border-radius:11px;position:relative;cursor:pointer}.toggle.on{background:var(--gold)}.toggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;right:2px;transition:transform .3s}.toggle.on::after{transform:translateX(-18px)}
+.badge{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;display:inline-block}.badge-pro{background:rgba(240,165,0,.1);color:var(--gold)}.badge-free{background:rgba(148,163,184,.1);color:var(--txt3)}
+.comp-btn{padding:6px 14px;background:var(--green);color:var(--bg);border:none;border-radius:6px;font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer}.comp-btn:hover{opacity:.8}
 .acc-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:500px;margin-bottom:20px}.acc-card h3{font-size:16px;font-weight:700;margin-bottom:20px}
 .acc-field{margin-bottom:16px}.acc-field label{display:block;font-size:12px;color:var(--txt2);margin-bottom:5px;font-weight:600}.acc-field input{width:100%;padding:12px 14px;background:var(--bg);border:2px solid transparent;border-radius:8px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none}.acc-field input:focus{border-color:var(--gold)}
-.acc-btn{padding:12px 28px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer}.acc-btn:hover{box-shadow:0 4px 20px rgba(240,165,0,.3)}
+.acc-btn{padding:12px 28px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer}
 .acc-msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none}.acc-msg.ok{display:block;background:rgba(52,211,153,.1);color:var(--green)}.acc-msg.err{display:block;background:rgba(239,68,68,.1);color:var(--red)}
-@media(max-width:800px){.sidebar{display:none}.main{margin-right:0}.stats{grid-template-columns:repeat(2,1fr)}.chat-box{grid-template-columns:1fr}.ch-list{display:none}.form-row{grid-template-columns:1fr}}
+@media(max-width:800px){.sidebar{display:none}.main{margin-right:0}.stats{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<div id="loginScreen"><div class="login-box"><span class="logo">مساري<em>.io</em></span><h1>لوحة التحكم</h1><p class="sub">سجل دخول</p><input type="text" class="lin" id="loginUser" placeholder="اسم المستخدم"><input type="password" class="lin" id="loginPass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()"><button class="lbtn" onclick="doLogin()">دخول ←</button><div class="lerr" id="loginErr">اسم المستخدم أو كلمة المرور غير صحيحة</div></div></div>
-<aside class="sidebar" id="sidebar" style="display:none">
-<div class="sb-logo">مساري<em>.io</em><small>لوحة التحكم</small></div>
-<div class="sb-nav">
-<div class="sb-sec">الرئيسية</div>
-<div class="sb-item active" onclick="showPage('dash',this)"><span class="ic">📊</span> نظرة عامة</div>
-<div class="sb-sec">التواصل</div>
-<div class="sb-item" onclick="showPage('chat',this)"><span class="ic">💬</span> الرسائل <span class="sb-badge" id="chatBadge" style="display:none">0</span></div>
-<div class="sb-sec">الإدارة</div>
-<div class="sb-item" id="teamTab" onclick="showPage('team',this)"><span class="ic">👥</span> فريق العمل</div>
-<div class="sb-item" onclick="showPage('account',this)"><span class="ic">👤</span> حسابي</div>
-<div class="sb-item" id="settingsTab" onclick="showPage('settings',this)"><span class="ic">⚙️</span> الإعدادات</div>
-</div>
-<div class="sb-footer"><div class="sb-user"><div class="sb-av" id="sbAv">م</div><div><div class="sb-nm" id="sbNm">—</div><div class="sb-rl" id="sbRl">—</div></div></div><button class="sb-logout" onclick="logout()">تسجيل خروج</button></div>
-</aside>
+<div id="loginScreen"><div class="login-box"><span style="font-size:22px;font-weight:800;display:block;margin-bottom:20px">مساري<em style="color:var(--gold);font-style:normal">.io</em></span><h1>لوحة التحكم</h1><p class="sub">سجل دخول</p><input type="text" class="lin" id="loginUser" placeholder="اسم المستخدم"><input type="password" class="lin" id="loginPass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()"><button class="lbtn" onclick="doLogin()">دخول ←</button><div class="lerr" id="loginErr">بيانات غلط</div></div></div>
+<aside class="sidebar" id="sidebar" style="display:none"><div class="sb-logo">مساري<em>.io</em></div><div class="sb-nav"><div class="sb-sec">الرئيسية</div><div class="sb-item active" onclick="showPage('dash',this)">📊 نظرة عامة</div><div class="sb-sec">العملاء</div><div class="sb-item" onclick="showPage('users',this)">👥 العملاء</div><div class="sb-item" onclick="showPage('trips',this)">✈️ الرحلات</div><div class="sb-sec">الإدارة</div><div class="sb-item" onclick="showPage('comp',this)">🎁 التعويضات</div><div class="sb-item" onclick="showPage('account',this)">👤 حسابي</div></div><div class="sb-footer"><button class="sb-logout" onclick="logout()">تسجيل خروج</button></div></aside>
 <div class="main" id="mainContent" style="display:none">
-<div class="page active" id="pg-dash">
-<div class="pg-hd"><div><h1>نظرة عامة</h1><p>إحصائيات المنصة</p></div><div><button class="hbtn hbtn-dark" onclick="location.href='index.html'">↗ الموقع</button></div></div>
-<div class="stats"><div class="stat"><div class="lb">الرحلات</div><div class="vl" style="color:var(--gold)">0</div></div><div class="stat"><div class="lb">المستخدمين</div><div class="vl" style="color:var(--blue)">0</div></div><div class="stat"><div class="lb">الإيرادات</div><div class="vl" style="color:var(--green)">$0</div></div><div class="stat"><div class="lb">الرسائل</div><div class="vl" style="color:var(--red)">0</div></div></div>
-<div class="chart"><h3>الرحلات — آخر 7 أيام</h3><div class="bars" id="chartBars"></div></div>
+<!-- DASHBOARD -->
+<div class="page active" id="pg-dash"><div class="pg-hd"><div><h1>نظرة عامة</h1></div><button onclick="location.href='index.html'" style="padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);font-size:12px;cursor:pointer">↗ الموقع</button></div>
+<div class="stats"><div class="stat"><div class="lb">العملاء</div><div class="vl" id="statUsers" style="color:var(--blue)">0</div></div><div class="stat"><div class="lb">الرحلات</div><div class="vl" id="statTrips" style="color:var(--gold)">0</div></div><div class="stat"><div class="lb">تعويضات</div><div class="vl" id="statComps" style="color:var(--green)">0</div></div><div class="stat"><div class="lb">PRO</div><div class="vl" id="statPro" style="color:var(--purple)">0</div></div></div></div>
+<!-- USERS -->
+<div class="page" id="pg-users"><div class="pg-hd"><h1>👥 العملاء</h1></div><div class="tbl-wrap"><div class="tbl-hd"><h3>قائمة العملاء</h3></div><table><thead><tr><th>الاسم</th><th>الإيميل</th><th>الرحلات</th><th>الحالة</th><th>تاريخ التسجيل</th></tr></thead><tbody id="usersBody"><tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:30px">جاري التحميل...</td></tr></tbody></table></div></div>
+<!-- TRIPS -->
+<div class="page" id="pg-trips"><div class="pg-hd"><h1>✈️ الرحلات</h1></div><div class="tbl-wrap"><div class="tbl-hd"><h3>كل الرحلات</h3></div><table><thead><tr><th>العميل</th><th>الوجهة</th><th>الأيام</th><th>الميزانية</th><th>التكلفة</th><th>التاريخ</th></tr></thead><tbody id="tripsBody"><tr><td colspan="6" style="text-align:center;color:var(--txt3);padding:30px">جاري التحميل...</td></tr></tbody></table></div></div>
+<!-- COMPENSATE -->
+<div class="page" id="pg-comp"><div class="pg-hd"><h1>🎁 تعويض عميل</h1></div><div class="acc-card"><h3>منح رحلة مجانية</h3><div class="acc-field"><label>إيميل العميل</label><input type="email" id="compEmail" placeholder="customer@email.com"></div><div class="acc-field"><label>السبب (اختياري)</label><input type="text" id="compReason" placeholder="مثال: شكوى على جودة الرحلة"></div><button class="acc-btn" onclick="grantFreeTrip()">✅ منح رحلة مجانية</button><div class="acc-msg" id="compMsg"></div></div><div class="tbl-wrap"><div class="tbl-hd"><h3>سجل التعويضات</h3></div><table><thead><tr><th>العميل</th><th>السبب</th><th>التاريخ</th><th>بواسطة</th></tr></thead><tbody id="compBody"><tr><td colspan="4" style="text-align:center;color:var(--txt3);padding:30px">لا توجد تعويضات</td></tr></tbody></table></div></div>
+<!-- ACCOUNT -->
+<div class="page" id="pg-account"><div class="pg-hd"><h1>👤 حسابي</h1></div><div class="acc-card"><h3>تغيير الاسم</h3><div class="acc-field"><label>الاسم</label><input type="text" id="accName"></div><button class="acc-btn" onclick="saveName()">حفظ</button><div class="acc-msg" id="nameMsg"></div></div><div class="acc-card"><h3>🔒 تغيير كلمة المرور</h3><div class="acc-field"><label>الحالية</label><input type="password" id="oldPass"></div><div class="acc-field"><label>الجديدة</label><input type="password" id="newPass"></div><div class="acc-field"><label>تأكيد</label><input type="password" id="newPass2"></div><button class="acc-btn" onclick="savePass()">تغيير</button><div class="acc-msg" id="passMsg"></div></div></div>
 </div>
-<div class="page" id="pg-chat">
-<div class="pg-hd"><div><h1>الرسائل</h1><p>استفسارات العملاء</p></div></div>
-<div class="chat-box"><div class="ch-list"><div class="ch-list-hd">المحادثات</div><div id="chatList"><p style="padding:20px;color:var(--txt3);font-size:13px;text-align:center">لا توجد رسائل</p></div></div><div class="ch-main"><div class="ch-top"><h3 id="chatName">اختر محادثة</h3></div><div class="ch-msgs" id="chatMsgs"><div style="text-align:center;color:var(--txt3);padding:40px;font-size:13px">← اختر محادثة</div></div><div class="ch-inp"><input type="text" id="replyInput" placeholder="اكتب ردك..." onkeydown="if(event.key==='Enter')sendReply()"><button onclick="sendReply()">إرسال</button></div></div></div>
-</div>
-<div class="page" id="pg-team">
-<div class="pg-hd"><div><h1>فريق العمل</h1><p>إدارة الأعضاء والصلاحيات</p></div><div><button class="hbtn hbtn-gold" onclick="document.getElementById('addForm').classList.toggle('show')">+ إضافة عضو</button></div></div>
-<div class="add-form" id="addForm"><div class="form-row"><div class="field"><label>الاسم</label><input type="text" id="newName" placeholder="الاسم"></div><div class="field"><label>اسم المستخدم</label><input type="text" id="newUser" placeholder="username"></div><div class="field"><label>الصلاحية</label><select id="newRole"><option value="admin">مدير عام</option><option value="editor" selected>محرر</option><option value="viewer">مشاهد</option></select></div><div><button class="hbtn hbtn-gold" onclick="addMember()">إضافة</button></div></div></div>
-<div class="tbl-wrap"><div class="tbl-hd"><h3>الأعضاء</h3></div><table><thead><tr><th>الاسم</th><th>المستخدم</th><th>الصلاحية</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="teamBody"></tbody></table></div>
-</div>
-<div class="page" id="pg-account">
-<div class="pg-hd"><div><h1>إعدادات حسابي</h1><p>تغيير الاسم وكلمة المرور</p></div></div>
-<div class="acc-card"><h3>👤 تغيير الاسم</h3><div class="acc-field"><label>الاسم</label><input type="text" id="accName"></div><button class="acc-btn" onclick="saveName()">حفظ</button><div class="acc-msg" id="nameMsg"></div></div>
-<div class="acc-card"><h3>🔒 تغيير كلمة المرور</h3><div class="acc-field"><label>كلمة المرور الحالية</label><input type="password" id="oldPass"></div><div class="acc-field"><label>الجديدة (4 حروف على الأقل)</label><input type="password" id="newPass"></div><div class="acc-field"><label>تأكيد الجديدة</label><input type="password" id="newPass2"></div><button class="acc-btn" onclick="savePass()">تغيير</button><div class="acc-msg" id="passMsg"></div></div>
-<div class="acc-card"><h3>📋 معلومات</h3><div class="srow"><div>اسم المستخدم</div><div id="accUser" style="font-family:var(--mono);color:var(--gold)">—</div></div><div class="srow"><div>الصلاحية</div><div id="accRoleTxt">—</div></div></div>
-</div>
-<div class="page" id="pg-settings">
-<div class="pg-hd"><div><h1>الإعدادات</h1></div></div>
-<div class="scard"><h3>⚙️ عامة</h3><div class="srow"><div>الرحلات المجانية</div><input type="number" class="sinp" value="2" style="width:60px;text-align:center"></div><div class="srow"><div>سعر الرحلة</div><input type="text" class="sinp" value="$4.99" style="width:80px;text-align:center"></div><div class="srow"><div>الشاتبوت</div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div></div>
-<div class="scard"><h3>🔗 ربط الخدمات</h3><div class="srow"><div>OpenAI API Key</div><input type="password" class="sinp" placeholder="sk-..." style="width:200px"></div><div class="srow"><div>Stripe Key</div><input type="password" class="sinp" placeholder="sk_live_..." style="width:200px"></div></div>
-</div>
-</div>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-var DEFAULT_ACCOUNTS=[{user:"admin",pass:"admin",name:"المدير",role:"admin",status:"online"}];
-function getAccounts(){try{var d=localStorage.getItem("masari_accounts");if(d)return JSON.parse(d)}catch(e){}return JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS))}
-function saveAccounts(a){try{localStorage.setItem("masari_accounts",JSON.stringify(a))}catch(e){}}
-var currentUser=null,chats=[],activeChat=null;
-function doLogin(){var u=document.getElementById("loginUser").value.trim(),p=document.getElementById("loginPass").value,accs=getAccounts(),found=null;for(var i=0;i<accs.length;i++){if(accs[i].user===u&&accs[i].pass===p){found=accs[i];break}}if(found){currentUser=found;document.getElementById("loginScreen").style.display="none";document.getElementById("sidebar").style.display="flex";document.getElementById("mainContent").style.display="block";document.getElementById("sbAv").textContent=found.name.charAt(0);document.getElementById("sbNm").textContent=found.name;var r={admin:"مدير عام",editor:"محرر",viewer:"مشاهد"};document.getElementById("sbRl").textContent=r[found.role]||found.role;if(found.role==="viewer"||found.role==="editor")document.getElementById("teamTab").style.display="none";if(found.role==="viewer")document.getElementById("settingsTab").style.display="none";renderChart();renderTeam();loadAcc()}else{document.getElementById("loginErr").style.display="block"}}
-function logout(){currentUser=null;document.getElementById("loginScreen").style.display="flex";document.getElementById("sidebar").style.display="none";document.getElementById("mainContent").style.display="none";document.getElementById("loginUser").value="";document.getElementById("loginPass").value=""}
-function showPage(id,el){var p=document.getElementsByClassName("page");for(var i=0;i<p.length;i++)p[i].classList.remove("active");document.getElementById("pg-"+id).classList.add("active");var it=document.getElementsByClassName("sb-item");for(var i=0;i<it.length;i++)it[i].classList.remove("active");if(el)el.classList.add("active");if(id==="account")loadAcc()}
-function renderChart(){var d=["السبت","الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"],h="";for(var i=0;i<d.length;i++){var v=0;h+='<div class="bar" style="height:'+(v*12+3)+'px"><span class="bv">'+v+'</span><span class="bl">'+d[i]+'</span></div>'}document.getElementById("chartBars").innerHTML=h}
-function renderTeam(){var a=getAccounts(),r={admin:"مدير عام",editor:"محرر",viewer:"مشاهد"},h="";for(var i=0;i<a.length;i++){var x=a[i],del=currentUser&&currentUser.role==="admin"&&x.user!==currentUser.user;h+="<tr><td>"+x.name+"</td><td style='font-family:var(--mono);font-size:11px'>"+x.user+"</td><td><span class='badge badge-"+x.role+"'>"+(r[x.role]||x.role)+"</span></td><td><span class='badge badge-"+(x.status==="online"?"on":"off")+"'>"+(x.status==="online"?"متصل":"غير متصل")+"</span></td><td>"+(del?"<button onclick='removeMember("+i+")' style='background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;font-family:var(--font)'>حذف</button>":"—")+"</td></tr>"}document.getElementById("teamBody").innerHTML=h}
-function addMember(){var n=document.getElementById("newName").value.trim(),u=document.getElementById("newUser").value.trim(),r=document.getElementById("newRole").value;if(!n||!u){alert("عبّي الاسم واسم المستخدم");return}var a=getAccounts();for(var i=0;i<a.length;i++)if(a[i].user===u){alert("اسم المستخدم موجود!");return}a.push({user:u,pass:"1234",name:n,role:r,status:"offline"});saveAccounts(a);renderTeam();document.getElementById("newName").value="";document.getElementById("newUser").value="";document.getElementById("addForm").classList.remove("show");alert("تم إضافة "+n+"!\n\nالمستخدم: "+u+"\nالرمز: 1234\n\nيقدر يغيّره من حسابي.")}
-function removeMember(i){var a=getAccounts();if(confirm("حذف "+a[i].name+"؟")){a.splice(i,1);saveAccounts(a);renderTeam()}}
-function loadAcc(){if(!currentUser)return;document.getElementById("accName").value=currentUser.name;document.getElementById("accUser").textContent=currentUser.user;var r={admin:"مدير عام",editor:"محرر",viewer:"مشاهد"};document.getElementById("accRoleTxt").textContent=r[currentUser.role]||currentUser.role;document.getElementById("oldPass").value="";document.getElementById("newPass").value="";document.getElementById("newPass2").value="";document.getElementById("nameMsg").className="acc-msg";document.getElementById("passMsg").className="acc-msg"}
-function saveName(){var n=document.getElementById("accName").value.trim();if(!n){showM("nameMsg","err","اكتب الاسم");return}var a=getAccounts();for(var i=0;i<a.length;i++)if(a[i].user===currentUser.user)a[i].name=n;saveAccounts(a);currentUser.name=n;document.getElementById("sbAv").textContent=n.charAt(0);document.getElementById("sbNm").textContent=n;showM("nameMsg","ok","تم تغيير الاسم ✓");renderTeam()}
-function savePass(){var o=document.getElementById("oldPass").value,n=document.getElementById("newPass").value,n2=document.getElementById("newPass2").value;if(o!==currentUser.pass){showM("passMsg","err","كلمة المرور الحالية غير صحيحة");return}if(n.length<4){showM("passMsg","err","الجديدة قصيرة (4 حروف على الأقل)");return}if(n!==n2){showM("passMsg","err","غير متطابقة");return}var a=getAccounts();for(var i=0;i<a.length;i++)if(a[i].user===currentUser.user)a[i].pass=n;saveAccounts(a);currentUser.pass=n;document.getElementById("oldPass").value="";document.getElementById("newPass").value="";document.getElementById("newPass2").value="";showM("passMsg","ok","تم تغيير كلمة المرور ✓")}
-function showM(id,t,txt){var e=document.getElementById(id);e.className="acc-msg "+t;e.textContent=txt}
-function sendReply(){var inp=document.getElementById("replyInput"),t=inp.value.trim();if(!t||activeChat===null)return;var now=new Date(),time=now.getHours()+":"+(now.getMinutes()<10?"0":"")+now.getMinutes();chats[activeChat].msgs.push({from:"admin",text:t,time:time});openChat(activeChat);inp.value=""}
-function openChat(i){activeChat=i;document.getElementById("chatName").textContent=chats[i].name;var h="";for(var j=0;j<chats[i].msgs.length;j++){var m=chats[i].msgs[j];h+='<div class="msg '+m.from+'"><div>'+m.text+'</div><div class="mt">'+m.time+'</div></div>'}document.getElementById("chatMsgs").innerHTML=h;document.getElementById("chatMsgs").scrollTop=999999;document.getElementById("replyInput").focus()}
+firebase.initializeApp({apiKey:"AIzaSyCtaF4bay85Pr7yB_fXtWdIH-Htg12W1BY",authDomain:"masari-io.firebaseapp.com",projectId:"masari-io",storageBucket:"masari-io.firebasestorage.app",messagingSenderId:"512681089634",appId:"1:512681089634:web:615e26e29e5cc2c9458f3b"});
+var db = firebase.firestore();
+var ADMIN_PASS = "admin";
+var ADMIN_USER = "admin";
+var currentAdmin = null;
+
+function doLogin() {
+  var u = document.getElementById("loginUser").value.trim(), p = document.getElementById("loginPass").value;
+  var accs = JSON.parse(localStorage.getItem("masari_accounts") || '[{"user":"admin","pass":"admin","name":"المدير","role":"admin"}]');
+  var found = null;
+  for (var i = 0; i < accs.length; i++) { if (accs[i].user === u && accs[i].pass === p) { found = accs[i]; break; } }
+  if (found) { currentAdmin = found; document.getElementById("loginScreen").style.display = "none"; document.getElementById("sidebar").style.display = "flex"; document.getElementById("mainContent").style.display = "block"; loadDashboard(); }
+  else { document.getElementById("loginErr").style.display = "block"; }
+}
+function logout() { currentAdmin = null; location.reload(); }
+function showPage(id, el) { var pages = document.getElementsByClassName("page"); for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active"); document.getElementById("pg-" + id).classList.add("active"); var items = document.getElementsByClassName("sb-item"); for (var i = 0; i < items.length; i++) items[i].classList.remove("active"); if (el) el.classList.add("active"); if (id === "users") loadUsers(); if (id === "trips") loadTrips(); if (id === "comp") loadComps(); if (id === "account") loadAccount(); }
+
+function loadDashboard() {
+  db.collection("users").get().then(function(s) { document.getElementById("statUsers").textContent = s.size; var pro = 0; s.forEach(function(d) { if (d.data().isPro) pro++; }); document.getElementById("statPro").textContent = pro; });
+  db.collection("trips").get().then(function(s) { document.getElementById("statTrips").textContent = s.size; });
+  db.collection("compensations").get().then(function(s) { document.getElementById("statComps").textContent = s.size; });
+}
+function loadUsers() {
+  db.collection("users").orderBy("createdAt", "desc").get().then(function(snap) {
+    var html = '';
+    if (snap.empty) { html = '<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:30px">لا يوجد عملاء</td></tr>'; }
+    snap.forEach(function(doc) { var u = doc.data(); var date = u.createdAt ? new Date(u.createdAt.seconds * 1000).toLocaleDateString('ar-SA') : '—';
+      html += '<tr><td>' + (u.name || '—') + '</td><td style="font-family:var(--mono);font-size:11px">' + (u.email || '—') + '</td><td>' + (u.tripCount || 0) + '</td><td><span class="badge ' + (u.isPro ? 'badge-pro' : 'badge-free') + '">' + (u.isPro ? 'PRO' : 'مجاني') + '</span></td><td>' + date + '</td></tr>';
+    });
+    document.getElementById("usersBody").innerHTML = html;
+  });
+}
+function loadTrips() {
+  db.collection("trips").orderBy("createdAt", "desc").limit(50).get().then(function(snap) {
+    var html = '';
+    if (snap.empty) { html = '<tr><td colspan="6" style="text-align:center;color:var(--txt3);padding:30px">لا توجد رحلات</td></tr>'; }
+    snap.forEach(function(doc) { var t = doc.data(); var date = t.createdAt ? new Date(t.createdAt.seconds * 1000).toLocaleDateString('ar-SA') : '—';
+      html += '<tr><td>' + (t.userName || t.userEmail || '—') + '</td><td style="font-weight:700">' + (t.destination || '—') + '</td><td>' + (t.days || 0) + '</td><td>' + (t.budget || '—') + '</td><td style="color:var(--gold);font-family:var(--mono)">$' + (t.totalCost || 0) + '</td><td>' + date + '</td></tr>';
+    });
+    document.getElementById("tripsBody").innerHTML = html;
+  });
+}
+function grantFreeTrip() {
+  var email = document.getElementById("compEmail").value.trim();
+  var reason = document.getElementById("compReason").value.trim();
+  var msgEl = document.getElementById("compMsg");
+  if (!email) { msgEl.className = "acc-msg err"; msgEl.textContent = "ادخل إيميل العميل"; return; }
+  // Find user by email
+  db.collection("users").where("email", "==", email).get().then(function(snap) {
+    if (snap.empty) { msgEl.className = "acc-msg err"; msgEl.textContent = "العميل غير موجود: " + email; return; }
+    var userDoc = snap.docs[0];
+    // Grant PRO
+    return userDoc.ref.update({ isPro: true, freeTripsGranted: firebase.firestore.FieldValue.increment(1) }).then(function() {
+      // Log compensation
+      return db.collection("compensations").add({ userEmail: email, userName: userDoc.data().name || '', reason: reason || 'تعويض', grantedBy: currentAdmin.name || 'المدير', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    }).then(function() {
+      msgEl.className = "acc-msg ok"; msgEl.textContent = "تم منح " + email + " رحلة مجانية ✅";
+      document.getElementById("compEmail").value = ""; document.getElementById("compReason").value = "";
+      loadComps();
+    });
+  }).catch(function(e) { msgEl.className = "acc-msg err"; msgEl.textContent = "خطأ: " + e.message; });
+}
+function loadComps() {
+  db.collection("compensations").orderBy("createdAt", "desc").get().then(function(snap) {
+    var html = '';
+    if (snap.empty) { html = '<tr><td colspan="4" style="text-align:center;color:var(--txt3);padding:20px">لا توجد تعويضات</td></tr>'; }
+    snap.forEach(function(doc) { var c = doc.data(); var date = c.createdAt ? new Date(c.createdAt.seconds * 1000).toLocaleDateString('ar-SA') : '—';
+      html += '<tr><td>' + (c.userEmail || '—') + '</td><td>' + (c.reason || '—') + '</td><td>' + date + '</td><td>' + (c.grantedBy || '—') + '</td></tr>';
+    });
+    document.getElementById("compBody").innerHTML = html;
+  });
+}
+function loadAccount() { if (currentAdmin) document.getElementById("accName").value = currentAdmin.name || ''; }
+function saveName() { var n = document.getElementById("accName").value.trim(); if (!n) return; var accs = JSON.parse(localStorage.getItem("masari_accounts") || '[]'); for (var i = 0; i < accs.length; i++) { if (accs[i].user === currentAdmin.user) accs[i].name = n; } localStorage.setItem("masari_accounts", JSON.stringify(accs)); currentAdmin.name = n; document.getElementById("nameMsg").className = "acc-msg ok"; document.getElementById("nameMsg").textContent = "تم ✓"; }
+function savePass() { var o = document.getElementById("oldPass").value, n = document.getElementById("newPass").value, n2 = document.getElementById("newPass2").value; if (o !== currentAdmin.pass) { document.getElementById("passMsg").className = "acc-msg err"; document.getElementById("passMsg").textContent = "كلمة المرور غلط"; return; } if (n.length < 4) { document.getElementById("passMsg").className = "acc-msg err"; document.getElementById("passMsg").textContent = "قصيرة"; return; } if (n !== n2) { document.getElementById("passMsg").className = "acc-msg err"; document.getElementById("passMsg").textContent = "غير متطابقة"; return; } var accs = JSON.parse(localStorage.getItem("masari_accounts") || '[]'); for (var i = 0; i < accs.length; i++) { if (accs[i].user === currentAdmin.user) accs[i].pass = n; } localStorage.setItem("masari_accounts", JSON.stringify(accs)); currentAdmin.pass = n; document.getElementById("passMsg").className = "acc-msg ok"; document.getElementById("passMsg").textContent = "تم ✓"; document.getElementById("oldPass").value = ""; document.getElementById("newPass").value = ""; document.getElementById("newPass2").value = ""; }
 </script>
 </body>
 </html>
