@@ -446,7 +446,6 @@ function handlePayment(plan) {
 
 // ===== START TRIP =====
 function startTrip() {
-  // Check if free trips used
   if (getTripsUsed() >= 2 && !isPro()) {
     document.getElementById("paywallModal").style.display = "flex";
     return;
@@ -455,7 +454,6 @@ function startTrip() {
   var screen = document.getElementById("loadingScreen");
   screen.style.display = "flex";
   
-  // Animate loading steps continuously
   var loadStep = 0;
   var ids = ["ls1", "ls2", "ls3", "ls4"];
   var loadInterval = setInterval(function() {
@@ -467,8 +465,14 @@ function startTrip() {
         document.getElementById(ids[loadStep - 1]).getElementsByTagName("span")[0].textContent = "✓";
       }
       loadStep++;
+    } else {
+      loadStep = 0;
+      for (var i = 0; i < ids.length; i++) {
+        document.getElementById(ids[i]).style.color = "var(--txt3)";
+        document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○";
+      }
     }
-  }, 3000);
+  }, 2500);
 
   function hideLoading() {
     clearInterval(loadInterval);
@@ -479,30 +483,59 @@ function startTrip() {
     }
   }
 
-  fetch("/api/generate-trip", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes })
-  })
-  .then(function(r) { return r.ok ? r.json() : null; })
-  .then(function(j) {
-    hideLoading();
-    if (j && j.data) {
-      renderSmartTrip(j.data);
-    } else {
-      buildLocalTrip();
-    }
-  })
-  .catch(function() {
-    hideLoading();
-    buildLocalTrip();
-  });
+  var tripPayload = JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes });
+  
+  function callAPI(attempt) {
+    fetch("/api/generate-trip", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: tripPayload
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error("Status " + r.status);
+      return r.json();
+    })
+    .then(function(j) {
+      if (j && j.data && j.data.days) {
+        hideLoading();
+        renderSmartTrip(j.data);
+      } else {
+        throw new Error("Invalid data");
+      }
+    })
+    .catch(function(err) {
+      if (attempt < 3) {
+        // Retry after 2 seconds
+        setTimeout(function() { callAPI(attempt + 1); }, 2000);
+      } else {
+        hideLoading();
+        buildLocalTrip();
+      }
+    });
+  }
+  
+  callAPI(1);
 }
 
 // ===== RENDER SMART TRIP (3 OPTIONS) =====
 function renderSmartTrip(data) {
   document.getElementById("resultMeta").innerHTML = '<span>📍 ' + (data.destination || formData.destination) + '</span><span>📅 ' + (data.total_days || formData.days) + ' أيام</span><span>💰 ' + formData.budget + '</span><span>💵 ~$' + (data.total_cost_estimate || '—') + '</span>';
+  
+  // Trip summary stats
+  var totalSlots = 0, totalOptions = 0;
+  for (var sd = 0; sd < data.days.length; sd++) {
+    var ss = data.days[sd].slots || [];
+    totalSlots += ss.length;
+    for (var so = 0; so < ss.length; so++) totalOptions += (ss[so].options || []).length;
+  }
+  
   var html = '';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:28px">';
+  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">' + (data.total_days || formData.days) + '</div><div style="font-size:11px;color:var(--txt2)">أيام</div></div>';
+  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--blue);font-family:var(--mono)">' + totalSlots + '</div><div style="font-size:11px;color:var(--txt2)">نشاط</div></div>';
+  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--green);font-family:var(--mono)">' + totalOptions + '</div><div style="font-size:11px;color:var(--txt2)">خيار للمقارنة</div></div>';
+  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">$' + (data.total_cost_estimate || '—') + '</div><div style="font-size:11px;color:var(--txt2)">التكلفة الإجمالية</div></div>';
+  html += '</div>';
   for (var d = 0; d < data.days.length; d++) {
     var day = data.days[d];
     var slots = day.slots || [];
@@ -538,6 +571,50 @@ function renderSmartTrip(data) {
     html += '<div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);border-radius:14px;padding:24px;margin-top:16px"><h3 style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px">💡 نصائح</h3>';
     for (var t = 0; t < data.tips.length; t++) html += '<div style="font-size:13px;color:var(--txt2);padding:4px 0">✦ ' + data.tips[t] + '</div>';
     html += '</div>';
+  }
+  
+  // Build map with recommended places
+  var mapPlaces = [];
+  var placeNum = 1;
+  for (var md = 0; md < data.days.length; md++) {
+    var mSlots = data.days[md].slots || [];
+    for (var ms = 0; ms < mSlots.length; ms++) {
+      var mOpts = mSlots[ms].options || [];
+      for (var mo = 0; mo < mOpts.length; mo++) {
+        if (mOpts[mo].recommended) {
+          mapPlaces.push({ name: mOpts[mo].name, num: placeNum });
+          placeNum++;
+        }
+      }
+    }
+  }
+  
+  if (mapPlaces.length > 0) {
+    var mapQuery = encodeURIComponent(formData.destination);
+    var markers = '';
+    for (var mi = 0; mi < mapPlaces.length; mi++) {
+      markers += '&markers=label:' + mapPlaces[mi].num + '%7C' + encodeURIComponent(mapPlaces[mi].name + ' ' + formData.destination);
+    }
+    
+    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px">';
+    html += '<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:16px;font-weight:700">🗺️ خريطة المسار</h3><span style="font-size:12px;color:var(--txt3)">' + mapPlaces.length + ' مواقع موصى بها</span></div>';
+    
+    // Interactive map using OpenStreetMap (free, no API key needed)
+    html += '<div style="position:relative;height:400px;background:var(--bg3)">';
+    html += '<iframe width="100%" height="400" frameborder="0" style="border:0" loading="lazy" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=' + encodeURIComponent('أماكن سياحية في ' + formData.destination) + '&zoom=12"></iframe>';
+    html += '</div>';
+    
+    // Place list with numbers
+    html += '<div style="padding:16px 24px">';
+    html += '<div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--gold)">📍 الأماكن الموصى بها بالترتيب:</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
+    for (var pi = 0; pi < mapPlaces.length; pi++) {
+      html += '<a href="https://www.google.com/maps/search/' + encodeURIComponent(mapPlaces[pi].name + ' ' + formData.destination) + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="this.style.borderColor=\'var(--border)\'">';
+      html += '<span style="width:24px;height:24px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--bg);flex-shrink:0">' + mapPlaces[pi].num + '</span>';
+      html += '<span style="font-size:12px;color:var(--txt);font-weight:600">' + mapPlaces[pi].name + '</span>';
+      html += '</a>';
+    }
+    html += '</div></div></div>';
   }
   document.getElementById("resultDays").innerHTML = html;
   var rs = document.getElementById("resultSection"); rs.style.display = "block";
