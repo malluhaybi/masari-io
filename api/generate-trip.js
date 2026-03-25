@@ -2,53 +2,6 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const SYSTEM_PROMPT = `You are Masari.io, an elite AI travel planner. For each time slot, provide 3 real place OPTIONS with ratings, pros, cons, and mark the best as recommended.
-
-RULES:
-1. ONLY real places that exist on Google Maps
-2. Budget: اقتصادي=cheap, متوسط=mid-range, فاخر=luxury
-3. Respect food preferences (حلال/نباتي/بحري)
-4. All text in Arabic
-5. Return ONLY valid JSON
-
-JSON SCHEMA:
-{
-  "trip_title": "Arabic title",
-  "destination": "string",
-  "total_days": number,
-  "total_cost_estimate": number,
-  "tips": ["3 tips in Arabic"],
-  "days": [
-    {
-      "day_number": number,
-      "title": "Arabic day title",
-      "daily_cost_estimate": number,
-      "slots": [
-        {
-          "time": "9:00 AM",
-          "slot_title": "زيارة صباحية",
-          "category": "attraction|restaurant|shopping|entertainment",
-          "options": [
-            {
-              "name": "exact place name",
-              "name_ar": "Arabic name",
-              "description": "2 sentences Arabic",
-              "rating": 4.5,
-              "cost_usd": 25,
-              "duration_minutes": 90,
-              "maps_query": "place name city",
-              "pros": ["pro1 Arabic", "pro2 Arabic"],
-              "cons": ["con1 Arabic"],
-              "recommended": true,
-              "why_recommended": "Arabic reason"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}`;
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -57,42 +10,70 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { destination, days, budget, tripType, food, notes } = req.body;
+    const { destination, days, budget, tripType, food, notes, startDay, usedPlaces } = req.body;
     if (!destination || !days || !budget) return res.status(400).json({ error: 'Missing fields' });
 
-    const userMsg = `Plan trip: ${destination}, ${days} days, budget: ${budget}, type: ${tripType}, food: ${food || 'any'}, notes: ${notes || 'none'}. Each day needs 4 slots (morning activity, lunch, afternoon, dinner). Each slot has 3 options. All Arabic. Real places only.`;
+    const totalDays = parseInt(days) || 3;
+    const from = parseInt(startDay) || 1;
+    const chunkSize = 3;
+    const to = Math.min(from + chunkSize - 1, totalDays);
+    const hasMore = to < totalDays;
+
+    // Build exclusion list from previous chunks
+    var excludeRule = '';
+    if (usedPlaces && usedPlaces.length > 0) {
+      excludeRule = '\n\nIMPORTANT: Do NOT repeat any of these places that were already used in previous days: ' + usedPlaces.join(', ') + '. Choose DIFFERENT places for variety.';
+    }
+
+    const prompt = `Plan days ${from}-${to} of a ${totalDays}-day trip to ${destination}.
+Budget: ${budget}. Type: ${tripType}. Food: ${food || 'any'}. Notes: ${notes || 'none'}.
+
+RULES:
+- ONLY real places on Google Maps
+- Each day: 4 time slots (morning, lunch, afternoon, dinner)
+- Each slot: 3 options, mark best as recommended:true
+- All text Arabic, descriptions 1 sentence
+- Do NOT repeat any place across the entire trip — every option must be unique
+- Return ONLY JSON${excludeRule}
+
+JSON:
+{"days":[{"day_number":${from},"title":"Arabic","daily_cost_estimate":0,"slots":[{"time":"9:00 AM","slot_title":"Arabic","category":"attraction","options":[{"name":"place","name_ar":"Arabic","description":"Arabic","rating":4.5,"cost_usd":0,"duration_minutes":90,"maps_query":"place city","pros":["pro"],"cons":["con"],"recommended":true,"why_recommended":"Arabic"}]}]}],"tips":["tip1","tip2"]${from === 1 ? ',"trip_title":"Arabic","destination":"'+destination+'","total_days":'+totalDays+',"total_cost_estimate":0' : ''}}`;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userMsg }
+        { role: 'system', content: 'Return ONLY valid JSON. No markdown. Never repeat a place name.' },
+        { role: 'user', content: prompt }
       ],
-      temperature: 0.7,
-      max_tokens: 6000,
+      temperature: 0.8,
+      max_tokens: 5000,
       response_format: { type: 'json_object' },
     });
 
     const data = JSON.parse(response.choices[0].message.content);
 
-    // Add Maps URLs
+    // Collect all place names from this chunk for the frontend to track
+    var placesInChunk = [];
     if (data.days) {
       data.days.forEach(function(day) {
-        if (day.slots) {
-          day.slots.forEach(function(slot) {
-            if (slot.options) {
-              slot.options.forEach(function(opt) {
-                opt.maps_url = 'https://www.google.com/maps/search/' + encodeURIComponent(opt.maps_query || opt.name);
-              });
-            }
+        (day.slots || []).forEach(function(slot) {
+          (slot.options || []).forEach(function(opt) {
+            opt.maps_url = 'https://www.google.com/maps/search/' + encodeURIComponent(opt.maps_query || opt.name);
+            if (opt.name) placesInChunk.push(opt.name);
           });
-        }
+        });
       });
     }
 
-    return res.status(200).json({ success: true, data: data });
+    return res.status(200).json({ 
+      success: true, 
+      data: data, 
+      hasMore: hasMore,
+      nextStartDay: hasMore ? to + 1 : null,
+      placesUsed: placesInChunk
+    });
   } catch (error) {
-    console.error('Error:', error);
-    return res.status(500).json({ error: 'Failed to generate trip' });
+    console.error('API Error:', error.message || error);
+    return res.status(500).json({ error: 'Failed', detail: error.message });
   }
 }
