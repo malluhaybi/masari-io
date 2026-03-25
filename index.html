@@ -432,6 +432,7 @@ function renderSmartTrip(data) {
       html += '</a>';
     }
     html += '</div></div></div>';
+  }
   document.getElementById("resultDays").innerHTML = html;
   var rs = document.getElementById("resultSection"); rs.style.display = "block";
   setTimeout(function() { rs.scrollIntoView({ behavior: "smooth" }); }, 100);
