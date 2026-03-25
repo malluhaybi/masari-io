@@ -1,4 +1,27 @@
-*/
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  masari.io — index.html PATCH
+ *  الملف: index_patch.js
+ *  يحتوي على 3 تحسينات:
+ *    1. CSS محسّن للـ profileSection
+ *    2. HTML محسّن للـ profileSection
+ *    3. دالة showProfile() محسّنة مع إحصائيات
+ *    4. دالة buildInfographic() محسّنة للـ SVG
+ *
+ *  طريقة التطبيق:
+ *    ① افتح index.html في GitHub
+ *    ② ابحث عن /* PROFILE */ في CSS وعوّضه بـ PROFILE_CSS
+ *    ③ ابحث عن <div id="profileSection"> وعوّضه بـ PROFILE_HTML
+ *    ④ ابحث عن function showProfile() وعوّضها بـ showProfile()
+ *    ⑤ ابحث عن // === INFOGRAPHIC MAP === وعوّض الكود بـ buildInfographic()
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   1. PROFILE_CSS
+   استبدل  /* PROFILE */  في كتلة <style> بهذا:
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const PROFILE_CSS = `
 /* PROFILE */
 #profileSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto;animation:profileFadeIn .4s ease}
