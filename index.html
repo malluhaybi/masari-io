@@ -244,7 +244,7 @@ footer a:hover { color: var(--gold); }
     <div class="app-body">
       <div class="form-step active" id="step1">
         <div class="mb"><label class="form-label">إلى أين تريد السفر؟ *</label><input type="text" class="form-input" id="inputDest" placeholder="مثال: دبي، اسطنبول، لندن، طوكيو..."></div>
-        <div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="30" value="3"></div>
+        <div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="90" value="3"></div>
       </div>
       <div class="form-step" id="step2" style="display:none">
         <label class="form-label">مستوى الميزانية *</label>
@@ -424,13 +424,40 @@ function isPro() { try { return localStorage.getItem("masari_pro") === "true"; }
   var p = new URLSearchParams(window.location.search);
   if (p.get("paid") === "true") {
     try { localStorage.setItem("masari_pro", "true"); } catch(e) {}
-    alert("تم الدفع بنجاح! شكراً لاشتراكك في Masari.io ✅");
     window.history.replaceState({}, "", window.location.pathname);
+    
+    // Restore pending trip and auto-generate
+    try {
+      var pending = localStorage.getItem("masari_pending_trip");
+      if (pending) {
+        var saved = JSON.parse(pending);
+        formData.destination = saved.destination || "";
+        formData.days = saved.days || 3;
+        formData.budget = saved.budget || "متوسط";
+        formData.tripType = saved.tripType || "عائلية";
+        formData.food = saved.food || "بدون تفضيل";
+        formData.notes = saved.notes || "";
+        localStorage.removeItem("masari_pending_trip");
+        
+        // Auto-start trip after page loads
+        setTimeout(function() {
+          alert("تم الدفع بنجاح! ✅\nجاري تصميم رحلتك...");
+          startTrip();
+        }, 1000);
+      } else {
+        alert("تم الدفع بنجاح! شكراً لاشتراكك في Masari.io ✅");
+      }
+    } catch(e) {
+      alert("تم الدفع بنجاح! شكراً لاشتراكك في Masari.io ✅");
+    }
   }
 })();
 
 // ===== STRIPE CHECKOUT =====
 function handlePayment(plan) {
+  // Save trip data before going to Stripe
+  try { localStorage.setItem("masari_pending_trip", JSON.stringify(formData)); } catch(e) {}
+  
   fetch("/api/create-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -453,6 +480,9 @@ function startTrip() {
   addTripCount();
   var screen = document.getElementById("loadingScreen");
   screen.style.display = "flex";
+  
+  // Update loading text
+  var loadTitle = screen.querySelector("div[style*='font-size:20px']") || screen.children[1];
   
   var loadStep = 0;
   var ids = ["ls1", "ls2", "ls3", "ls4"];
@@ -483,13 +513,20 @@ function startTrip() {
     }
   }
 
-  var tripPayload = JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes });
+  // Chunked loading — 3 days per request
+  var allDays = [];
+  var tripMeta = null;
+  var totalDays = parseInt(formData.days) || 3;
+  var usedPlaces = [];
   
-  function callAPI(attempt) {
+  function loadChunk(startDay, retries) {
+    // Update loading message
+    if (loadTitle) loadTitle.textContent = "✦ نصمم أيام " + startDay + "-" + Math.min(startDay + 2, totalDays) + " من " + totalDays;
+    
     fetch("/api/generate-trip", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: tripPayload
+      body: JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes, startDay: startDay, usedPlaces: usedPlaces })
     })
     .then(function(r) {
       if (!r.ok) throw new Error("Status " + r.status);
@@ -497,16 +534,43 @@ function startTrip() {
     })
     .then(function(j) {
       if (j && j.data && j.data.days) {
-        hideLoading();
-        renderSmartTrip(j.data);
+        // Save metadata from first chunk
+        if (!tripMeta) {
+          tripMeta = {
+            trip_title: j.data.trip_title || "رحلتك إلى " + formData.destination,
+            destination: j.data.destination || formData.destination,
+            total_days: totalDays,
+            total_cost_estimate: j.data.total_cost_estimate || 0,
+            tips: j.data.tips || []
+          };
+        } else {
+          tripMeta.total_cost_estimate += (j.data.total_cost_estimate || 0);
+          if (j.data.tips) tripMeta.tips = tripMeta.tips.concat(j.data.tips);
+        }
+        
+        // Track used places to avoid repeats in next chunk
+        if (j.placesUsed) usedPlaces = usedPlaces.concat(j.placesUsed);
+        
+        // Add days
+        allDays = allDays.concat(j.data.days);
+        
+        // Check if more chunks needed
+        if (j.hasMore && j.nextStartDay) {
+          loadChunk(j.nextStartDay, 0);
+        } else {
+          // All chunks loaded — render!
+          hideLoading();
+          tripMeta.days = allDays;
+          tripMeta.tips = tripMeta.tips.filter(function(tip, idx, arr) { return arr.indexOf(tip) === idx; }).slice(0, 5);
+          renderSmartTrip(tripMeta);
+        }
       } else {
         throw new Error("Invalid data");
       }
     })
-    .catch(function(err) {
-      if (attempt < 3) {
-        // Retry after 2 seconds
-        setTimeout(function() { callAPI(attempt + 1); }, 2000);
+    .catch(function() {
+      if (retries < 2) {
+        setTimeout(function() { loadChunk(startDay, retries + 1); }, 2000);
       } else {
         hideLoading();
         buildLocalTrip();
@@ -514,7 +578,7 @@ function startTrip() {
     });
   }
   
-  callAPI(1);
+  loadChunk(1, 0);
 }
 
 // ===== RENDER SMART TRIP (3 OPTIONS) =====
