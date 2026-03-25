@@ -94,7 +94,7 @@ footer{padding:40px 24px 20px;border-top:1px solid var(--border);text-align:cent
 .profile-trips{display:grid;gap:12px;margin-top:20px}
 .trip-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:border-color .2s}
 .trip-card:hover{border-color:var(--gold)}
-@media print{*{color:#000!important;background:#fff!important}nav,.hero,#features,#how,#appSection,#pricing,#faq,footer,#chatWidget,#loadingScreen,#paywallModal,#authModal,.result-actions,.badge{display:none!important}#resultSection{display:block!important;padding:0!important}.day-card.collapsed .day-body{display:block!important}@page{margin:1.5cm}}
+@media print{*{color:#000!important;background:#fff!important}nav,.hero,#features,#how,#appSection,#pricing,#faq,footer,#chatWidget,#loadingScreen,#paywallModal,#authModal,.result-actions,.badge,.opt-map{display:none!important}#resultSection{display:block!important;padding:0!important}.day-card.collapsed .day-body{display:block!important}#infographicSection{break-before:page}#infographicSection svg{max-width:100%!important}@page{margin:1.5cm}}
 @media(max-width:768px){.nav-links{display:none}.features,.tests,.pricing{grid-template-columns:1fr}.options{grid-template-columns:repeat(2,1fr)}.opt-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -337,6 +337,101 @@ function renderSmartTrip(data) {
     html += '<div class="day-cost"><span style="color:var(--txt2);font-size:13px">تكلفة اليوم</span><span style="color:var(--gold);font-size:20px;font-weight:900;font-family:var(--mono)">$' + (day.daily_cost_estimate || '—') + '</span></div></div></div>';
   }
   if (data.tips && data.tips.length) { html += '<div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);border-radius:14px;padding:24px;margin-top:16px"><h3 style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px">💡 نصائح</h3>'; for (var t = 0; t < data.tips.length; t++) html += '<div style="font-size:13px;color:var(--txt2);padding:4px 0">✦ ' + data.tips[t] + '</div>'; html += '</div>'; }
+  
+  // === INFOGRAPHIC MAP ===
+  var mapPlaces = [], placeNum = 1, cities = [];
+  for (var md = 0; md < data.days.length; md++) {
+    var mDay = data.days[md];
+    if (mDay.city && cities.indexOf(mDay.city) === -1) cities.push(mDay.city);
+    var mSlots = mDay.slots || [];
+    for (var ms = 0; ms < mSlots.length; ms++) {
+      var mOpts = mSlots[ms].options || [];
+      for (var mo = 0; mo < mOpts.length; mo++) {
+        if (mOpts[mo].recommended) {
+          mapPlaces.push({ name: mOpts[mo].name_ar || mOpts[mo].name, day: mDay.day_number || md+1, cost: mOpts[mo].cost_usd || 0, city: mDay.city || '', cat: mSlots[ms].category || '', num: placeNum });
+          placeNum++;
+        }
+      }
+    }
+  }
+  
+  if (mapPlaces.length > 0) {
+    // SVG Infographic Route Map
+    var dest = data.destination || formData.destination;
+    var svgW = 800, nodeH = 54, padY = 20, headerH = 80;
+    var svgH = headerH + (mapPlaces.length * (nodeH + padY)) + 100;
+    var catIcons = { attraction: '🏛️', restaurant: '🍽️', transport: '🚁', shopping: '🛍️', entertainment: '🎭', relaxation: '🧘' };
+    var catColors = { attraction: '#F0A500', restaurant: '#34D399', transport: '#60A5FA', shopping: '#A78BFA', entertainment: '#F472B6', relaxation: '#38BDF8' };
+    
+    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px" id="infographicSection">';
+    html += '<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:16px;font-weight:700">🗺️ خريطة المسار — ' + dest + '</h3><span style="font-size:12px;color:var(--txt3)">' + mapPlaces.length + ' محطة | ' + cities.length + ' مدينة</span></div>';
+    
+    // SVG Infographic
+    html += '<div style="padding:20px;overflow-x:auto"><svg viewBox="0 0 ' + svgW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;margin:0 auto;display:block;font-family:IBM Plex Sans Arabic,sans-serif">';
+    
+    // Background
+    html += '<defs><linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0C1220"/><stop offset="100%" stop-color="#06090F"/></linearGradient>';
+    html += '<filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+    html += '<rect width="' + svgW + '" height="' + svgH + '" rx="14" fill="url(#bgGrad)"/>';
+    
+    // Header
+    html += '<text x="' + (svgW/2) + '" y="35" text-anchor="middle" fill="#F0A500" font-size="20" font-weight="900">✈️ ' + dest + ' — خطة المسار</text>';
+    html += '<text x="' + (svgW/2) + '" y="58" text-anchor="middle" fill="#94A3B8" font-size="12">' + (data.total_days || formData.days) + ' أيام | ' + mapPlaces.length + ' نشاط | $' + (data.total_cost_estimate || '—') + '</text>';
+    
+    // Route line
+    var lineX = 100, startY = headerH + 20;
+    html += '<line x1="' + lineX + '" y1="' + startY + '" x2="' + lineX + '" y2="' + (startY + mapPlaces.length * (nodeH + padY) - padY) + '" stroke="#F0A500" stroke-width="2" stroke-dasharray="6,4" opacity="0.3"/>';
+    
+    var currentDay = 0;
+    for (var pi = 0; pi < mapPlaces.length; pi++) {
+      var place = mapPlaces[pi];
+      var py = startY + pi * (nodeH + padY);
+      var col = catColors[place.cat] || '#F0A500';
+      
+      // Day separator
+      if (place.day !== currentDay) {
+        currentDay = place.day;
+        html += '<rect x="30" y="' + (py - 8) + '" width="50" height="22" rx="11" fill="#F0A500"/>';
+        html += '<text x="55" y="' + (py + 7) + '" text-anchor="middle" fill="#06090F" font-size="10" font-weight="800">Day ' + currentDay + '</text>';
+      }
+      
+      // Node circle
+      html += '<circle cx="' + lineX + '" cy="' + (py + 14) + '" r="16" fill="' + col + '" opacity="0.15"/>';
+      html += '<circle cx="' + lineX + '" cy="' + (py + 14) + '" r="10" fill="' + col + '" filter="url(#glow)"/>';
+      html += '<text x="' + lineX + '" y="' + (py + 18) + '" text-anchor="middle" fill="#06090F" font-size="9" font-weight="900">' + place.num + '</text>';
+      
+      // Place card
+      html += '<rect x="130" y="' + py + '" width="' + (svgW - 160) + '" height="' + nodeH + '" rx="10" fill="rgba(18,26,43,0.8)" stroke="' + col + '" stroke-width="1" stroke-opacity="0.3"/>';
+      
+      // Icon
+      html += '<text x="150" y="' + (py + 32) + '" font-size="20">' + (catIcons[place.cat] || '📍') + '</text>';
+      
+      // Place name
+      html += '<text x="180" y="' + (py + 22) + '" fill="#F1F1F1" font-size="13" font-weight="700" text-anchor="start">' + place.name + '</text>';
+      
+      // City + Cost
+      if (place.city) html += '<text x="180" y="' + (py + 40) + '" fill="#94A3B8" font-size="10" text-anchor="start">📍 ' + place.city + '</text>';
+      html += '<text x="' + (svgW - 40) + '" y="' + (py + 30) + '" fill="' + col + '" font-size="13" font-weight="900" text-anchor="end" font-family="Space Mono,monospace">$' + place.cost + '</text>';
+    }
+    
+    // Footer
+    var footY = startY + mapPlaces.length * (nodeH + padY) + 20;
+    html += '<text x="' + (svgW/2) + '" y="' + footY + '" text-anchor="middle" fill="#4B5975" font-size="10">Masari.io — مصمم بالذكاء الاصطناعي</text>';
+    
+    html += '</svg></div>';
+    
+    // Place list with links
+    html += '<div style="padding:16px 24px;border-top:1px solid var(--border)">';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
+    for (var pi2 = 0; pi2 < mapPlaces.length; pi2++) {
+      var pl = mapPlaces[pi2];
+      var plCol = catColors[pl.cat] || '#F0A500';
+      html += '<a href="https://www.google.com/maps/search/' + encodeURIComponent(pl.name + ' ' + (pl.city || formData.destination)) + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;text-decoration:none" onmouseover="this.style.borderColor=\'' + plCol + '\'" onmouseout="this.style.borderColor=\'rgba(240,165,0,0.1)\'">';
+      html += '<span style="width:24px;height:24px;background:' + plCol + ';border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--bg);flex-shrink:0">' + pl.num + '</span>';
+      html += '<span style="font-size:12px;color:var(--txt);font-weight:600">' + pl.name + '</span>';
+      html += '</a>';
+    }
+    html += '</div></div></div>';
   document.getElementById("resultDays").innerHTML = html;
   var rs = document.getElementById("resultSection"); rs.style.display = "block";
   setTimeout(function() { rs.scrollIntoView({ behavior: "smooth" }); }, 100);
