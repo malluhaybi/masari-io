@@ -91,10 +91,35 @@ footer{padding:40px 24px 20px;border-top:1px solid var(--border);text-align:cent
 .auth-switch{color:var(--txt3);font-size:12px;margin-top:16px}.auth-switch a{color:var(--gold);cursor:pointer;text-decoration:underline}
 .auth-err{color:var(--red);font-size:12px;margin-top:8px;display:none}
 /* PROFILE */
-#profileSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto}
-.profile-trips{display:grid;gap:12px;margin-top:20px}
-.trip-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:border-color .2s}
-.trip-card:hover{border-color:var(--gold)}
+#profileSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto;animation:profileFadeIn .4s ease}
+@keyframes profileFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.profile-wrap{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;text-align:center;position:sticky;top:90px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 24px rgba(240,165,0,.3)}
+.profile-name{font-size:19px;font-weight:700;margin-bottom:4px}
+.profile-email-txt{font-size:12px;color:var(--txt2);margin-bottom:16px;direction:ltr;unicode-bidi:plaintext}
+.profile-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:20px;letter-spacing:.3px}
+.profile-badge.pro{background:rgba(240,165,0,.15);color:var(--gold);border:1px solid rgba(240,165,0,.3)}
+.profile-badge.free{background:rgba(148,163,184,.08);color:var(--txt2);border:1px solid var(--border)}
+.profile-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.ps-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center}
+.ps-num{font-size:24px;font-weight:800;font-family:'Space Mono',monospace;color:var(--gold);line-height:1}
+.ps-lbl{font-size:10px;color:var(--txt2);margin-top:4px;letter-spacing:.2px}
+.profile-logout-btn{width:100%;padding:10px;background:none;border:1px solid var(--border);border-radius:10px;color:var(--txt3);font-family:var(--font);font-size:13px;cursor:pointer;transition:all .2s;margin-top:8px}
+.profile-logout-btn:hover{border-color:var(--red);color:var(--red)}
+.profile-trips-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px}
+.profile-trips-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.profile-trips-head h3{font-size:17px;font-weight:700}
+.trip-card-item{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .15s;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.trip-card-item:last-child{margin-bottom:0}
+.trip-card-item:hover{border-color:var(--border2);transform:translateX(-3px)}
+.tci-dest{font-size:15px;font-weight:700;margin-bottom:5px}
+.tci-meta{font-size:12px;color:var(--txt2);display:flex;gap:10px;flex-wrap:wrap}
+.tci-cost{font-size:17px;font-weight:800;font-family:'Space Mono',monospace;color:var(--gold);white-space:nowrap}
+.profile-empty{text-align:center;padding:48px 20px;color:var(--txt3)}
+.profile-empty .ei{font-size:44px;display:block;margin-bottom:12px}
+.profile-empty p{font-size:14px;margin-bottom:20px}
+@media(max-width:768px){.profile-wrap{grid-template-columns:1fr}.profile-card{position:static}}
 @media print{*{color:#000!important;background:#fff!important}nav,.hero,#features,#how,#appSection,#pricing,#faq,footer,#chatWidget,#loadingScreen,#paywallModal,#authModal,.result-actions,.badge,.opt-map{display:none!important}#resultSection{display:block!important;padding:0!important}.day-card.collapsed .day-body{display:block!important}#infographicSection{break-before:page}#infographicSection svg{max-width:100%!important}@page{margin:1.5cm}}
 @media(max-width:768px){.nav-links{display:none}.features,.tests,.pricing{grid-template-columns:1fr}.options{grid-template-columns:repeat(2,1fr)}.opt-grid{grid-template-columns:1fr}}
 </style>
@@ -116,7 +141,29 @@ footer{padding:40px 24px 20px;border-top:1px solid var(--border);text-align:cent
 <div class="section"><div class="section-head"><div class="tag">آراء العملاء</div><h2>ماذا يقولون عنا</h2></div><div class="tests"><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"وفّر علي ساعات! الخيارات ساعدتني أقرر بسرعة."</div><div style="font-size:14px;font-weight:700">محمد العتيبي</div><div style="font-size:11px;color:var(--txt3)">رحلة عائلية — اسطنبول</div></div><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"أول مرة أخطط شهر عسل بدون توتر."</div><div style="font-size:14px;font-weight:700">نورة الشمري</div><div style="font-size:11px;color:var(--txt3)">شهر عسل — المالديف</div></div><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"المقارنة بين الأماكن شيء ما لقيته بأي تطبيق ثاني."</div><div style="font-size:14px;font-weight:700">خالد المهيري</div><div style="font-size:11px;color:var(--txt3)">مؤثر سفر</div></div></div></div>
 <div class="section" id="appSection"><div class="section-head"><div class="tag">ابدأ الآن</div><h2>صمم رحلتك المثالية</h2><p>5 أسئلة بسيطة — والباقي علينا</p></div><div class="app-box"><div class="app-header"><h2>✦ مُصمم الرحلات</h2><span id="stepLabel">1 / 5</span></div><div class="progress"><div id="progressBar"></div></div><div class="app-body"><div class="form-step active" id="step1"><div class="mb"><label class="form-label">إلى أين تريد السفر؟ *</label><input type="text" class="form-input" id="inputDest" placeholder="مثال: دبي، تركيا، اليابان..."></div><div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="90" value="3"></div></div><div class="form-step" id="step2" style="display:none"><label class="form-label">مستوى الميزانية *</label><div class="options"><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💵</span><span class="name">اقتصادي</span></div><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💳</span><span class="name">متوسط</span></div><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💎</span><span class="name">فاخر</span></div></div></div><div class="form-step" id="step3" style="display:none"><label class="form-label">نوع الرحلة *</label><div class="options"><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">👨‍👩‍👧‍👦</span><span class="name">عائلية</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">💑</span><span class="name">شهر عسل</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏔️</span><span class="name">مغامرة</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🛍️</span><span class="name">تسوق</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏛️</span><span class="name">ثقافية</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏖️</span><span class="name">استرخاء</span></div></div></div><div class="form-step" id="step4" style="display:none"><label class="form-label">تفضيلات الطعام</label><div class="options"><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥩</span><span class="name">حلال</span></div><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥗</span><span class="name">نباتي</span></div><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🐟</span><span class="name">بحري</span></div><div class="opt-card selected" onclick="selectOption(this,'food')"><span class="emoji">🍽️</span><span class="name">بدون تفضيل</span></div></div></div><div class="form-step" id="step5" style="display:none"><div class="mb"><label class="form-label">ملاحظات (اختياري)</label><input type="text" class="form-input" id="inputNotes" placeholder="أنشطة للأطفال، أماكن قريبة..."></div><div style="background:var(--bg3);border-radius:var(--rs);padding:20px"><h4 style="margin-bottom:10px;font-size:15px">📋 ملخص</h4><div id="summaryBox" style="color:var(--txt2);font-size:14px;line-height:2.2"></div></div></div></div><div class="app-footer"><button id="backBtn" onclick="goBack()" style="visibility:hidden">→ السابقة</button><button id="nextBtn" onclick="goNext()">التالي ←</button></div></div></div>
 <div id="resultSection"><div class="result-head"><h2>🎉 مسار رحلتك جاهز!</h2><div class="result-meta" id="resultMeta"></div></div><div id="resultDays"></div><div class="result-actions"><button class="btn btn-gold" onclick="downloadPDF()">📄 تحميل PDF</button><button class="btn btn-dark" onclick="location.href='#appSection'">✦ رحلة جديدة</button></div></div>
-<div id="profileSection"><div class="section-head"><div class="tag">بروفايلي</div><h2 id="profileName">رحلاتي</h2><p id="profileEmail" style="color:var(--txt3)"></p></div><div id="profileTrips" class="profile-trips"><p style="color:var(--txt3);text-align:center">لا توجد رحلات بعد — صمم أول رحلة!</p></div><div style="text-align:center;margin-top:24px"><button class="btn btn-dark" onclick="logoutUser()">تسجيل خروج</button></div></div>
+<div id="profileSection">
+  <div class="profile-wrap">
+    <div class="profile-card">
+      <div class="profile-avatar" id="profileAvatar">م</div>
+      <div class="profile-name" id="profileName">المستخدم</div>
+      <div class="profile-email-txt" id="profileEmail">—</div>
+      <div class="profile-badge free" id="profileBadge">🔓 مجاني</div>
+      <div class="profile-stats-row">
+        <div class="ps-box"><div class="ps-num" id="profileTripCount">0</div><div class="ps-lbl">رحلة مصمَّمة</div></div>
+        <div class="ps-box"><div class="ps-num" id="profileRemainingTrips">2</div><div class="ps-lbl">رحلات متبقية</div></div>
+      </div>
+      <a href="#appSection" class="btn btn-gold" style="display:block;text-align:center">✈️ رحلة جديدة</a>
+      <button class="profile-logout-btn" onclick="logoutUser()">↩ تسجيل خروج</button>
+    </div>
+    <div class="profile-trips-section">
+      <div class="profile-trips-head">
+        <h3>🗺️ رحلاتي</h3>
+        <span id="profileTripsCount" style="font-size:13px;color:var(--txt2)"></span>
+      </div>
+      <div id="profileTrips"></div>
+    </div>
+  </div>
+</div>
 <div class="section" id="pricing"><div class="section-head"><div class="tag">الأسعار</div><h2>خطط تناسب الجميع</h2></div><div class="pricing"><div class="price-card"><div style="font-size:20px;font-weight:800">مجاني</div><div class="price-amount">$0<small> / للأبد</small></div><ul class="price-list"><li>رحلتان مجانيتان</li><li>خيارات لكل نشاط</li><li>روابط Google Maps</li><li>تقدير التكاليف</li></ul><a href="#appSection" class="btn btn-dark" style="width:100%;justify-content:center">ابدأ مجاناً</a></div><div class="price-card popular"><div style="font-size:20px;font-weight:800">احترافي</div><div class="price-amount">$4.99<small> / رحلة</small></div><ul class="price-list"><li>رحلات غير محدودة</li><li>مقارنة ذكية</li><li>تصدير PDF احترافي</li><li>حفظ الرحلات في بروفايلك</li></ul><a href="#appSection" class="btn btn-gold" style="width:100%;justify-content:center">اشترك الآن</a></div></div></div>
 <div class="section" id="faq" style="max-width:700px"><div class="section-head"><div class="tag">أسئلة شائعة</div><h2>كل اللي تبي تعرفه</h2></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل الأماكن حقيقية؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم! كل الأماكن حقيقية وموجودة على Google Maps.</div></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل يراعي الحلال؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">بالتأكيد. كل المطاعم تكون حلال لما تختار هذا التفضيل.</div></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل بياناتي آمنة؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم. نستخدم Firebase من Google لحماية بياناتك.</div></div></div>
 <footer><p>© 2026 Masari.io — جميع الحقوق محفوظة</p><div><a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">الشروط</a><a href="about.html">من نحن</a><a href="admin.html">لوحة التحكم</a></div></footer>
@@ -196,23 +243,32 @@ function logoutUser() { auth.signOut().then(function() { location.reload(); }); 
 // ===== PROFILE =====
 function showProfile() {
   if (!currentUser) { showAuth('login'); return; }
-  document.getElementById("profileName").textContent = (currentUser.displayName || "المستخدم") + " — رحلاتي";
-  document.getElementById("profileEmail").textContent = currentUser.email;
-  // Load trips from Firestore
-  db.collection("trips").where("userId", "==", currentUser.uid).orderBy("createdAt", "desc").limit(20).get().then(function(snap) {
+  var initial = (currentUser.displayName || currentUser.email || 'م').charAt(0).toUpperCase();
+  document.getElementById('profileAvatar').textContent = initial;
+  document.getElementById('profileName').textContent   = currentUser.displayName || 'المستخدم';
+  document.getElementById('profileEmail').textContent  = currentUser.email;
+  var proStatus = isPro();
+  var badge = document.getElementById('profileBadge');
+  if (proStatus) { badge.className='profile-badge pro'; badge.textContent='⭐ مشترك PRO'; }
+  else           { badge.className='profile-badge free'; badge.textContent='🔓 مجاني'; }
+  document.getElementById('profileRemainingTrips').textContent = proStatus ? '∞' : String(Math.max(0, 2 - getTripsUsed()));
+  db.collection('trips').where('userId','==',currentUser.uid).orderBy('createdAt','desc').limit(20).get().then(function(snap){
+    document.getElementById('profileTripCount').textContent  = snap.size;
+    document.getElementById('profileTripsCount').textContent = snap.size + ' رحلة';
+    if (snap.empty) {
+      document.getElementById('profileTrips').innerHTML = '<div class="profile-empty"><span class="ei">✈️</span><p>لا توجد رحلات بعد — صمّم أول رحلة!</p><a href="#appSection" class="btn btn-gold">ابدأ الآن ←</a></div>';
+      return;
+    }
     var html = '';
-    if (snap.empty) { html = '<p style="color:var(--txt3);text-align:center;padding:20px">لا توجد رحلات بعد — صمم أول رحلة!</p>'; }
-    snap.forEach(function(doc) {
-      var t = doc.data();
-      html += '<div class="trip-card"><div><div style="font-size:15px;font-weight:700">📍 ' + (t.destination || '—') + '</div><div style="font-size:12px;color:var(--txt3)">' + (t.days || 0) + ' أيام | ' + (t.budget || '') + ' | ' + (t.tripType || '') + '</div></div><div style="text-align:left"><div style="font-size:13px;color:var(--gold);font-weight:700">$' + (t.totalCost || '—') + '</div><div style="font-size:10px;color:var(--txt3)">' + (t.createdAt ? new Date(t.createdAt.seconds * 1000).toLocaleDateString('ar-SA') : '') + '</div></div></div>';
+    snap.forEach(function(doc){
+      var t=doc.data(), date=t.createdAt?new Date(t.createdAt.seconds*1000).toLocaleDateString('ar-SA'):'';
+      html+='<div class="trip-card-item"><div><div class="tci-dest">📍 '+(t.destination||'—')+'</div><div class="tci-meta"><span>📅 '+(t.days||0)+' أيام</span><span>💰 $'+(t.budget||'—')+'</span>'+(t.tripType?'<span>🎯 '+t.tripType+'</span>':'')+'<span style="color:var(--txt3)">'+date+'</span></div></div><div class="tci-cost">$'+(t.totalCost||0)+'</div></div>';
     });
-    document.getElementById("profileTrips").innerHTML = html;
+    document.getElementById('profileTrips').innerHTML = html;
   });
-  document.getElementById("profileSection").style.display = "block";
-  document.getElementById("profileSection").scrollIntoView({ behavior: "smooth" });
+  document.getElementById('profileSection').style.display='block';
+  document.getElementById('profileSection').scrollIntoView({behavior:'smooth'});
 }
-
-// ===== SAVE TRIP TO FIRESTORE =====
 function saveTripToFirestore(tripData) {
   if (!currentUser) return;
   db.collection("trips").add({
