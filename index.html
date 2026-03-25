@@ -6,766 +6,350 @@
 <title>مساري | Masari.io — رحلتك بضغطة زر</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #06090F; --bg2: #0C1220; --bg3: #121A2B;
-  --gold: #F0A500; --gold2: #FFD166; --gold3: #C4880A;
-  --green: #34D399; --red: #EF4444; --blue: #60A5FA;
-  --txt: #F1F1F1; --txt2: #94A3B8; --txt3: #4B5975;
-  --border: rgba(240,165,0,0.1); --border2: rgba(240,165,0,0.25);
-  --surface: rgba(18,26,43,0.8);
-  --font: 'IBM Plex Sans Arabic', sans-serif;
-  --mono: 'Space Mono', monospace;
-  --r: 14px; --rs: 8px;
-}
-html { scroll-behavior: smooth; }
-body { font-family: var(--font); background: var(--bg); color: var(--txt); line-height: 1.75; overflow-x: hidden; }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-
-/* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s; }
-nav.scrolled { background: rgba(6,9,15,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-.logo { text-decoration: none; font-size: 24px; font-weight: 800; color: var(--txt); }
-.logo span { color: var(--gold); }
-.nav-links { display: flex; align-items: center; gap: 24px; }
-.nav-links a { color: var(--txt2); text-decoration: none; font-size: 14px; font-weight: 500; }
-.nav-links a:hover { color: var(--gold); }
-.nav-cta { background: var(--gold) !important; color: var(--bg) !important; padding: 8px 20px !important; border-radius: var(--rs) !important; font-weight: 700 !important; }
-
-/* HERO */
-.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; }
-.hero-content { max-width: 700px; }
-.badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(240,165,0,0.08); border: 1px solid rgba(240,165,0,0.15); padding: 6px 16px; border-radius: 40px; font-size: 12px; color: var(--gold); font-weight: 600; margin-bottom: 28px; }
-.hero h1 { font-size: clamp(32px, 6vw, 60px); font-weight: 900; line-height: 1.2; margin-bottom: 20px; }
-.hero h1 .gold { color: var(--gold); }
-.hero p { font-size: 18px; color: var(--txt2); margin-bottom: 32px; max-width: 550px; margin-left: auto; margin-right: auto; }
-.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-/* BUTTONS */
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--rs); font-family: var(--font); font-size: 15px; font-weight: 700; cursor: pointer; border: none; text-decoration: none; transition: all 0.3s; }
-.btn-gold { background: var(--gold); color: var(--bg); }
-.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(240,165,0,0.3); }
-.btn-dark { background: rgba(18,26,43,0.55); color: var(--txt); border: 1px solid var(--border); }
-
-/* SECTIONS */
-.section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-.section-head { text-align: center; margin-bottom: 48px; }
-.tag { display: inline-block; background: rgba(240,165,0,0.08); color: var(--gold); padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
-.section-head h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 900; margin-bottom: 10px; }
-.section-head p { color: var(--txt2); font-size: 16px; }
-
-/* FEATURES */
-.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.feat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; }
-.feat:hover { border-color: var(--border2); transform: translateY(-4px); transition: all 0.3s; }
-.feat h3 { font-size: 17px; font-weight: 700; margin: 14px 0 8px; }
-.feat p { font-size: 13px; color: var(--txt2); }
-
-/* STEPS */
-.steps { max-width: 650px; margin: 0 auto; }
-.step { display: flex; gap: 24px; padding: 24px 0; }
-.step-num { flex-shrink: 0; width: 56px; height: 56px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: var(--bg); font-family: var(--mono); }
-.step h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-.step p { color: var(--txt2); font-size: 14px; }
-
-/* TESTIMONIALS */
-.tests { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.tcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
-
-/* APP FORM */
-.app-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; max-width: 750px; margin: 0 auto; overflow: hidden; }
-.app-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.app-header h2 { font-size: 18px; font-weight: 800; }
-#stepLabel { font-size: 13px; color: var(--txt3); font-family: var(--mono); }
-.progress { height: 3px; background: var(--bg3); }
-#progressBar { height: 100%; background: var(--gold); transition: width 0.4s; width: 20%; }
-.app-body { padding: 28px; min-height: 200px; }
-.form-step { display: none; }
-.form-step.active { display: block; }
-.form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-.form-input { width: 100%; padding: 14px 16px; background: var(--bg3); border: 2px solid transparent; border-radius: var(--rs); color: var(--txt); font-family: var(--font); font-size: 15px; outline: none; transition: border-color 0.3s; }
-.form-input:focus { border-color: var(--gold); }
-.form-input::placeholder { color: var(--txt3); }
-.mb { margin-bottom: 20px; }
-.options { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-.opt-card { background: var(--bg3); border: 2px solid transparent; border-radius: var(--rs); padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.3s; }
-.opt-card:hover { border-color: rgba(240,165,0,0.2); }
-.opt-card.selected { border-color: var(--gold); background: rgba(240,165,0,0.06); }
-.opt-card .emoji { font-size: 28px; display: block; margin-bottom: 6px; }
-.opt-card .name { font-size: 13px; font-weight: 700; }
-.app-footer { padding: 16px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-#backBtn { background: none; border: none; color: var(--txt2); font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; padding: 10px 16px; border-radius: var(--rs); }
-#nextBtn { background: var(--gold); color: var(--bg); border: none; padding: 12px 26px; border-radius: var(--rs); font-family: var(--font); font-size: 15px; font-weight: 800; cursor: pointer; }
-
-/* LOADING */
-#loadingScreen { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(6,9,15,0.97); backdrop-filter: blur(30px); flex-direction: column; align-items: center; justify-content: center; }
-.spinner { width: 60px; height: 60px; border: 3px solid var(--bg3); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* RESULT */
-#resultSection { display: none; padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-.result-head { text-align: center; margin-bottom: 40px; }
-.result-head h2 { font-size: 32px; font-weight: 900; margin-bottom: 10px; }
-.result-meta { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; color: var(--txt2); font-size: 14px; }
-.day-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 16px; overflow: hidden; }
-.day-header { padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid var(--border); }
-.day-header h3 { font-size: 17px; font-weight: 700; }
-.day-badge { background: var(--gold); color: var(--bg); padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; font-family: var(--mono); margin-left: 8px; }
-.day-body { padding: 20px 24px; }
-.day-card.collapsed .day-body { display: none; }
-.day-cost { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; margin-top: 8px; border-top: 1px solid var(--border); }
-.result-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
-
-/* OPTION CARDS (3 choices) */
-.opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-.opt-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position: relative; }
-.opt-box.rec { border-color: var(--gold); background: rgba(240,165,0,0.04); }
-.opt-box.transport { border-color: var(--blue); background: rgba(96,165,250,0.04); }
-.opt-rec-badge { position: absolute; top: -8px; right: 12px; background: var(--gold); color: var(--bg); padding: 2px 10px; border-radius: 10px; font-size: 10px; font-weight: 800; }
-.opt-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.opt-stars { color: var(--gold); font-size: 12px; margin-bottom: 8px; }
-.opt-desc { font-size: 12px; color: var(--txt2); line-height: 1.7; margin-bottom: 10px; }
-.opt-pro { font-size: 11px; color: var(--green); margin-bottom: 2px; }
-.opt-con { font-size: 11px; color: var(--red); margin-bottom: 2px; }
-.opt-why { margin-top: 8px; padding: 6px 10px; background: rgba(240,165,0,0.08); border-radius: 6px; font-size: 11px; color: var(--gold); }
-.opt-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); }
-.opt-price { font-family: var(--mono); font-size: 13px; font-weight: 700; }
-.opt-map { font-size: 11px; color: var(--green); text-decoration: none; }
-
-/* PRICING */
-.pricing { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 700px; margin: 0 auto; }
-.price-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 32px 24px; text-align: center; position: relative; }
-.price-card.popular { border-color: var(--gold); }
-.price-card.popular::before { content: 'الأكثر شعبية'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--bg); padding: 3px 14px; border-radius: 12px; font-size: 11px; font-weight: 800; }
-.price-amount { font-size: 42px; font-weight: 900; color: var(--gold); font-family: var(--mono); margin: 12px 0; }
-.price-amount small { font-size: 14px; color: var(--txt3); font-weight: 400; font-family: var(--font); }
-.price-list { list-style: none; text-align: right; margin: 16px 0; }
-.price-list li { padding: 6px 0; font-size: 13px; color: var(--txt2); }
-.price-list li::before { content: '✓ '; color: var(--green); }
-
-/* FAQ */
-.faq-item { border-bottom: 1px solid var(--border); }
-.faq-q { padding: 18px 0; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; }
-.faq-q:hover { color: var(--gold); }
-.faq-a { max-height: 0; overflow: hidden; color: var(--txt2); font-size: 14px; line-height: 1.9; transition: max-height 0.4s; }
-.faq-item.open .faq-a { max-height: 200px; padding-bottom: 18px; }
-
-/* FOOTER */
-footer { padding: 40px 24px 20px; border-top: 1px solid var(--border); text-align: center; }
-footer p { font-size: 13px; color: var(--txt3); margin-bottom: 8px; }
-footer a { color: var(--txt3); text-decoration: none; margin: 0 8px; font-size: 13px; }
-footer a:hover { color: var(--gold); }
-
-/* PRINT */
-@media print {
-  * { color: #000 !important; background: #fff !important; }
-  nav, .hero, #features, #how, #appSection, #pricing, #faq, footer, #chatWidget, #loadingScreen, #paywallModal, .result-actions, .badge { display: none !important; }
-  #resultSection { display: block !important; padding: 0 !important; }
-  .day-card.collapsed .day-body { display: block !important; }
-  .opt-map { display: none !important; }
-  @page { margin: 1.5cm; }
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-  .features, .tests, .pricing { grid-template-columns: 1fr; }
-  .options { grid-template-columns: repeat(2, 1fr); }
-  .opt-grid { grid-template-columns: 1fr; }
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06090F;--bg2:#0C1220;--bg3:#121A2B;--gold:#F0A500;--gold2:#FFD166;--green:#34D399;--red:#EF4444;--blue:#60A5FA;--txt:#F1F1F1;--txt2:#94A3B8;--txt3:#4B5975;--border:rgba(240,165,0,0.1);--border2:rgba(240,165,0,0.25);--surface:rgba(18,26,43,0.8);--font:'IBM Plex Sans Arabic',sans-serif;--mono:'Space Mono',monospace;--r:14px;--rs:8px}
+html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--txt);line-height:1.75;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+nav.scrolled{background:rgba(6,9,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{text-decoration:none;font-size:24px;font-weight:800;color:var(--txt)}.logo span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:20px}.nav-links a{color:var(--txt2);text-decoration:none;font-size:13px;font-weight:500}.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--gold)!important;color:var(--bg)!important;padding:8px 18px!important;border-radius:var(--rs)!important;font-weight:700!important}
+.nav-user{display:flex;align-items:center;gap:10px}.nav-av{width:32px;height:32px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--bg)}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px}
+.hero-content{max-width:700px}.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.15);padding:6px 16px;border-radius:40px;font-size:12px;color:var(--gold);font-weight:600;margin-bottom:28px}
+.hero h1{font-size:clamp(32px,6vw,60px);font-weight:900;line-height:1.2;margin-bottom:20px}.hero h1 .gold{color:var(--gold)}
+.hero p{font-size:18px;color:var(--txt2);margin-bottom:32px;max-width:550px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--rs);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;border:none;text-decoration:none;transition:all .3s}
+.btn-gold{background:var(--gold);color:var(--bg)}.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,165,0,0.3)}
+.btn-dark{background:rgba(18,26,43,0.55);color:var(--txt);border:1px solid var(--border)}
+.section{padding:80px 24px;max-width:1100px;margin:0 auto}
+.section-head{text-align:center;margin-bottom:48px}.tag{display:inline-block;background:rgba(240,165,0,0.08);color:var(--gold);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:12px}
+.section-head h2{font-size:clamp(26px,4vw,40px);font-weight:900;margin-bottom:10px}.section-head p{color:var(--txt2);font-size:16px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px}.feat:hover{border-color:var(--border2);transform:translateY(-4px);transition:all .3s}
+.feat h3{font-size:17px;font-weight:700;margin:14px 0 8px}.feat p{font-size:13px;color:var(--txt2)}
+.steps{max-width:650px;margin:0 auto}.step{display:flex;gap:24px;padding:24px 0}
+.step-num{flex-shrink:0;width:56px;height:56px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--bg);font-family:var(--mono)}
+.step h3{font-size:18px;font-weight:700;margin-bottom:4px}.step p{color:var(--txt2);font-size:14px}
+.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.app-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:750px;margin:0 auto;overflow:hidden}
+.app-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}.app-header h2{font-size:18px;font-weight:800}
+#stepLabel{font-size:13px;color:var(--txt3);font-family:var(--mono)}
+.progress{height:3px;background:var(--bg3)}#progressBar{height:100%;background:var(--gold);transition:width .4s;width:20%}
+.app-body{padding:28px;min-height:200px}.form-step{display:none}.form-step.active{display:block}
+.form-label{display:block;font-size:14px;font-weight:600;margin-bottom:8px}
+.form-input{width:100%;padding:14px 16px;background:var(--bg3);border:2px solid transparent;border-radius:var(--rs);color:var(--txt);font-family:var(--font);font-size:15px;outline:none}.form-input:focus{border-color:var(--gold)}.form-input::placeholder{color:var(--txt3)}
+.mb{margin-bottom:20px}.options{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.opt-card{background:var(--bg3);border:2px solid transparent;border-radius:var(--rs);padding:16px 12px;text-align:center;cursor:pointer;transition:all .3s}
+.opt-card:hover{border-color:rgba(240,165,0,0.2)}.opt-card.selected{border-color:var(--gold);background:rgba(240,165,0,0.06)}
+.opt-card .emoji{font-size:28px;display:block;margin-bottom:6px}.opt-card .name{font-size:13px;font-weight:700}
+.app-footer{padding:16px 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+#backBtn{background:none;border:none;color:var(--txt2);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;padding:10px 16px;border-radius:var(--rs)}
+#nextBtn{background:var(--gold);color:var(--bg);border:none;padding:12px 26px;border-radius:var(--rs);font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer}
+#loadingScreen{display:none;position:fixed;inset:0;z-index:9999;background:rgba(6,9,15,0.97);backdrop-filter:blur(30px);flex-direction:column;align-items:center;justify-content:center}
+.spinner{width:60px;height:60px;border:3px solid var(--bg3);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:24px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#resultSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto}
+.result-head{text-align:center;margin-bottom:40px}.result-head h2{font-size:32px;font-weight:900;margin-bottom:10px}
+.result-meta{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;color:var(--txt2);font-size:14px}
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden}
+.day-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-bottom:1px solid var(--border)}
+.day-header h3{font-size:17px;font-weight:700}
+.day-badge{background:var(--gold);color:var(--bg);padding:2px 10px;border-radius:12px;font-size:11px;font-weight:800;font-family:var(--mono);margin-left:8px}
+.day-body{padding:20px 24px}.day-card.collapsed .day-body{display:none}
+.day-cost{display:flex;justify-content:space-between;align-items:center;padding-top:14px;margin-top:8px;border-top:1px solid var(--border)}
+.result-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:32px}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.opt-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
+.opt-box.rec{border-color:var(--gold);background:rgba(240,165,0,0.04)}.opt-box.transport{border-color:var(--blue);background:rgba(96,165,250,0.04)}
+.opt-rec-badge{position:absolute;top:-8px;right:12px;background:var(--gold);color:var(--bg);padding:2px 10px;border-radius:10px;font-size:10px;font-weight:800}
+.opt-name{font-size:14px;font-weight:700;margin-bottom:4px}.opt-stars{color:var(--gold);font-size:12px;margin-bottom:8px}
+.opt-desc{font-size:12px;color:var(--txt2);line-height:1.7;margin-bottom:10px}
+.opt-pro{font-size:11px;color:var(--green);margin-bottom:2px}.opt-con{font-size:11px;color:var(--red);margin-bottom:2px}
+.opt-why{margin-top:8px;padding:6px 10px;background:rgba(240,165,0,0.08);border-radius:6px;font-size:11px;color:var(--gold)}
+.opt-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.04)}
+.opt-price{font-family:var(--mono);font-size:13px;font-weight:700}.opt-map{font-size:11px;color:var(--green);text-decoration:none}
+.pricing{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:700px;margin:0 auto}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 24px;text-align:center;position:relative}
+.price-card.popular{border-color:var(--gold)}.price-card.popular::before{content:'الأكثر شعبية';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--bg);padding:3px 14px;border-radius:12px;font-size:11px;font-weight:800}
+.price-amount{font-size:42px;font-weight:900;color:var(--gold);font-family:var(--mono);margin:12px 0}
+.price-amount small{font-size:14px;color:var(--txt3);font-weight:400;font-family:var(--font)}
+.price-list{list-style:none;text-align:right;margin:16px 0}.price-list li{padding:6px 0;font-size:13px;color:var(--txt2)}.price-list li::before{content:'✓ ';color:var(--green)}
+.faq-item{border-bottom:1px solid var(--border)}.faq-q{padding:18px 0;font-size:16px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between}.faq-q:hover{color:var(--gold)}
+.faq-a{max-height:0;overflow:hidden;color:var(--txt2);font-size:14px;line-height:1.9;transition:max-height .4s}.faq-item.open .faq-a{max-height:200px;padding-bottom:18px}
+footer{padding:40px 24px 20px;border-top:1px solid var(--border);text-align:center}footer p{font-size:13px;color:var(--txt3);margin-bottom:8px}footer a{color:var(--txt3);text-decoration:none;margin:0 8px;font-size:13px}footer a:hover{color:var(--gold)}
+/* AUTH MODAL */
+#authModal{display:none;position:fixed;inset:0;z-index:9998;background:rgba(6,9,15,0.95);backdrop-filter:blur(30px);align-items:center;justify-content:center}
+.auth-box{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;max-width:400px;width:90%;padding:36px 28px;text-align:center}
+.auth-box h2{font-size:22px;font-weight:900;margin-bottom:6px}.auth-sub{color:var(--txt2);font-size:13px;margin-bottom:24px}
+.auth-input{width:100%;padding:13px 16px;background:var(--bg);border:2px solid transparent;border-radius:8px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none;margin-bottom:12px}.auth-input:focus{border-color:var(--gold)}.auth-input::placeholder{color:var(--txt3)}
+.auth-btn{width:100%;padding:13px;background:var(--gold);color:var(--bg);border:none;border-radius:8px;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;margin-top:6px}.auth-btn:hover{box-shadow:0 6px 24px rgba(240,165,0,.3)}
+.auth-switch{color:var(--txt3);font-size:12px;margin-top:16px}.auth-switch a{color:var(--gold);cursor:pointer;text-decoration:underline}
+.auth-err{color:var(--red);font-size:12px;margin-top:8px;display:none}
+/* PROFILE */
+#profileSection{display:none;padding:80px 24px;max-width:1100px;margin:0 auto}
+.profile-trips{display:grid;gap:12px;margin-top:20px}
+.trip-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:border-color .2s}
+.trip-card:hover{border-color:var(--gold)}
+@media print{*{color:#000!important;background:#fff!important}nav,.hero,#features,#how,#appSection,#pricing,#faq,footer,#chatWidget,#loadingScreen,#paywallModal,#authModal,.result-actions,.badge{display:none!important}#resultSection{display:block!important;padding:0!important}.day-card.collapsed .day-body{display:block!important}@page{margin:1.5cm}}
+@media(max-width:768px){.nav-links{display:none}.features,.tests,.pricing{grid-template-columns:1fr}.options{grid-template-columns:repeat(2,1fr)}.opt-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
 <nav id="navbar">
   <a href="#" class="logo">مساري<span>.io</span></a>
-  <div class="nav-links">
+  <div class="nav-links" id="navLinks">
     <a href="#features">المميزات</a>
     <a href="#how">كيف يعمل</a>
     <a href="#appSection">صمم رحلتك</a>
     <a href="#pricing">الأسعار</a>
-    <a href="#appSection" class="nav-cta">ابدأ مجاناً</a>
+    <a id="navAuthBtn" href="javascript:showAuth('login')" class="nav-cta">تسجيل دخول</a>
   </div>
 </nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="badge">🟢 مدعوم بالذكاء الاصطناعي</div>
-    <h1>خطط رحلتك بذكاء<br><span class="gold">في 30 ثانية فقط</span></h1>
-    <p>الذكاء الاصطناعي يعطيك 3 خيارات لكل نشاط مع مقارنة ذكية — أماكن حقيقية، تقييمات، مميزات وعيوب، وتكاليف.</p>
-    <div class="hero-btns">
-      <a href="#appSection" class="btn btn-gold">صمم رحلتي الآن ←</a>
-      <a href="#how" class="btn btn-dark">كيف يعمل ↓</a>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<div class="section" id="features">
-  <div class="section-head"><div class="tag">المميزات</div><h2>أدوات ذكية لرحلة مثالية</h2></div>
-  <div class="features">
-    <div class="feat"><div style="font-size:28px">🧠</div><h3>3 خيارات ذكية</h3><p>لكل نشاط يعرض 3 أماكن حقيقية مع تقييمات ومميزات وعيوب عشان تختار الأنسب.</p></div>
-    <div class="feat"><div style="font-size:28px">🗺️</div><h3>خرائط مباشرة</h3><p>كل مكان مربوط بـ Google Maps مباشرة.</p></div>
-    <div class="feat"><div style="font-size:28px">💰</div><h3>تقدير التكاليف</h3><p>ميزانية يومية تشمل كل شيء.</p></div>
-    <div class="feat"><div style="font-size:28px">🍽️</div><h3>طعام حلال</h3><p>مراعاة كاملة لتفضيلاتك الغذائية.</p></div>
-    <div class="feat"><div style="font-size:28px">📄</div><h3>تصدير PDF</h3><p>حمّل الجدول كملف جاهز للطباعة.</p></div>
-    <div class="feat"><div style="font-size:28px">⚡</div><h3>سرعة فائقة</h3><p>من النموذج للجدول في أقل من 30 ثانية.</p></div>
-  </div>
-</div>
-
-<!-- HOW -->
-<div class="section" id="how">
-  <div class="section-head"><div class="tag">كيف يعمل</div><h2>ثلاث خطوات بس</h2></div>
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div><div><h3>أخبرنا عن رحلتك</h3><p>الوجهة، الأيام، الميزانية، ونوع الرحلة.</p></div></div>
-    <div class="step"><div class="step-num">2</div><div><h3>الذكاء الاصطناعي يحلل</h3><p>يقارن آلاف الأماكن ويعطيك 3 خيارات لكل نشاط.</p></div></div>
-    <div class="step"><div class="step-num">3</div><div><h3>اختر واستمتع</h3><p>قارن الخيارات، اختر الأنسب، وحمّل الجدول PDF.</p></div></div>
-  </div>
-</div>
-
-<!-- TESTIMONIALS -->
-<div class="section">
-  <div class="section-head"><div class="tag">آراء العملاء</div><h2>ماذا يقولون عنا</h2></div>
-  <div class="tests">
-    <div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"وفّر علي ساعات! الـ 3 خيارات لكل مكان ساعدتني أقرر بسرعة."</div><div style="font-size:14px;font-weight:700">محمد العتيبي</div><div style="font-size:11px;color:var(--txt3)">رحلة عائلية — اسطنبول</div></div>
-    <div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"أول مرة أخطط شهر عسل بدون توتر. فهم بالضبط اللي نبيه."</div><div style="font-size:14px;font-weight:700">نورة الشمري</div><div style="font-size:11px;color:var(--txt3)">شهر عسل — المالديف</div></div>
-    <div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"المقارنة بين الأماكن مع المميزات والعيوب شيء ما لقيته بأي تطبيق ثاني."</div><div style="font-size:14px;font-weight:700">خالد المهيري</div><div style="font-size:11px;color:var(--txt3)">مؤثر سفر</div></div>
-  </div>
-</div>
-
-<!-- APP FORM -->
-<div class="section" id="appSection">
-  <div class="section-head"><div class="tag">ابدأ الآن</div><h2>صمم رحلتك المثالية</h2><p>5 أسئلة بسيطة — والباقي علينا</p></div>
-  <div class="app-box">
-    <div class="app-header"><h2>✦ مُصمم الرحلات</h2><span id="stepLabel">1 / 5</span></div>
-    <div class="progress"><div id="progressBar"></div></div>
-    <div class="app-body">
-      <div class="form-step active" id="step1">
-        <div class="mb"><label class="form-label">إلى أين تريد السفر؟ *</label><input type="text" class="form-input" id="inputDest" placeholder="مثال: دبي، اسطنبول، لندن، طوكيو..."></div>
-        <div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="90" value="3"></div>
-      </div>
-      <div class="form-step" id="step2" style="display:none">
-        <label class="form-label">مستوى الميزانية *</label>
-        <div class="options">
-          <div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💵</span><span class="name">اقتصادي</span></div>
-          <div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💳</span><span class="name">متوسط</span></div>
-          <div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💎</span><span class="name">فاخر</span></div>
-        </div>
-      </div>
-      <div class="form-step" id="step3" style="display:none">
-        <label class="form-label">نوع الرحلة *</label>
-        <div class="options">
-          <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">👨‍👩‍👧‍👦</span><span class="name">عائلية</span></div>
-          <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">💑</span><span class="name">شهر عسل</span></div>
-          <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏔️</span><span class="name">مغامرة</span></div>
-          <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🛍️</span><span class="name">تسوق</span></div>
-          <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏛️</span><span class="name">ثقافية</span></div>
-          <div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏖️</span><span class="name">استرخاء</span></div>
-        </div>
-      </div>
-      <div class="form-step" id="step4" style="display:none">
-        <label class="form-label">تفضيلات الطعام (اختياري)</label>
-        <div class="options">
-          <div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥩</span><span class="name">حلال</span></div>
-          <div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥗</span><span class="name">نباتي</span></div>
-          <div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🐟</span><span class="name">بحري</span></div>
-          <div class="opt-card selected" onclick="selectOption(this,'food')"><span class="emoji">🍽️</span><span class="name">بدون تفضيل</span></div>
-        </div>
-      </div>
-      <div class="form-step" id="step5" style="display:none">
-        <div class="mb"><label class="form-label">ملاحظات (اختياري)</label><input type="text" class="form-input" id="inputNotes" placeholder="أنشطة للأطفال، أماكن قريبة..."></div>
-        <div style="background:var(--bg3);border-radius:var(--rs);padding:20px"><h4 style="margin-bottom:10px;font-size:15px">📋 ملخص</h4><div id="summaryBox" style="color:var(--txt2);font-size:14px;line-height:2.2"></div></div>
-      </div>
-    </div>
-    <div class="app-footer">
-      <button id="backBtn" onclick="goBack()" style="visibility:hidden">→ السابقة</button>
-      <button id="nextBtn" onclick="goNext()">التالي ←</button>
-    </div>
-  </div>
-</div>
-
-<!-- RESULT -->
-<div id="resultSection">
-  <div class="result-head"><h2>🎉 مسار رحلتك جاهز!</h2><div class="result-meta" id="resultMeta"></div></div>
-  <div id="resultDays"></div>
-  <div class="result-actions">
-    <button class="btn btn-gold" onclick="downloadPDF()">📄 تحميل PDF</button>
-    <button class="btn btn-dark" onclick="location.href='#appSection'">✦ رحلة جديدة</button>
-  </div>
-</div>
-
-<!-- PRICING -->
-<div class="section" id="pricing">
-  <div class="section-head"><div class="tag">الأسعار</div><h2>خطط تناسب الجميع</h2></div>
-  <div class="pricing">
-    <div class="price-card"><div style="font-size:20px;font-weight:800">مجاني</div><div class="price-amount">$0<small> / للأبد</small></div><ul class="price-list"><li>رحلتان مجانيتان</li><li>3 خيارات لكل نشاط</li><li>روابط Google Maps</li><li>تقدير التكاليف</li></ul><a href="#appSection" class="btn btn-dark" style="width:100%;justify-content:center">ابدأ مجاناً</a></div>
-    <div class="price-card popular"><div style="font-size:20px;font-weight:800">احترافي</div><div class="price-amount">$4.99<small> / رحلة</small></div><ul class="price-list"><li>رحلات غير محدودة</li><li>3 خيارات + مقارنة ذكية</li><li>تصدير PDF احترافي</li><li>دعم 24/7</li></ul><a href="#appSection" class="btn btn-gold" style="width:100%;justify-content:center">اشترك الآن</a></div>
-  </div>
-</div>
-
-<!-- FAQ -->
-<div class="section" id="faq" style="max-width:700px">
-  <div class="section-head"><div class="tag">أسئلة شائعة</div><h2>كل اللي تبي تعرفه</h2></div>
-  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل الأماكن حقيقية؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم! كل الأماكن حقيقية وموجودة على Google Maps.</div></div>
-  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">ليش 3 خيارات؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">عشان تقدر تقارن وتختار اللي يناسبك — كل خيار فيه تقييم ومميزات وعيوب.</div></div>
-  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل يراعي الحلال؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">بالتأكيد. كل المطاعم تكون حلال لما تختار هذا التفضيل.</div></div>
-  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل بياناتي آمنة؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم. لا نحفظ بيانات شخصية ولا نشاركها.</div></div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <p>© 2026 Masari.io — جميع الحقوق محفوظة</p>
-  <div><a href="privacy.html">سياسة الخصوصية</a> <a href="terms.html">الشروط والأحكام</a> <a href="about.html">من نحن</a> <a href="admin.html">لوحة التحكم</a></div>
-</footer>
-
+<section class="hero"><div class="hero-content"><div class="badge">🟢 مدعوم بالذكاء الاصطناعي</div><h1>خطط رحلتك بذكاء<br><span class="gold">في 30 ثانية فقط</span></h1><p>الذكاء الاصطناعي يعطيك خيارات لكل نشاط مع مقارنة ذكية — أماكن حقيقية، تقييمات، مميزات وعيوب، وتكاليف.</p><div class="hero-btns"><a href="#appSection" class="btn btn-gold">صمم رحلتي الآن ←</a><a href="#how" class="btn btn-dark">كيف يعمل ↓</a></div></div></section>
+<div class="section" id="features"><div class="section-head"><div class="tag">المميزات</div><h2>أدوات ذكية لرحلة مثالية</h2></div><div class="features"><div class="feat"><div style="font-size:28px">🧠</div><h3>خيارات ذكية</h3><p>لكل نشاط يعرض أماكن حقيقية مع تقييمات ومميزات وعيوب.</p></div><div class="feat"><div style="font-size:28px">🗺️</div><h3>خرائط مباشرة</h3><p>كل مكان مربوط بـ Google Maps.</p></div><div class="feat"><div style="font-size:28px">💰</div><h3>تقدير التكاليف</h3><p>ميزانية يومية تشمل كل شيء.</p></div><div class="feat"><div style="font-size:28px">🍽️</div><h3>طعام حلال</h3><p>مراعاة كاملة لتفضيلاتك الغذائية.</p></div><div class="feat"><div style="font-size:28px">📄</div><h3>تصدير PDF</h3><p>حمّل الجدول كملف جاهز للطباعة.</p></div><div class="feat"><div style="font-size:28px">👤</div><h3>بروفايل شخصي</h3><p>سجّل دخولك وشوف كل رحلاتك السابقة.</p></div></div></div>
+<div class="section" id="how"><div class="section-head"><div class="tag">كيف يعمل</div><h2>ثلاث خطوات بس</h2></div><div class="steps"><div class="step"><div class="step-num">1</div><div><h3>أخبرنا عن رحلتك</h3><p>الوجهة، الأيام، الميزانية، ونوع الرحلة.</p></div></div><div class="step"><div class="step-num">2</div><div><h3>الذكاء الاصطناعي يحلل</h3><p>يقارن آلاف الأماكن ويعطيك خيارات لكل نشاط.</p></div></div><div class="step"><div class="step-num">3</div><div><h3>اختر واستمتع</h3><p>قارن الخيارات، اختر الأنسب، وحمّل الجدول PDF.</p></div></div></div></div>
+<div class="section"><div class="section-head"><div class="tag">آراء العملاء</div><h2>ماذا يقولون عنا</h2></div><div class="tests"><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"وفّر علي ساعات! الخيارات ساعدتني أقرر بسرعة."</div><div style="font-size:14px;font-weight:700">محمد العتيبي</div><div style="font-size:11px;color:var(--txt3)">رحلة عائلية — اسطنبول</div></div><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"أول مرة أخطط شهر عسل بدون توتر."</div><div style="font-size:14px;font-weight:700">نورة الشمري</div><div style="font-size:11px;color:var(--txt3)">شهر عسل — المالديف</div></div><div class="tcard"><div style="color:var(--gold);margin-bottom:10px">★★★★★</div><div style="font-size:14px;color:var(--txt2);font-style:italic;margin-bottom:14px">"المقارنة بين الأماكن شيء ما لقيته بأي تطبيق ثاني."</div><div style="font-size:14px;font-weight:700">خالد المهيري</div><div style="font-size:11px;color:var(--txt3)">مؤثر سفر</div></div></div></div>
+<div class="section" id="appSection"><div class="section-head"><div class="tag">ابدأ الآن</div><h2>صمم رحلتك المثالية</h2><p>5 أسئلة بسيطة — والباقي علينا</p></div><div class="app-box"><div class="app-header"><h2>✦ مُصمم الرحلات</h2><span id="stepLabel">1 / 5</span></div><div class="progress"><div id="progressBar"></div></div><div class="app-body"><div class="form-step active" id="step1"><div class="mb"><label class="form-label">إلى أين تريد السفر؟ *</label><input type="text" class="form-input" id="inputDest" placeholder="مثال: دبي، تركيا، اليابان..."></div><div><label class="form-label">كم يوم؟ *</label><input type="number" class="form-input" id="inputDays" min="1" max="90" value="3"></div></div><div class="form-step" id="step2" style="display:none"><label class="form-label">مستوى الميزانية *</label><div class="options"><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💵</span><span class="name">اقتصادي</span></div><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💳</span><span class="name">متوسط</span></div><div class="opt-card" onclick="selectOption(this,'budget')"><span class="emoji">💎</span><span class="name">فاخر</span></div></div></div><div class="form-step" id="step3" style="display:none"><label class="form-label">نوع الرحلة *</label><div class="options"><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">👨‍👩‍👧‍👦</span><span class="name">عائلية</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">💑</span><span class="name">شهر عسل</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏔️</span><span class="name">مغامرة</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🛍️</span><span class="name">تسوق</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏛️</span><span class="name">ثقافية</span></div><div class="opt-card" onclick="selectOption(this,'tripType')"><span class="emoji">🏖️</span><span class="name">استرخاء</span></div></div></div><div class="form-step" id="step4" style="display:none"><label class="form-label">تفضيلات الطعام</label><div class="options"><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥩</span><span class="name">حلال</span></div><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🥗</span><span class="name">نباتي</span></div><div class="opt-card" onclick="selectOption(this,'food')"><span class="emoji">🐟</span><span class="name">بحري</span></div><div class="opt-card selected" onclick="selectOption(this,'food')"><span class="emoji">🍽️</span><span class="name">بدون تفضيل</span></div></div></div><div class="form-step" id="step5" style="display:none"><div class="mb"><label class="form-label">ملاحظات (اختياري)</label><input type="text" class="form-input" id="inputNotes" placeholder="أنشطة للأطفال، أماكن قريبة..."></div><div style="background:var(--bg3);border-radius:var(--rs);padding:20px"><h4 style="margin-bottom:10px;font-size:15px">📋 ملخص</h4><div id="summaryBox" style="color:var(--txt2);font-size:14px;line-height:2.2"></div></div></div></div><div class="app-footer"><button id="backBtn" onclick="goBack()" style="visibility:hidden">→ السابقة</button><button id="nextBtn" onclick="goNext()">التالي ←</button></div></div></div>
+<div id="resultSection"><div class="result-head"><h2>🎉 مسار رحلتك جاهز!</h2><div class="result-meta" id="resultMeta"></div></div><div id="resultDays"></div><div class="result-actions"><button class="btn btn-gold" onclick="downloadPDF()">📄 تحميل PDF</button><button class="btn btn-dark" onclick="location.href='#appSection'">✦ رحلة جديدة</button></div></div>
+<div id="profileSection"><div class="section-head"><div class="tag">بروفايلي</div><h2 id="profileName">رحلاتي</h2><p id="profileEmail" style="color:var(--txt3)"></p></div><div id="profileTrips" class="profile-trips"><p style="color:var(--txt3);text-align:center">لا توجد رحلات بعد — صمم أول رحلة!</p></div><div style="text-align:center;margin-top:24px"><button class="btn btn-dark" onclick="logoutUser()">تسجيل خروج</button></div></div>
+<div class="section" id="pricing"><div class="section-head"><div class="tag">الأسعار</div><h2>خطط تناسب الجميع</h2></div><div class="pricing"><div class="price-card"><div style="font-size:20px;font-weight:800">مجاني</div><div class="price-amount">$0<small> / للأبد</small></div><ul class="price-list"><li>رحلتان مجانيتان</li><li>خيارات لكل نشاط</li><li>روابط Google Maps</li><li>تقدير التكاليف</li></ul><a href="#appSection" class="btn btn-dark" style="width:100%;justify-content:center">ابدأ مجاناً</a></div><div class="price-card popular"><div style="font-size:20px;font-weight:800">احترافي</div><div class="price-amount">$4.99<small> / رحلة</small></div><ul class="price-list"><li>رحلات غير محدودة</li><li>مقارنة ذكية</li><li>تصدير PDF احترافي</li><li>حفظ الرحلات في بروفايلك</li></ul><a href="#appSection" class="btn btn-gold" style="width:100%;justify-content:center">اشترك الآن</a></div></div></div>
+<div class="section" id="faq" style="max-width:700px"><div class="section-head"><div class="tag">أسئلة شائعة</div><h2>كل اللي تبي تعرفه</h2></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل الأماكن حقيقية؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم! كل الأماكن حقيقية وموجودة على Google Maps.</div></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل يراعي الحلال؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">بالتأكيد. كل المطاعم تكون حلال لما تختار هذا التفضيل.</div></div><div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">هل بياناتي آمنة؟ <span style="color:var(--txt3)">▼</span></div><div class="faq-a">نعم. نستخدم Firebase من Google لحماية بياناتك.</div></div></div>
+<footer><p>© 2026 Masari.io — جميع الحقوق محفوظة</p><div><a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">الشروط</a><a href="about.html">من نحن</a><a href="admin.html">لوحة التحكم</a></div></footer>
 <!-- PAYWALL -->
-<div id="paywallModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(6,9,15,0.95);backdrop-filter:blur(30px);align-items:center;justify-content:center">
-  <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:20px;max-width:460px;width:90%;padding:36px 28px;text-align:center;position:relative">
-    <button onclick="document.getElementById('paywallModal').style.display='none'" style="position:absolute;top:14px;left:14px;background:none;border:none;color:var(--txt3);font-size:20px;cursor:pointer">✕</button>
-    <div style="font-size:44px;margin-bottom:14px">🔒</div>
-    <h2 style="font-size:22px;font-weight:900;margin-bottom:8px">انتهت رحلاتك المجانية!</h2>
-    <p style="color:var(--txt2);font-size:14px;margin-bottom:24px">لقد استخدمت رحلتيك المجانيتين. اشترك الآن للمتابعة.</p>
-    <div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);border-radius:12px;padding:18px;margin-bottom:20px">
-      <div style="font-size:34px;font-weight:900;color:var(--gold);font-family:var(--mono)">$4.99</div>
-      <div style="color:var(--txt2);font-size:12px">لكل رحلة — دفعة واحدة</div>
-    </div>
-    <button onclick="handlePayment('single')" style="width:100%;padding:14px;background:var(--gold);color:var(--bg);border:none;border-radius:var(--rs);font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px">اشترك الآن — $4.99 ←</button>
-    <button onclick="handlePayment('monthly')" style="width:100%;padding:12px;background:transparent;color:var(--txt2);border:1px solid var(--border);border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer">أو اشتراك شهري $29 — رحلات لا محدودة</button>
-    <p style="color:var(--txt3);font-size:10px;margin-top:14px">🔒 دفع آمن عبر Stripe</p>
-  </div>
-</div>
-
+<div id="paywallModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(6,9,15,0.95);backdrop-filter:blur(30px);align-items:center;justify-content:center"><div style="background:var(--bg3);border:1px solid var(--border2);border-radius:20px;max-width:460px;width:90%;padding:36px 28px;text-align:center;position:relative"><button onclick="document.getElementById('paywallModal').style.display='none'" style="position:absolute;top:14px;left:14px;background:none;border:none;color:var(--txt3);font-size:20px;cursor:pointer">✕</button><div style="font-size:44px;margin-bottom:14px">🔒</div><h2 style="font-size:22px;font-weight:900;margin-bottom:8px">انتهت رحلاتك المجانية!</h2><p style="color:var(--txt2);font-size:14px;margin-bottom:24px">اشترك الآن للمتابعة.</p><div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);border-radius:12px;padding:18px;margin-bottom:20px"><div style="font-size:34px;font-weight:900;color:var(--gold);font-family:var(--mono)">$4.99</div><div style="color:var(--txt2);font-size:12px">لكل رحلة</div></div><button onclick="handlePayment('single')" style="width:100%;padding:14px;background:var(--gold);color:var(--bg);border:none;border-radius:var(--rs);font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px">اشترك — $4.99 ←</button><button onclick="handlePayment('monthly')" style="width:100%;padding:12px;background:transparent;color:var(--txt2);border:1px solid var(--border);border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer">اشتراك شهري $29 — رحلات لا محدودة</button></div></div>
+<!-- AUTH MODAL -->
+<div id="authModal"><div class="auth-box"><span class="logo" style="display:block;margin-bottom:20px;font-size:22px">مساري<span>.io</span></span><h2 id="authTitle">تسجيل الدخول</h2><p class="auth-sub" id="authSub">ادخل بياناتك</p><input type="text" class="auth-input" id="authName" placeholder="الاسم" style="display:none"><input type="email" class="auth-input" id="authEmail" placeholder="الإيميل"><input type="password" class="auth-input" id="authPass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doAuth()"><button class="auth-btn" onclick="doAuth()" id="authBtn">دخول</button><div class="auth-err" id="authErr"></div><div class="auth-switch" id="authSwitch">ما عندك حساب؟ <a onclick="showAuth('register')">سجل الآن</a></div><div style="margin-top:12px"><a onclick="document.getElementById('authModal').style.display='none'" style="color:var(--txt3);font-size:12px;cursor:pointer">✕ إغلاق</a></div></div></div>
 <!-- LOADING -->
-<div id="loadingScreen">
-  <div class="spinner"></div>
-  <div style="font-size:20px;font-weight:800;margin-bottom:6px">✦ نصمم رحلتك الآن</div>
-  <div style="color:var(--txt2);font-size:14px;margin-bottom:24px">نقارن آلاف الأماكن ونجهز 3 خيارات لكل نشاط</div>
-  <div id="ls1" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> تحليل الوجهة</div>
-  <div id="ls2" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> مقارنة الأماكن</div>
-  <div id="ls3" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> ترتيب الخيارات</div>
-  <div id="ls4" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> حساب التكاليف</div>
-</div>
-
+<div id="loadingScreen"><div class="spinner"></div><div style="font-size:20px;font-weight:800;margin-bottom:6px" id="loadTitle">✦ نصمم رحلتك الآن</div><div style="color:var(--txt2);font-size:14px;margin-bottom:24px">نقارن آلاف الأماكن ونجهز خيارات لكل نشاط</div><div id="ls1" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> تحليل الوجهة</div><div id="ls2" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> مقارنة الأماكن</div><div id="ls3" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> ترتيب الخيارات</div><div id="ls4" style="color:var(--txt3);font-size:13px;padding:4px 0"><span>○</span> حساب التكاليف</div></div>
 <!-- CHATBOT -->
-<div id="chatWidget" style="position:fixed;bottom:24px;left:24px;z-index:900">
-  <div onclick="toggleChat()" style="width:56px;height:56px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(240,165,0,0.3);font-size:22px">💬</div>
-  <div id="chatBox" style="display:none;position:absolute;bottom:68px;left:0;width:320px;background:var(--bg3);border:1px solid var(--border2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.4)">
-    <div style="padding:14px 18px;background:var(--gold);display:flex;justify-content:space-between;align-items:center"><div style="font-size:14px;font-weight:800;color:var(--bg)">مساري.io</div><button onclick="toggleChat()" style="background:none;border:none;color:var(--bg);font-size:16px;cursor:pointer">✕</button></div>
-    <div id="botMsgs" style="height:260px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px"><div style="background:rgba(240,165,0,0.08);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;color:var(--txt)">أهلاً! 👋 كيف أقدر أساعدك؟</div></div>
-    <div style="padding:10px;border-top:1px solid var(--border);display:flex;gap:6px"><input type="text" id="botInput" placeholder="سؤالك..." style="flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);font-size:12px;outline:none" onkeydown="if(event.key==='Enter')sendBot()"><button onclick="sendBot()" style="padding:8px 14px;background:var(--gold);color:var(--bg);border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:12px">↩</button></div>
-  </div>
-</div>
-
+<div id="chatWidget" style="position:fixed;bottom:24px;left:24px;z-index:900"><div onclick="toggleChat()" style="width:56px;height:56px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(240,165,0,0.3);font-size:22px">💬</div><div id="chatBox" style="display:none;position:absolute;bottom:68px;left:0;width:320px;background:var(--bg3);border:1px solid var(--border2);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.4)"><div style="padding:14px 18px;background:var(--gold);display:flex;justify-content:space-between;align-items:center"><div style="font-size:14px;font-weight:800;color:var(--bg)">مساري.io</div><button onclick="toggleChat()" style="background:none;border:none;color:var(--bg);font-size:16px;cursor:pointer">✕</button></div><div id="botMsgs" style="height:260px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px"><div style="background:rgba(240,165,0,0.08);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;color:var(--txt)">أهلاً! 👋 كيف أقدر أساعدك؟</div></div><div style="padding:10px;border-top:1px solid var(--border);display:flex;gap:6px"><input type="text" id="botInput" placeholder="سؤالك..." style="flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--txt);font-family:var(--font);font-size:12px;outline:none" onkeydown="if(event.key==='Enter')sendBot()"><button onclick="sendBot()" style="padding:8px 14px;background:var(--gold);color:var(--bg);border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:12px">↩</button></div></div></div>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-// ===== STATE =====
-var currentStep = 1;
-var formData = { destination: "", days: 3, budget: "", tripType: "", food: "بدون تفضيل", notes: "" };
+// ===== FIREBASE INIT =====
+firebase.initializeApp({
+  apiKey:"AIzaSyCtaF4bay85Pr7yB_fXtWdIH-Htg12W1BY",authDomain:"masari-io.firebaseapp.com",projectId:"masari-io",
+  storageBucket:"masari-io.firebasestorage.app",messagingSenderId:"512681089634",appId:"1:512681089634:web:615e26e29e5cc2c9458f3b"
+});
+var auth = firebase.auth();
+var db = firebase.firestore();
+var currentUser = null;
 
-// ===== NAV =====
-window.onscroll = function() { document.getElementById("navbar").className = window.scrollY > 50 ? "scrolled" : ""; };
+// ===== AUTH STATE =====
+auth.onAuthStateChanged(function(user) {
+  currentUser = user;
+  var navEl = document.getElementById("navLinks");
+  if (user) {
+    var initial = (user.displayName || user.email || "U").charAt(0).toUpperCase();
+    document.getElementById("navAuthBtn").outerHTML = '<div class="nav-user"><div class="nav-av" id="navAv">' + initial + '</div><a href="javascript:showProfile()" style="color:var(--txt);font-size:13px;font-weight:600">' + (user.displayName || 'حسابي') + '</a></div>';
+  }
+});
 
-// ===== SELECT OPTION =====
-function selectOption(el, field) {
-  var cards = el.parentElement.getElementsByClassName("opt-card");
-  for (var i = 0; i < cards.length; i++) cards[i].classList.remove("selected");
-  el.classList.add("selected");
-  formData[field] = el.getElementsByClassName("name")[0].textContent;
+// ===== AUTH UI =====
+var authMode = 'login';
+function showAuth(mode) {
+  authMode = mode;
+  document.getElementById("authModal").style.display = "flex";
+  document.getElementById("authErr").style.display = "none";
+  if (mode === 'register') {
+    document.getElementById("authTitle").textContent = "إنشاء حساب";
+    document.getElementById("authSub").textContent = "سجّل عشان تحفظ رحلاتك";
+    document.getElementById("authBtn").textContent = "إنشاء حساب";
+    document.getElementById("authName").style.display = "block";
+    document.getElementById("authSwitch").innerHTML = 'عندك حساب؟ <a onclick="showAuth(\'login\')">سجل دخول</a>';
+  } else {
+    document.getElementById("authTitle").textContent = "تسجيل الدخول";
+    document.getElementById("authSub").textContent = "ادخل بياناتك";
+    document.getElementById("authBtn").textContent = "دخول";
+    document.getElementById("authName").style.display = "none";
+    document.getElementById("authSwitch").innerHTML = 'ما عندك حساب؟ <a onclick="showAuth(\'register\')">سجل الآن</a>';
+  }
+}
+function doAuth() {
+  var email = document.getElementById("authEmail").value.trim();
+  var pass = document.getElementById("authPass").value;
+  var errEl = document.getElementById("authErr");
+  errEl.style.display = "none";
+  if (!email || !pass) { errEl.textContent = "ادخل الإيميل وكلمة المرور"; errEl.style.display = "block"; return; }
+  if (authMode === 'register') {
+    var name = document.getElementById("authName").value.trim();
+    auth.createUserWithEmailAndPassword(email, pass).then(function(cred) {
+      return cred.user.updateProfile({ displayName: name || email.split('@')[0] }).then(function() {
+        db.collection("users").doc(cred.user.uid).set({ name: name || email.split('@')[0], email: email, createdAt: new Date(), freeTrips: 0, isPro: false });
+      });
+    }).then(function() { document.getElementById("authModal").style.display = "none"; location.reload(); })
+    .catch(function(e) { errEl.textContent = e.message.indexOf("email-already") > -1 ? "الإيميل مسجل مسبقاً" : "خطأ: " + e.message; errEl.style.display = "block"; });
+  } else {
+    auth.signInWithEmailAndPassword(email, pass).then(function() { document.getElementById("authModal").style.display = "none"; location.reload(); })
+    .catch(function(e) { errEl.textContent = "الإيميل أو كلمة المرور غلط"; errEl.style.display = "block"; });
+  }
+}
+function logoutUser() { auth.signOut().then(function() { location.reload(); }); }
+
+// ===== PROFILE =====
+function showProfile() {
+  if (!currentUser) { showAuth('login'); return; }
+  document.getElementById("profileName").textContent = (currentUser.displayName || "المستخدم") + " — رحلاتي";
+  document.getElementById("profileEmail").textContent = currentUser.email;
+  // Load trips from Firestore
+  db.collection("trips").where("userId", "==", currentUser.uid).orderBy("createdAt", "desc").limit(20).get().then(function(snap) {
+    var html = '';
+    if (snap.empty) { html = '<p style="color:var(--txt3);text-align:center;padding:20px">لا توجد رحلات بعد — صمم أول رحلة!</p>'; }
+    snap.forEach(function(doc) {
+      var t = doc.data();
+      html += '<div class="trip-card"><div><div style="font-size:15px;font-weight:700">📍 ' + (t.destination || '—') + '</div><div style="font-size:12px;color:var(--txt3)">' + (t.days || 0) + ' أيام | ' + (t.budget || '') + ' | ' + (t.tripType || '') + '</div></div><div style="text-align:left"><div style="font-size:13px;color:var(--gold);font-weight:700">$' + (t.totalCost || '—') + '</div><div style="font-size:10px;color:var(--txt3)">' + (t.createdAt ? new Date(t.createdAt.seconds * 1000).toLocaleDateString('ar-SA') : '') + '</div></div></div>';
+    });
+    document.getElementById("profileTrips").innerHTML = html;
+  });
+  document.getElementById("profileSection").style.display = "block";
+  document.getElementById("profileSection").scrollIntoView({ behavior: "smooth" });
 }
 
-// ===== UPDATE UI =====
+// ===== SAVE TRIP TO FIRESTORE =====
+function saveTripToFirestore(tripData) {
+  if (!currentUser) return;
+  db.collection("trips").add({
+    userId: currentUser.uid,
+    userEmail: currentUser.email,
+    userName: currentUser.displayName || '',
+    destination: formData.destination,
+    days: formData.days,
+    budget: formData.budget,
+    tripType: formData.tripType,
+    food: formData.food,
+    totalCost: tripData.total_cost_estimate || 0,
+    tripTitle: tripData.trip_title || '',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(function() {});
+}
+
+// ===== STATE =====
+var currentStep = 1;
+var formData = { destination:"", days:3, budget:"", tripType:"", food:"بدون تفضيل", notes:"" };
+window.onscroll = function() { document.getElementById("navbar").className = window.scrollY > 50 ? "scrolled" : ""; };
+
+function selectOption(el, field) { var cards = el.parentElement.getElementsByClassName("opt-card"); for (var i = 0; i < cards.length; i++) cards[i].classList.remove("selected"); el.classList.add("selected"); formData[field] = el.getElementsByClassName("name")[0].textContent; }
+
 function updateUI() {
-  for (var i = 1; i <= 5; i++) {
-    var el = document.getElementById("step" + i);
-    if (i === currentStep) {
-      el.className = "form-step active";
-      el.style.display = "block";
-    } else {
-      el.className = "form-step";
-      el.style.display = "none";
-    }
-  }
+  for (var i = 1; i <= 5; i++) { var el = document.getElementById("step" + i); if (i === currentStep) { el.className = "form-step active"; el.style.display = "block"; } else { el.className = "form-step"; el.style.display = "none"; } }
   document.getElementById("stepLabel").textContent = currentStep + " / 5";
   document.getElementById("progressBar").style.width = (currentStep * 20) + "%";
   document.getElementById("backBtn").style.visibility = (currentStep === 1) ? "hidden" : "visible";
-  if (currentStep === 5) {
-    document.getElementById("nextBtn").textContent = "صمم رحلتي الآن ✦";
-    document.getElementById("summaryBox").innerHTML = "📍 " + formData.destination + "<br>📅 " + formData.days + " أيام<br>💰 " + formData.budget + "<br>✈️ " + formData.tripType + "<br>🍽️ " + formData.food;
-  } else {
-    document.getElementById("nextBtn").textContent = "التالي ←";
-  }
+  if (currentStep === 5) { document.getElementById("nextBtn").textContent = "صمم رحلتي ✦"; document.getElementById("summaryBox").innerHTML = "📍 " + formData.destination + "<br>📅 " + formData.days + " أيام<br>💰 " + formData.budget + "<br>✈️ " + formData.tripType + "<br>🍽️ " + formData.food; }
+  else { document.getElementById("nextBtn").textContent = "التالي ←"; }
 }
-
-// ===== NEXT =====
 function goNext() {
-  if (currentStep === 1) {
-    formData.destination = document.getElementById("inputDest").value.trim();
-    formData.days = parseInt(document.getElementById("inputDays").value) || 3;
-    if (!formData.destination) { document.getElementById("inputDest").style.borderColor = "#EF4444"; document.getElementById("inputDest").focus(); setTimeout(function() { document.getElementById("inputDest").style.borderColor = "transparent"; }, 1000); return; }
-  }
+  if (currentStep === 1) { formData.destination = document.getElementById("inputDest").value.trim(); formData.days = parseInt(document.getElementById("inputDays").value) || 3; if (!formData.destination) { document.getElementById("inputDest").style.borderColor = "#EF4444"; return; } }
   if (currentStep === 2 && !formData.budget) return;
   if (currentStep === 3 && !formData.tripType) return;
   if (currentStep === 5) { formData.notes = document.getElementById("inputNotes").value; startTrip(); return; }
-  currentStep++;
-  updateUI();
+  currentStep++; updateUI();
 }
-
-// ===== BACK =====
 function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
 
 // ===== TRIP COUNTER =====
-function getTripsUsed() { try { return parseInt(localStorage.getItem("masari_trips") || "0"); } catch(e) { return 0; } }
-function addTripCount() { try { var c = getTripsUsed() + 1; localStorage.setItem("masari_trips", c.toString()); } catch(e) {} }
-function isPro() { try { return localStorage.getItem("masari_pro") === "true"; } catch(e) { return false; } }
+function getTripsUsed() { if (currentUser) { return parseInt(localStorage.getItem("masari_trips_" + currentUser.uid) || "0"); } return parseInt(localStorage.getItem("masari_trips") || "0"); }
+function addTripCount() { var key = currentUser ? "masari_trips_" + currentUser.uid : "masari_trips"; var c = getTripsUsed() + 1; localStorage.setItem(key, c.toString()); }
+function isPro() { if (currentUser) { var v = localStorage.getItem("masari_pro_" + currentUser.uid); if (v === "true") return true; } return localStorage.getItem("masari_pro") === "true"; }
 
 // Check payment return
 (function() {
   var p = new URLSearchParams(window.location.search);
   if (p.get("paid") === "true") {
-    try { localStorage.setItem("masari_pro", "true"); } catch(e) {}
+    var key = currentUser ? "masari_pro_" + currentUser.uid : "masari_pro";
+    localStorage.setItem(key, "true"); localStorage.setItem("masari_pro", "true");
     window.history.replaceState({}, "", window.location.pathname);
-    
-    // Restore pending trip and auto-generate
-    try {
-      var pending = localStorage.getItem("masari_pending_trip");
-      if (pending) {
-        var saved = JSON.parse(pending);
-        formData.destination = saved.destination || "";
-        formData.days = saved.days || 3;
-        formData.budget = saved.budget || "متوسط";
-        formData.tripType = saved.tripType || "عائلية";
-        formData.food = saved.food || "بدون تفضيل";
-        formData.notes = saved.notes || "";
-        localStorage.removeItem("masari_pending_trip");
-        
-        // Auto-start trip after page loads
-        setTimeout(function() {
-          alert("تم الدفع بنجاح! ✅\nجاري تصميم رحلتك...");
-          startTrip();
-        }, 1000);
-      } else {
-        alert("تم الدفع بنجاح! شكراً لاشتراكك في Masari.io ✅");
-      }
-    } catch(e) {
-      alert("تم الدفع بنجاح! شكراً لاشتراكك في Masari.io ✅");
-    }
+    try { var pending = localStorage.getItem("masari_pending_trip"); if (pending) { var s = JSON.parse(pending); formData = s; localStorage.removeItem("masari_pending_trip"); setTimeout(function() { alert("تم الدفع! ✅ جاري تصميم رحلتك..."); startTrip(); }, 1000); } else { alert("تم الدفع بنجاح! ✅"); } } catch(e) { alert("تم الدفع بنجاح! ✅"); }
   }
 })();
 
-// ===== STRIPE CHECKOUT =====
+// ===== STRIPE =====
 function handlePayment(plan) {
-  // Save trip data before going to Stripe
   try { localStorage.setItem("masari_pending_trip", JSON.stringify(formData)); } catch(e) {}
-  
-  fetch("/api/create-checkout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ plan: plan || "single" })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.url) window.location.href = data.url;
-    else alert("حدث خطأ في الدفع. حاول مرة ثانية.");
-  })
-  .catch(function() { alert("حدث خطأ. تأكد من اتصالك بالإنترنت."); });
+  fetch("/api/create-checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan: plan || "single" }) })
+  .then(function(r) { return r.json(); }).then(function(d) { if (d.url) window.location.href = d.url; else alert("خطأ في الدفع"); }).catch(function() { alert("خطأ. تأكد من اتصالك."); });
 }
 
 // ===== START TRIP =====
 function startTrip() {
-  if (getTripsUsed() >= 2 && !isPro()) {
-    document.getElementById("paywallModal").style.display = "flex";
-    return;
-  }
+  if (getTripsUsed() >= 2 && !isPro()) { document.getElementById("paywallModal").style.display = "flex"; return; }
   addTripCount();
-  var screen = document.getElementById("loadingScreen");
-  screen.style.display = "flex";
-  
-  // Update loading text
-  var loadTitle = screen.querySelector("div[style*='font-size:20px']") || screen.children[1];
-  
-  var loadStep = 0;
-  var ids = ["ls1", "ls2", "ls3", "ls4"];
-  var loadInterval = setInterval(function() {
-    if (loadStep < ids.length) {
-      document.getElementById(ids[loadStep]).style.color = "var(--gold)";
-      document.getElementById(ids[loadStep]).getElementsByTagName("span")[0].textContent = "⟳";
-      if (loadStep > 0) {
-        document.getElementById(ids[loadStep - 1]).style.color = "var(--green)";
-        document.getElementById(ids[loadStep - 1]).getElementsByTagName("span")[0].textContent = "✓";
-      }
-      loadStep++;
-    } else {
-      loadStep = 0;
-      for (var i = 0; i < ids.length; i++) {
-        document.getElementById(ids[i]).style.color = "var(--txt3)";
-        document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○";
-      }
-    }
-  }, 2500);
+  var screen = document.getElementById("loadingScreen"); screen.style.display = "flex";
+  var loadStep = 0, ids = ["ls1","ls2","ls3","ls4"];
+  var loadInterval = setInterval(function() { if (loadStep < ids.length) { document.getElementById(ids[loadStep]).style.color = "var(--gold)"; document.getElementById(ids[loadStep]).getElementsByTagName("span")[0].textContent = "⟳"; if (loadStep > 0) { document.getElementById(ids[loadStep-1]).style.color = "var(--green)"; document.getElementById(ids[loadStep-1]).getElementsByTagName("span")[0].textContent = "✓"; } loadStep++; } else { loadStep = 0; for (var i = 0; i < ids.length; i++) { document.getElementById(ids[i]).style.color = "var(--txt3)"; document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○"; } } }, 2500);
+  function hideLoading() { clearInterval(loadInterval); screen.style.display = "none"; for (var i = 0; i < ids.length; i++) { document.getElementById(ids[i]).style.color = "var(--txt3)"; document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○"; } }
 
-  function hideLoading() {
-    clearInterval(loadInterval);
-    screen.style.display = "none";
-    for (var i = 0; i < ids.length; i++) {
-      document.getElementById(ids[i]).style.color = "var(--txt3)";
-      document.getElementById(ids[i]).getElementsByTagName("span")[0].textContent = "○";
-    }
-  }
-
-  // Chunked loading — 3 days per request
-  var allDays = [];
-  var tripMeta = null;
-  var totalDays = parseInt(formData.days) || 3;
-  var usedPlaces = [];
-  
+  var allDays = [], tripMeta = null, totalDays = parseInt(formData.days) || 3, usedPlaces = [];
   function loadChunk(startDay, retries) {
-    // Update loading message
-    if (loadTitle) loadTitle.textContent = "✦ نصمم أيام " + startDay + "-" + Math.min(startDay + 3, totalDays) + " من " + totalDays;
-    
-    fetch("/api/generate-trip", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes, startDay: startDay, usedPlaces: usedPlaces })
-    })
-    .then(function(r) {
-      if (!r.ok) throw new Error("Status " + r.status);
-      return r.json();
-    })
+    document.getElementById("loadTitle").textContent = "✦ نصمم أيام " + startDay + "-" + Math.min(startDay + 3, totalDays) + " من " + totalDays;
+    fetch("/api/generate-trip", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ destination: formData.destination, days: formData.days, budget: formData.budget, tripType: formData.tripType, food: formData.food, notes: formData.notes, startDay: startDay, usedPlaces: usedPlaces }) })
+    .then(function(r) { if (!r.ok) throw new Error("Status " + r.status); return r.json(); })
     .then(function(j) {
       if (j && j.data && j.data.days) {
-        // Save metadata from first chunk
-        if (!tripMeta) {
-          tripMeta = {
-            trip_title: j.data.trip_title || "رحلتك إلى " + formData.destination,
-            destination: j.data.destination || formData.destination,
-            total_days: totalDays,
-            total_cost_estimate: j.data.total_cost_estimate || 0,
-            tips: j.data.tips || []
-          };
-        } else {
-          tripMeta.total_cost_estimate += (j.data.total_cost_estimate || 0);
-          if (j.data.tips) tripMeta.tips = tripMeta.tips.concat(j.data.tips);
-        }
-        
-        // Track used places to avoid repeats in next chunk
+        if (!tripMeta) { tripMeta = { trip_title: j.data.trip_title || "رحلتك إلى " + formData.destination, destination: j.data.destination || formData.destination, total_days: totalDays, total_cost_estimate: j.data.total_cost_estimate || 0, tips: j.data.tips || [] }; }
+        else { tripMeta.total_cost_estimate += (j.data.total_cost_estimate || 0); if (j.data.tips) tripMeta.tips = tripMeta.tips.concat(j.data.tips); }
         if (j.placesUsed) usedPlaces = usedPlaces.concat(j.placesUsed);
-        
-        // Add days
         allDays = allDays.concat(j.data.days);
-        
-        // Check if more chunks needed
-        if (j.hasMore && j.nextStartDay) {
-          loadChunk(j.nextStartDay, 0);
-        } else {
-          // All chunks loaded — render!
-          hideLoading();
-          tripMeta.days = allDays;
-          tripMeta.tips = tripMeta.tips.filter(function(tip, idx, arr) { return arr.indexOf(tip) === idx; }).slice(0, 5);
-          renderSmartTrip(tripMeta);
-        }
-      } else {
-        throw new Error("Invalid data");
-      }
+        if (j.hasMore && j.nextStartDay) { loadChunk(j.nextStartDay, 0); }
+        else { hideLoading(); tripMeta.days = allDays; tripMeta.tips = tripMeta.tips.filter(function(t, i, a) { return a.indexOf(t) === i; }).slice(0, 5); renderSmartTrip(tripMeta); saveTripToFirestore(tripMeta); }
+      } else { throw new Error("Invalid"); }
     })
-    .catch(function() {
-      if (retries < 2) {
-        setTimeout(function() { loadChunk(startDay, retries + 1); }, 2000);
-      } else {
-        hideLoading();
-        buildLocalTrip();
-      }
-    });
+    .catch(function() { if (retries < 2) { setTimeout(function() { loadChunk(startDay, retries + 1); }, 2000); } else { hideLoading(); buildLocalTrip(); } });
   }
-  
   loadChunk(1, 0);
 }
 
-// ===== RENDER SMART TRIP (3 OPTIONS) =====
+// ===== RENDER =====
 function renderSmartTrip(data) {
   document.getElementById("resultMeta").innerHTML = '<span>📍 ' + (data.destination || formData.destination) + '</span><span>📅 ' + (data.total_days || formData.days) + ' أيام</span><span>💰 ' + formData.budget + '</span><span>💵 ~$' + (data.total_cost_estimate || '—') + '</span>';
-  
-  // Trip summary stats
   var totalSlots = 0, totalOptions = 0;
-  for (var sd = 0; sd < data.days.length; sd++) {
-    var ss = data.days[sd].slots || [];
-    totalSlots += ss.length;
-    for (var so = 0; so < ss.length; so++) totalOptions += (ss[so].options || []).length;
-  }
-  
-  var html = '';
-  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:28px">';
-  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">' + (data.total_days || formData.days) + '</div><div style="font-size:11px;color:var(--txt2)">أيام</div></div>';
-  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--blue);font-family:var(--mono)">' + totalSlots + '</div><div style="font-size:11px;color:var(--txt2)">نشاط</div></div>';
-  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--green);font-family:var(--mono)">' + totalOptions + '</div><div style="font-size:11px;color:var(--txt2)">خيار للمقارنة</div></div>';
-  html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">$' + (data.total_cost_estimate || '—') + '</div><div style="font-size:11px;color:var(--txt2)">التكلفة الإجمالية</div></div>';
-  html += '</div>';
+  for (var sd = 0; sd < data.days.length; sd++) { var ss = data.days[sd].slots || []; totalSlots += ss.length; for (var so = 0; so < ss.length; so++) totalOptions += (ss[so].options || []).length; }
+  var html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:28px"><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">' + (data.total_days || formData.days) + '</div><div style="font-size:11px;color:var(--txt2)">أيام</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--blue);font-family:var(--mono)">' + totalSlots + '</div><div style="font-size:11px;color:var(--txt2)">نشاط</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--green);font-family:var(--mono)">' + totalOptions + '</div><div style="font-size:11px;color:var(--txt2)">خيار</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center"><div style="font-size:24px;font-weight:900;color:var(--gold);font-family:var(--mono)">$' + (data.total_cost_estimate || '—') + '</div><div style="font-size:11px;color:var(--txt2)">التكلفة</div></div></div>';
   for (var d = 0; d < data.days.length; d++) {
-    var day = data.days[d];
-    var slots = day.slots || [];
+    var day = data.days[d], slots = day.slots || [];
     html += '<div class="day-card"><div class="day-header" onclick="this.parentElement.classList.toggle(\'collapsed\')"><h3><span class="day-badge">Day ' + (day.day_number || d+1) + '</span> ' + day.title + (day.city ? ' <span style="font-size:12px;color:var(--blue);font-weight:400">📍 ' + day.city + '</span>' : '') + '</h3><span style="color:var(--txt3)">▼</span></div><div class="day-body">';
     for (var s = 0; s < slots.length; s++) {
       var slot = slots[s];
       if (slot.options && slot.options.length) {
-        html += '<div style="margin-bottom:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="background:var(--bg3);padding:4px 10px;border-radius:4px;font-size:12px;font-weight:700;color:var(--gold);font-family:var(--mono)">' + slot.time + '</span><span style="font-size:14px;font-weight:700">' + (slot.slot_title || '') + '</span></div>';
-        html += '<div class="opt-grid">';
+        html += '<div style="margin-bottom:20px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="background:var(--bg3);padding:4px 10px;border-radius:4px;font-size:12px;font-weight:700;color:var(--gold);font-family:var(--mono)">' + slot.time + '</span><span style="font-size:14px;font-weight:700">' + (slot.slot_title || '') + '</span></div><div class="opt-grid">';
         for (var o = 0; o < slot.options.length; o++) {
-          var opt = slot.options[o];
-          var rec = opt.recommended;
-          var isTransport = (slot.category === 'transport');
-          html += '<div class="opt-box' + (rec ? ' rec' : '') + (isTransport ? ' transport' : '') + '">';
+          var opt = slot.options[o], rec = opt.recommended, isT = (slot.category === 'transport');
+          html += '<div class="opt-box' + (rec ? ' rec' : '') + (isT ? ' transport' : '') + '">';
           if (rec) html += '<div class="opt-rec-badge">⭐ الأفضل</div>';
-          html += '<div class="opt-name">' + (opt.name_ar || opt.name) + '</div>';
-          html += '<div class="opt-stars">';
+          html += '<div class="opt-name">' + (opt.name_ar || opt.name) + '</div><div class="opt-stars">';
           for (var st = 0; st < Math.floor(opt.rating || 0); st++) html += '★';
           html += ' <span style="font-family:var(--mono);font-size:11px">' + (opt.rating || '') + '</span></div>';
           html += '<div class="opt-desc">' + (opt.description || '') + '</div>';
           if (opt.pros) for (var p = 0; p < opt.pros.length; p++) html += '<div class="opt-pro">✓ ' + opt.pros[p] + '</div>';
           if (opt.cons) for (var c = 0; c < opt.cons.length; c++) html += '<div class="opt-con">✗ ' + opt.cons[c] + '</div>';
           if (rec && opt.why_recommended) html += '<div class="opt-why">💡 ' + opt.why_recommended + '</div>';
-          html += '<div class="opt-footer"><span class="opt-price">$' + (opt.cost_usd || 0) + '</span><a class="opt-map" href="' + (opt.maps_url || 'https://www.google.com/maps/search/' + encodeURIComponent(opt.maps_query || opt.name)) + '" target="_blank">📍 Maps</a></div>';
-          html += '</div>';
+          html += '<div class="opt-footer"><span class="opt-price">$' + (opt.cost_usd || 0) + '</span><a class="opt-map" href="' + (opt.maps_url || 'https://www.google.com/maps/search/' + encodeURIComponent(opt.maps_query || opt.name)) + '" target="_blank">📍 Maps</a></div></div>';
         }
         html += '</div></div>';
       }
     }
-    html += '<div class="day-cost"><span style="color:var(--txt2);font-size:13px">تكلفة اليوم (الخيار الأفضل)</span><span style="color:var(--gold);font-size:20px;font-weight:900;font-family:var(--mono)">$' + (day.daily_cost_estimate || '—') + '</span></div>';
-    html += '</div></div>';
+    html += '<div class="day-cost"><span style="color:var(--txt2);font-size:13px">تكلفة اليوم</span><span style="color:var(--gold);font-size:20px;font-weight:900;font-family:var(--mono)">$' + (day.daily_cost_estimate || '—') + '</span></div></div></div>';
   }
-  if (data.tips && data.tips.length) {
-    html += '<div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);border-radius:14px;padding:24px;margin-top:16px"><h3 style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px">💡 نصائح</h3>';
-    for (var t = 0; t < data.tips.length; t++) html += '<div style="font-size:13px;color:var(--txt2);padding:4px 0">✦ ' + data.tips[t] + '</div>';
-    html += '</div>';
-  }
-  
-  // Build map with recommended places
-  var mapPlaces = [];
-  var placeNum = 1;
-  for (var md = 0; md < data.days.length; md++) {
-    var mSlots = data.days[md].slots || [];
-    for (var ms = 0; ms < mSlots.length; ms++) {
-      var mOpts = mSlots[ms].options || [];
-      for (var mo = 0; mo < mOpts.length; mo++) {
-        if (mOpts[mo].recommended) {
-          mapPlaces.push({ name: mOpts[mo].name, num: placeNum });
-          placeNum++;
-        }
-      }
-    }
-  }
-  
-  if (mapPlaces.length > 0) {
-    var mapQuery = encodeURIComponent(formData.destination);
-    var markers = '';
-    for (var mi = 0; mi < mapPlaces.length; mi++) {
-      markers += '&markers=label:' + mapPlaces[mi].num + '%7C' + encodeURIComponent(mapPlaces[mi].name + ' ' + formData.destination);
-    }
-    
-    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px">';
-    html += '<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:16px;font-weight:700">🗺️ خريطة المسار</h3><span style="font-size:12px;color:var(--txt3)">' + mapPlaces.length + ' مواقع موصى بها</span></div>';
-    
-    // Interactive map using OpenStreetMap (free, no API key needed)
-    html += '<div style="position:relative;height:400px;background:var(--bg3)">';
-    html += '<iframe width="100%" height="400" frameborder="0" style="border:0" loading="lazy" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=' + encodeURIComponent('أماكن سياحية في ' + formData.destination) + '&zoom=12"></iframe>';
-    html += '</div>';
-    
-    // Place list with numbers
-    html += '<div style="padding:16px 24px">';
-    html += '<div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--gold)">📍 الأماكن الموصى بها بالترتيب:</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
-    for (var pi = 0; pi < mapPlaces.length; pi++) {
-      html += '<a href="https://www.google.com/maps/search/' + encodeURIComponent(mapPlaces[pi].name + ' ' + formData.destination) + '" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="this.style.borderColor=\'var(--border)\'">';
-      html += '<span style="width:24px;height:24px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--bg);flex-shrink:0">' + mapPlaces[pi].num + '</span>';
-      html += '<span style="font-size:12px;color:var(--txt);font-weight:600">' + mapPlaces[pi].name + '</span>';
-      html += '</a>';
-    }
-    html += '</div></div></div>';
-  }
+  if (data.tips && data.tips.length) { html += '<div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);border-radius:14px;padding:24px;margin-top:16px"><h3 style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px">💡 نصائح</h3>'; for (var t = 0; t < data.tips.length; t++) html += '<div style="font-size:13px;color:var(--txt2);padding:4px 0">✦ ' + data.tips[t] + '</div>'; html += '</div>'; }
   document.getElementById("resultDays").innerHTML = html;
   var rs = document.getElementById("resultSection"); rs.style.display = "block";
   setTimeout(function() { rs.scrollIntoView({ behavior: "smooth" }); }, 100);
 }
-
-// ===== LOCAL FALLBACK =====
-function buildLocalTrip() {
-  var d = formData.destination, n = formData.days;
-  var m = (formData.budget === "فاخر") ? 2.5 : (formData.budget === "متوسط") ? 1.5 : 1;
-  document.getElementById("resultMeta").innerHTML = '<span>📍 ' + d + '</span><span>📅 ' + n + ' أيام</span><span>💰 ' + formData.budget + '</span>';
-  var html = '';
-  for (var i = 0; i < n; i++) {
-    var cost = '$' + Math.round(55 * m + Math.random() * 30);
-    var title = i === 0 ? 'يوم الوصول' : (i === n-1 ? 'اليوم الأخير' : 'يوم ' + (i+1));
-    html += '<div class="day-card"><div class="day-header" onclick="this.parentElement.classList.toggle(\'collapsed\')"><h3><span class="day-badge">Day ' + (i+1) + '</span> ' + title + '</h3><span style="color:var(--txt3)">▼</span></div><div class="day-body">';
-    html += '<p style="color:var(--txt2);font-size:14px;padding:20px 0;text-align:center">⚠️ لم يتم الاتصال بالذكاء الاصطناعي — جرّب مرة ثانية أو تأكد من إعداد API Key</p>';
-    html += '<div class="day-cost"><span style="color:var(--txt2);font-size:13px">تكلفة تقريبية</span><span style="color:var(--gold);font-size:20px;font-weight:900;font-family:var(--mono)">' + cost + '</span></div>';
-    html += '</div></div>';
-  }
-  document.getElementById("resultDays").innerHTML = html;
-  var rs = document.getElementById("resultSection"); rs.style.display = "block";
-  setTimeout(function() { rs.scrollIntoView({ behavior: "smooth" }); }, 100);
-}
-
-// ===== PDF =====
-function downloadPDF() {
-  var cards = document.getElementsByClassName("day-card");
-  for (var i = 0; i < cards.length; i++) cards[i].classList.remove("collapsed");
-  setTimeout(function() { window.print(); }, 200);
-}
-
-// ===== CHATBOT =====
+function buildLocalTrip() { var d = formData.destination, n = formData.days; document.getElementById("resultMeta").innerHTML = '<span>📍 ' + d + '</span><span>📅 ' + n + ' أيام</span>'; var html = ''; for (var i = 0; i < n; i++) { html += '<div class="day-card"><div class="day-header"><h3><span class="day-badge">Day ' + (i+1) + '</span> يوم ' + (i+1) + '</h3></div><div class="day-body"><p style="color:var(--txt2);font-size:14px;padding:20px 0;text-align:center">⚠️ لم يتم الاتصال — جرّب مرة ثانية</p></div></div>'; } document.getElementById("resultDays").innerHTML = html; document.getElementById("resultSection").style.display = "block"; setTimeout(function() { document.getElementById("resultSection").scrollIntoView({ behavior: "smooth" }); }, 100); }
+function downloadPDF() { var cards = document.getElementsByClassName("day-card"); for (var i = 0; i < cards.length; i++) cards[i].classList.remove("collapsed"); setTimeout(function() { window.print(); }, 200); }
 function toggleChat() { var b = document.getElementById("chatBox"); b.style.display = b.style.display === "none" ? "block" : "none"; }
-function sendBot() {
-  var inp = document.getElementById("botInput"), t = inp.value.trim(); if (!t) return;
-  var msgs = document.getElementById("botMsgs");
-  msgs.innerHTML += '<div style="background:var(--bg);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;align-self:flex-end;color:var(--txt)">' + t + '</div>';
-  inp.value = ""; msgs.scrollTop = 999999;
-  
-  // Send to admin via EmailJS
-  sendToAdmin("💬 رسالة شاتبوت جديدة", "رسالة من زائر:\n\n" + t + "\n\nالوقت: " + new Date().toLocaleString("ar-SA"));
-  
-  setTimeout(function() {
-    var q = t.toLowerCase(), r = "شكراً لسؤالك! سيرد فريقنا قريباً. support@masari.io";
-    if (q.indexOf("حقيق") > -1 || q.indexOf("أماكن") > -1) r = "نعم! كل الأماكن حقيقية وموجودة على Google Maps 📍";
-    if (q.indexOf("حلال") > -1) r = "بالتأكيد! لما تختار حلال، كل المطاعم تكون حلال 🍽️";
-    if (q.indexOf("دفع") > -1 || q.indexOf("سعر") > -1) r = "أول رحلتين مجاناً! بعدها $4.99 لكل رحلة 💳";
-    if (q.indexOf("خيار") > -1 || q.indexOf("3") > -1) r = "كل نشاط يعرض 3 أماكن حقيقية مع تقييم ومميزات وعيوب عشان تختار الأنسب! 🧠";
-    msgs.innerHTML += '<div style="background:rgba(240,165,0,0.08);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;color:var(--txt)">' + r + '</div>';
-    msgs.scrollTop = 999999;
-  }, 600);
-}
-
-// ===== EMAILJS - SEND TO ADMIN =====
-function sendToAdmin(subject, message) {
-  if (typeof emailjs === "undefined") return;
-  emailjs.send("service_vtis1ps", "template_br397yj", {
-    subject: subject,
-    message: message
-  }).catch(function() {});
-}
-
-// ===== NOTIFY ON TRIP GENERATED =====
-var _origRenderSmart = renderSmartTrip;
-renderSmartTrip = function(data) {
-  _origRenderSmart(data);
-  sendToAdmin(
-    "✈️ رحلة جديدة — " + formData.destination,
-    "رحلة جديدة تم إنشاؤها:\n\n" +
-    "📍 الوجهة: " + formData.destination + "\n" +
-    "📅 المدة: " + formData.days + " أيام\n" +
-    "💰 الميزانية: " + formData.budget + "\n" +
-    "✈️ النوع: " + formData.tripType + "\n" +
-    "🍽️ الطعام: " + formData.food + "\n" +
-    "💵 التكلفة: ~$" + (data.total_cost_estimate || "—") + "\n" +
-    "🕐 الوقت: " + new Date().toLocaleString("ar-SA")
-  );
-};
+function sendBot() { var inp = document.getElementById("botInput"), t = inp.value.trim(); if (!t) return; var msgs = document.getElementById("botMsgs"); msgs.innerHTML += '<div style="background:var(--bg);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;align-self:flex-end;color:var(--txt)">' + t + '</div>'; inp.value = ""; msgs.scrollTop = 999999; sendToAdmin("💬 رسالة شاتبوت", t); setTimeout(function() { var q = t.toLowerCase(), r = "شكراً! سيرد فريقنا قريباً."; if (q.indexOf("حلال") > -1) r = "بالتأكيد! لما تختار حلال، كل المطاعم حلال 🍽️"; if (q.indexOf("دفع") > -1 || q.indexOf("سعر") > -1) r = "أول رحلتين مجاناً! بعدها $4.99 💳"; msgs.innerHTML += '<div style="background:rgba(240,165,0,0.08);padding:8px 12px;border-radius:10px;font-size:12px;max-width:85%;color:var(--txt)">' + r + '</div>'; msgs.scrollTop = 999999; }, 600); }
+function sendToAdmin(subject, message) { if (typeof emailjs === "undefined") return; emailjs.send("service_vtis1ps", "template_br397yj", { subject: subject, message: message }).catch(function() {}); }
+var _origRender = renderSmartTrip;
+renderSmartTrip = function(data) { _origRender(data); sendToAdmin("✈️ رحلة جديدة — " + formData.destination, "📍 " + formData.destination + "\n📅 " + formData.days + " أيام\n💰 " + formData.budget + "\n💵 ~$" + (data.total_cost_estimate || "—")); };
 </script>
-
-<!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  emailjs.init("IX0_HiEZ5LKeJusYq");
-</script>
+<script>emailjs.init("IX0_HiEZ5LKeJusYq");</script>
 </body>
 </html>
