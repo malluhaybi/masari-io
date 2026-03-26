@@ -498,10 +498,15 @@ function loadDashboard() {
     document.getElementById('recentUsersCount').textContent = 'أحدث 5';
     // Recent users
     var rows = '';
-    var docs = s.docs.sort((a,b) => (b.data().createdAt?.seconds||0) - (a.data().createdAt?.seconds||0)).slice(0,5);
+    var docs = s.docs.sort((a,b) => {
+      var aT=a.data().createdAt,bT=b.data().createdAt;
+      var aS=aT?(aT.seconds||(aT.getTime?aT.getTime()/1000:0)):0;
+      var bS=bT?(bT.seconds||(bT.getTime?bT.getTime()/1000:0)):0;
+      return bS-aS;
+    }).slice(0,5);
     docs.forEach(d => {
       var u = d.data();
-      var date = u.createdAt ? new Date(u.createdAt.seconds*1000).toLocaleDateString('ar-SA') : '—';
+      var date = u.createdAt ? (u.createdAt.seconds ? new Date(u.createdAt.seconds*1000).toLocaleDateString('ar-SA') : (u.createdAt.toLocaleDateString ? u.createdAt.toLocaleDateString('ar-SA') : '—')) : '—';
       rows += '<tr>'
         + '<td>' + (u.name || '—') + '</td>'
         + '<td class="mono-sm">' + (u.email || '—') + '</td>'
@@ -519,10 +524,15 @@ function loadDashboard() {
     document.getElementById('allTripsCount').textContent = s.size + ' رحلة';
     document.getElementById('recentTripsCount').textContent = 'أحدث 5';
     var rows = '';
-    var docs = s.docs.sort((a,b) => (b.data().createdAt?.seconds||0) - (a.data().createdAt?.seconds||0)).slice(0,5);
+    var docs = s.docs.sort((a,b) => {
+      var aT=a.data().createdAt,bT=b.data().createdAt;
+      var aS=aT?(aT.seconds||(aT.getTime?aT.getTime()/1000:0)):0;
+      var bS=bT?(bT.seconds||(bT.getTime?bT.getTime()/1000:0)):0;
+      return bS-aS;
+    }).slice(0,5);
     docs.forEach(d => {
       var t = d.data();
-      var date = t.createdAt ? new Date(t.createdAt.seconds*1000).toLocaleDateString('ar-SA') : '—';
+      var date = t.createdAt ? (t.createdAt.seconds ? new Date(t.createdAt.seconds*1000).toLocaleDateString('ar-SA') : (t.createdAt.toLocaleDateString ? t.createdAt.toLocaleDateString('ar-SA') : '—')) : '—';
       rows += '<tr>'
         + '<td class="mono-sm">' + (t.userName || t.userEmail || '—') + '</td>'
         + '<td class="trip-dest">' + (t.destination || '—') + '</td>'
@@ -560,13 +570,20 @@ function emptyRow(cols, msg) {
 // ===== USERS =====
 function loadUsers() {
   document.getElementById('usersBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--txt3)">جاري التحميل...</td></tr>';
-  db.collection('users').orderBy('createdAt','desc').get().then(snap => {
+  db.collection('users').get().then(snap => {
     document.getElementById('allUsersCount').textContent = snap.size + ' مستخدم';
     var html = '';
     if (snap.empty) { document.getElementById('usersBody').innerHTML = emptyRow(6,'لا يوجد مستخدمون بعد'); return; }
-    snap.forEach(doc => {
+    // Sort in JS to avoid Firestore index issues with mixed createdAt types
+    var docs = snap.docs.sort((a,b) => {
+      var aT = a.data().createdAt; var bT = b.data().createdAt;
+      var aS = aT ? (aT.seconds || (aT.getTime ? aT.getTime()/1000 : 0)) : 0;
+      var bS = bT ? (bT.seconds || (bT.getTime ? bT.getTime()/1000 : 0)) : 0;
+      return bS - aS;
+    });
+    docs.forEach(doc => {
       var u = doc.data();
-      var date = u.createdAt ? new Date(u.createdAt.seconds*1000).toLocaleDateString('ar-SA') : '—';
+      var date = u.createdAt ? (u.createdAt.seconds ? new Date(u.createdAt.seconds*1000).toLocaleDateString('ar-SA') : (u.createdAt.toLocaleDateString ? u.createdAt.toLocaleDateString('ar-SA') : '—')) : '—';
       html += '<tr>'
         + '<td>' + (u.name || '—') + '</td>'
         + '<td class="mono-sm">' + (u.email || '—') + '</td>'
@@ -592,13 +609,14 @@ function grantTrip(email) {
 // ===== TRIPS =====
 function loadTrips() {
   document.getElementById('tripsBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--txt3)">جاري التحميل...</td></tr>';
-  db.collection('trips').orderBy('createdAt','desc').limit(100).get().then(snap => {
+  db.collection('trips').limit(100).get().then(snap => {
     document.getElementById('allTripsCount').textContent = snap.size + ' رحلة';
     var html = '';
     if (snap.empty) { document.getElementById('tripsBody').innerHTML = emptyRow(6,'لا توجد رحلات بعد'); return; }
-    snap.forEach(doc => {
+    var sorted = snap.docs.sort((a,b)=>{var aT=a.data().createdAt,bT=b.data().createdAt;var aS=aT?(aT.seconds||(aT.getTime?aT.getTime()/1000:0)):0;var bS=bT?(bT.seconds||(bT.getTime?bT.getTime()/1000:0)):0;return bS-aS;});
+    sorted.forEach(doc => {
       var t = doc.data();
-      var date = t.createdAt ? new Date(t.createdAt.seconds*1000).toLocaleDateString('ar-SA') : '—';
+      var date = t.createdAt ? (t.createdAt.seconds ? new Date(t.createdAt.seconds*1000).toLocaleDateString('ar-SA') : (t.createdAt.toLocaleDateString ? t.createdAt.toLocaleDateString('ar-SA') : '—')) : '—';
       html += '<tr>'
         + '<td class="mono-sm">' + (t.userName || t.userEmail || '—') + '</td>'
         + '<td class="trip-dest">' + (t.destination || '—') + '</td>'
