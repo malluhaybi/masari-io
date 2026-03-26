@@ -336,7 +336,7 @@ function handlePayment(plan) {
 
 // ===== START TRIP =====
 function startTrip() {
-  if (getTripsUsed() >= 2 && !isPro()) { document.getElementById("paywallModal").style.display = "flex"; return; }
+  if (getTripsUsed() >= 2 && !isPro() && localStorage.getItem("masari_pro") !== "true") { document.getElementById("paywallModal").style.display = "flex"; return; }
   addTripCount();
   var screen = document.getElementById("loadingScreen"); screen.style.display = "flex";
   var loadStep = 0, ids = ["ls1","ls2","ls3","ls4"];
