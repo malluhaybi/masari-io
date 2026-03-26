@@ -229,7 +229,7 @@ function doAuth() {
     var name = document.getElementById("authName").value.trim();
     auth.createUserWithEmailAndPassword(email, pass).then(function(cred) {
       return cred.user.updateProfile({ displayName: name || email.split('@')[0] }).then(function() {
-        db.collection("users").doc(cred.user.uid).set({ name: name || email.split('@')[0], email: email, createdAt: new Date(), freeTrips: 0, isPro: false });
+        db.collection("users").doc(cred.user.uid).set({ name: name || email.split('@')[0], email: email, createdAt: firebase.firestore.FieldValue.serverTimestamp(), freeTrips: 0, isPro: false });
       });
     }).then(function() { document.getElementById("authModal").style.display = "none"; location.reload(); })
     .catch(function(e) { errEl.textContent = e.message.indexOf("email-already") > -1 ? "الإيميل مسجل مسبقاً" : "خطأ: " + e.message; errEl.style.display = "block"; });
@@ -313,7 +313,7 @@ function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
 // ===== TRIP COUNTER =====
 function getTripsUsed() { if (currentUser) { return parseInt(localStorage.getItem("masari_trips_" + currentUser.uid) || "0"); } return parseInt(localStorage.getItem("masari_trips") || "0"); }
 function addTripCount() { var key = currentUser ? "masari_trips_" + currentUser.uid : "masari_trips"; var c = getTripsUsed() + 1; localStorage.setItem(key, c.toString()); }
-function isPro() { if (currentUser) { var v = localStorage.getItem("masari_pro_" + currentUser.uid); if (v === "true") return true; } return localStorage.getItem("masari_pro") === "true"; }
+function isPro() { if (!currentUser) return false; var v = localStorage.getItem("masari_pro_" + currentUser.uid); return v === "true"; }
 
 // Check payment return
 (function() {
