@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     } else {
       priceConfig = { mode: 'payment', line_items: [{ price_data: { currency: 'usd', product_data: { name: 'Masari.io — رحلة احترافية' }, unit_amount: 499 }, quantity: 1 }] };
     }
-    const session = await stripe.checkout.sessions.create({ ...priceConfig, success_url: req.headers.origin + '?paid=true', cancel_url: req.headers.origin + '?paid=false' });
+    const session = await stripe.checkout.sessions.create({ ...priceConfig, success_url: req.headers.origin + '/?paid=true&ts=' + Date.now(), cancel_url: req.headers.origin + '?paid=false' });
     return res.status(200).json({ url: session.url });
   } catch (error) { console.error('Stripe error:', error); return res.status(500).json({ error: 'Payment failed' }); }
 }
