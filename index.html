@@ -322,7 +322,7 @@ function isPro() { if (!currentUser) return false; var v = localStorage.getItem(
     var key = currentUser ? "masari_pro_" + currentUser.uid : "masari_pro";
     localStorage.setItem(key, "true"); localStorage.setItem("masari_pro", "true");
     window.history.replaceState({}, "", window.location.pathname);
-    try { var pending = localStorage.getItem("masari_pending_trip"); if (pending) { var s = JSON.parse(pending); formData = s; localStorage.removeItem("masari_pending_trip"); setTimeout(function() { alert("تم الدفع! ✅ جاري تصميم رحلتك..."); startTrip(); }, 1000); } else { alert("تم الدفع بنجاح! ✅"); } } catch(e) { alert("تم الدفع بنجاح! ✅"); }
+    try { var pending = localStorage.getItem("masari_pending_trip"); if (pending) { var s = JSON.parse(pending); formData = s; localStorage.removeItem("masari_pending_trip"); setTimeout(function() { alert("تم الدفع! ✅ جاري تصميم رحلتك..."); if (currentUser) { startTrip(); } else { auth.onAuthStateChanged(function(u) { if (u) { currentUser = u; } startTrip(); }); } }, 1500);} else { alert("تم الدفع بنجاح! ✅"); } } catch(e) { alert("تم الدفع بنجاح! ✅"); }
   }
 })();
 
